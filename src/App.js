@@ -1,23 +1,37 @@
-import React from 'react';
+import React,{useState} from 'react';
+import GameBoard from './view_components/GameBoard';
+import Game from './classes/Game';
+import GameView from './view_components/GameView';
 import logo from './logo.svg';
 import './App.css';
 
+// <div className="player player-1">
+// Player 1
+// </div>
+// <div className="player player-2">
+// Player 2
+// </div>
+// <div className="player player-3">
+// Player 3
+// </div>
+// <div className="player player-4">
+// Player 4
+// </div>
+
 function App() {
+
+  // const [game, setGame] = useState([]);
+
+  // setGame(new Game());
+  const game = new Game();
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          Wahoo
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+          <GameView players={game.players}/>
       </header>
     </div>
   );

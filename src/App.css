@@ -15,7 +15,7 @@
 
 .App-header {
   background-color: #282c34;
-  min-height: 100vh;
+  min-height: 25vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -35,4 +35,64 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.wahoo-game {
+  min-height: 80vh;
+  min-width: 70vw;
+  background-color: lightblue;
+  position: relative;
+}
+
+.player {
+  height: 10%;
+  width: 15%;
+  position: absolute;
+  color: black;
+}
+
+.player-1 {
+ top: 0%;
+ left: 0%;
+ background-color: blue;
+}
+
+.player-2 {
+  top: 0%;
+  right: 0%;
+  background-color: yellow;
+}
+
+.player-3 {
+  top: 90%;
+  left: 0%;
+  background-color: red;
+}
+
+.player-4 {
+  top: 90%;
+  right: 0%;
+  background-color: green;
+}
+
+.game-board {
+  background-color: goldenrod;
+  width: 400px;
+  height: 400px;
+  /* margin: 0 auto; */
+  top: 20%;
+  left: 27.5%;
+  position: relative;
+}
+
+.game-slot {
+  border-radius: 25%;
+  height: 14px;
+  width: 14px;
+  background-color: lightgrey;
+  position: absolute;
+}
+
+.game-piece {
+  border-radius: 0% !important;
 }
