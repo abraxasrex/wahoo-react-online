@@ -162,3 +162,8 @@ todo:
 1. change all the new instances to props for react components until things aren't broken
 
 2. get wahoo board to show up properly (tie style position to a state object for position matrix, maybe tie in a method to map the 50 x 50 grid to the pixels themselves)
+
+todo: 
+
+1. ensure generated x and y values match expected
+2. find correct multipliers to spread the grid across the page

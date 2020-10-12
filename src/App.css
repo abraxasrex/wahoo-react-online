@@ -86,9 +86,9 @@
 }
 
 .game-slot {
-  border-radius: 25%;
-  height: 14px;
-  width: 14px;
+  border-radius: 50%;
+  height: 16px;
+  width: 16px;
   background-color: lightgrey;
   position: absolute;
 }
