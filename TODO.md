@@ -167,3 +167,52 @@ todo:
 
 1. ensure generated x and y values match expected
 2. find correct multipliers to spread the grid across the page
+
+todo 10/12: 
+
+1. write diagonal slotmaking code
+
+2. plan pathfinding from Start to Track and from Track to End
+
+todo [next]:
+
+1. make timout-based mock "player" to move piece for testing
+2. write pathfinding
+
+todo [next]:
+1. pathfinding for center 
+2. game manager: recognize score and display on PlayerView
+
+todo [next]:
+1. DiceView UI element. looks like dice, clicking it generates random 1 to 6 black dots
+
+todo [next]:
+1. player mouseover shows for current player if space is viable
+
+todo [next]: 
+1. freeze other players turn during one player's turn
+2. get gamemanager to recognize win condition
+
+todo [next]:
+
+1. UI cleanup
+
+todo [next]:
+
+1. Socket communication
+
+todo [next]:
+
+1. socket game login condition
+
+todo [next]:
+
+1. socket game logout condition
+
+todo [next]:
+
+1. generalized cleanup
+
+todo [next]:
+
+1. stretch

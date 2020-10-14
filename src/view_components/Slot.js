@@ -1,9 +1,15 @@
 import React from 'react';
 
 
-function highlightFirst(x, y) {
+function highlightSlots(x, y, slotType) {
     if(x === 0 && y === 125) {
-        return true;
+        return "orange";
+    } else if (slotType === "End" || slotType === "Start") {
+        return "Grey"
+    } else if (slotType === "Center"){
+        return "Blue"
+    } else {
+        return "lightGrey"
     }
 }
 function Slot (props) {
@@ -16,7 +22,7 @@ function Slot (props) {
     const x_offset = 15;
         return (
             <div className="game-slot" style={{left: props.x + x_offset, bottom: props.y + y_offset, 
-                backgroundColor: highlightFirst(props.x, props.y) ? "red" : 'lightGrey'}}>
+                backgroundColor: highlightSlots(props.x, props.y, props.slotType)}}>
             
             </div>
         );
