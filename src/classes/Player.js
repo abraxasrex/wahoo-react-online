@@ -32,6 +32,7 @@ class Player {
         this.selectedPiece = false;
         this.playerName = "Test";
         this.currentScore = 0;
+        this.currentTurn = false;
         // setup game pieces
         const gamePieces = [];
         // for (let i = 0; i < 4; i++) {

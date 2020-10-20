@@ -207,7 +207,7 @@ class GameBoard extends React.Component  {
     state = {slots: []};
 
     async getPositions() {
-        let players = this.props.players;
+        let players = this.props.game.manager.players;
         let slots = await setPatterns(players);
         this.setState({slots: slots});
     }

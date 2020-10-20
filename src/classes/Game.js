@@ -13,8 +13,7 @@ const colorSet = ["Red", "Blue", "Green", "Yellow"];
 
 
 class Game {
-    constructor() {
-        this.gameManager = new GameManager()
+    constructor(playerNumber) {
         const players = [];
         
         
@@ -23,6 +22,7 @@ class Game {
         }
         
         this.players = players;
+        this.manager = new GameManager(players);
 
      //   this.gameView = new GameView(this.players);
     }

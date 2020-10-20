@@ -168,34 +168,44 @@ todo:
 1. ensure generated x and y values match expected
 2. find correct multipliers to spread the grid across the page
 
-todo 10/12: 
+todo [10/12]: 
 
-1. write diagonal slotmaking code
+1. write diagonal slotmaking code [done]
 
-2. plan pathfinding from Start to Track and from Track to End
+2. plan pathfinding from Start to Track and from Track to End [10/14 - 10/16]
+
+- get list of all "next" Track slots, based on their order number
+- add to this all "next" slots starting from order 0, of type "End", and matching the player
+- caveat for center slot, if you're at one of four jump positions (note these), you can jump to the middle
+- ok, so basically you need *corner* *side* , and *entry* slots on the Track to allow jumps to home, from Start, and
+    across Center. these are what allow the special rules to take place.
+- if Corner slot, and your current MovementRange is at least 1, you can move forward (and only forward this direction?) 
+  onto the End slot range. This means your highlighted potential Slots will be those with a count within your MovementRange, and unoccupied, and of course in your own Player Lane.
+- if you roll a 6 or 1 (?), you get out of Home. That means your HighlightedPiece will be the Entry Slot matching your 
+   Player
+- If you are on a spot matching the "Corner" designation and have a roll of at least 1 (or also 6?), you can move the 
+  piece to 
+
+todo [10/15]:
+
+1. setup setState and props event so Dice rolls will work correctly [10/20]
+2. highlight available slots once user has rolled
 
 todo [next]:
 
-1. make timout-based mock "player" to move piece for testing
-2. write pathfinding
+1. display and ability to select gamepieces
+2. ability to move gamepiece (drag & drop?) to unoccupied spot.
 
 todo [next]:
-1. pathfinding for center 
-2. game manager: recognize score and display on PlayerView
+1. sense when it's time for next turn. announce somehow and set a timeout?
 
-todo [next]:
-1. DiceView UI element. looks like dice, clicking it generates random 1 to 6 black dots
-
-todo [next]:
-1. player mouseover shows for current player if space is viable
+todo [next]
+1. pathfinding for all cases (Track, End, Entry, and Center)
 
 todo [next]: 
-1. freeze other players turn during one player's turn
-2. get gamemanager to recognize win condition
+1. get gamemanager to recognize win condition. announcement.
+2. option to play again.
 
-todo [next]:
-
-1. UI cleanup
 
 todo [next]:
 
@@ -215,4 +225,4 @@ todo [next]:
 
 todo [next]:
 
-1. stretch
+1. UI cleanup

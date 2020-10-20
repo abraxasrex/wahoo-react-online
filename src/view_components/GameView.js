@@ -16,12 +16,22 @@ const GameView = (props) => {
        // this.players = props.players;
         // this.diceView = new DiceView();
         // this.playerViews = new PlayerViews(players);
-        const players = props.players;
-        const playerViews = [];
+        // const players = props.players;
 
-        for (var i = 0; i < players.length; i++) {
-           // playerViews.push(<PlayerView player={players[i]}> </PlayerView>);
-        }
+
+        const playerViews = [];
+    console.log("game view! ", props);
+
+    if (props && props.game && props.game.manager && props.game.manager.players) {
+        for (var i = 0; i < props.game.manager.players.length; i++) {
+            playerViews.push(<PlayerView player={props.game.manager.players[i]} currentPlayer={props.game.manager.currentPlayer}> </PlayerView>);
+         }
+
+
+    }
+
+
+
 
       //  this.playerViews = playerViews;
     
@@ -33,10 +43,10 @@ const GameView = (props) => {
                     {playerViews}
                 </div>
                 <div>
-                    <GameBoard players={players}></GameBoard>
+                    <GameBoard game={props.game} setGame={props.setGame}></GameBoard>
                 </div>
                 <div>
-                    <DiceView></DiceView>
+                    <DiceView manager={props.game.manager} game={props.game} setGame={props.setGame}></DiceView>
                 </div> 
             </div>
         );
