@@ -10,21 +10,35 @@ import React from 'react';
 // <div style={{ height: 10 }}>
 //   Hello World!
 // </div>
+const y_offset = 15;
+const x_offset = 15;
 
-class GamePiece extends React.Component {
-    constructor(player, initialSlot)  {
-        this.player = player;
-        this.currentSlot = initialSlot;
-    }
-    render(){
+function  GamePiece (props) {
+    // componentDidMount()  {
+    //   //  super(props);
+    //    // player={slots[i].owner} color = {slots[i].owner.gameColor
+
+    //     // this.state.player = initialSlot.owner;
+    //     // this.state.currentSlot = initialSlot;
+    // }
+    // render(){
+        console.log("pieces slot: ", props.slot);
+        let slot = props.slot.props;
+
         return (
-            <div className="game-slot game-piece" style={{ backgroundColor: this.player.gameColor || "purple" }}>
+
+            
+            <div className="game-piece" 
+            style={{ backgroundColor: slot.owner.gameColor || "purple", 
+                    left: slot.x + x_offset,
+                    bottom: slot.y + y_offset
+                }} >
                 <span>
-                    piece!
+                    
                 </span>
             </div>
         );
-    }
+    // }
 }
 
 export default GamePiece;

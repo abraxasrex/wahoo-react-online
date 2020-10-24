@@ -22,6 +22,9 @@ class GameManager {
         this.players = players;
         this.rollDice = this.rollDice.bind(this);
 
+        this.slots = [];
+        this.pieces = [];
+
     }
 
     setupGame() {
@@ -46,8 +49,7 @@ class GameManager {
     }
 
     rollDice(event) {
-        this.currentRoll = 
-        (6);
+        this.currentRoll = getRandomInt(6);
         console.log("dice: ", this.currentRoll);
         return this.currentRoll;
         // state...

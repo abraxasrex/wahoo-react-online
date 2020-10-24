@@ -21,7 +21,7 @@ function Slot (props) {
     const y_offset = 15;
     const x_offset = 15;
         return (
-            <div className="game-slot" style={{left: props.x + x_offset, bottom: props.y + y_offset, 
+            <div className={"game-slot " + (props.availableSlot ? ' available-slot' : '')} style={{left: props.x + x_offset, bottom: props.y + y_offset, 
                 backgroundColor: highlightSlots(props.x, props.y, props.slotType)}}>
             
             </div>

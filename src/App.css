@@ -78,6 +78,11 @@
 .current-player {
   border: 1px solid black;
 }
+
+.available-slot {
+  border: 1px solid black;
+}
+
 .game-board {
   background-color: goldenrod;
   width: 400px;
@@ -98,6 +103,10 @@
 
 .game-piece {
   border-radius: 0% !important;
+  height: 16px;
+  width: 16px;
+  background-color: white;
+  position: absolute;
 }
 
 .dice {
