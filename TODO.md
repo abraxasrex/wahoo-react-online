@@ -191,8 +191,8 @@ todo [10/15]:
 1. setup setState and props event so Dice rolls will work correctly [10/20]
 2. set up gamepieces [10/23]
 
-todo [next]:
-1. event when selecting gamePiece that highlights it and available slots
+todo [10/27]:
+1. event when selecting gamePiece that highlights it and available slots [10/27]
 2. ability to move gamepiece (drag & drop?) to unoccupied spot.
 
 todo [next]:

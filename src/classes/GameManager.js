@@ -16,15 +16,18 @@ class GameManager {
 
     currentRoll = 0;
     currentPlayer;
+    currentPiece;
     winner;
 
     constructor(players) {
         this.players = players;
         this.rollDice = this.rollDice.bind(this);
+        this.selectPiece = this.selectPiece.bind(this);
+        // this.currentRoll;
+        // this.currentPiece;
 
         this.slots = [];
         this.pieces = [];
-
     }
 
     setupGame() {
@@ -53,6 +56,12 @@ class GameManager {
         console.log("dice: ", this.currentRoll);
         return this.currentRoll;
         // state...
+    }
+
+    selectPiece(id) {
+        this.currentPiece = id;
+        console.log("piece!: ", this.currentPiece);
+        return this.currentPiece;
     }
 
 }

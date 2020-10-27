@@ -25,6 +25,7 @@ function DiceView (props) {
                         {dots}
                     </div>
                     <p> current roll: {props.game.manager.currentRoll || 0} </p>
+                    <p> current piece: {props.game.manager.currentPiece || 0} </p>
                     <button onClick={(e) => setDice(props)}>
                         Roll Dice
                     </button>

@@ -22,19 +22,33 @@ function  GamePiece (props) {
     //     // this.state.currentSlot = initialSlot;
     // }
     // render(){
-        console.log("pieces slot: ", props.slot);
+        // console.log("pieces slot: ", props.slot);
         let slot = props.slot.props;
 
+        function selectPiece(props){
+            // debugger;
+            // const newRoll = props.game.manager.rollDice();
+            const id = props._id;
+            console.log("calling a parent: ", props.manager.selectPiece(id));
+
+            const managerState = props.manager;
+            managerState.currentPiece = id;
+            props.setGame({manager: managerState});
+            props.selectPiece();
+        }
+
+        console.log("BIG  CHUNGUS");
         return (
 
             
             <div className="game-piece" 
-            style={{ backgroundColor: slot.owner.gameColor || "purple", 
-                    left: slot.x + x_offset,
-                    bottom: slot.y + y_offset
-                }} >
+                onClick={(e) => selectPiece(props)}
+                style={{ backgroundColor: slot.owner.gameColor || "purple", 
+                        left: slot.x + x_offset,
+                        bottom: slot.y + y_offset
+                    }} >
                 <span>
-                    
+                   pc: {props.manager.currentPiece || 0} 
                 </span>
             </div>
         );

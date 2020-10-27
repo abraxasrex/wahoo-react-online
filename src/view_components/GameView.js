@@ -24,7 +24,7 @@ const GameView = (props) => {
 
     if (props && props.game && props.game.manager && props.game.manager.players) {
         for (var i = 0; i < props.game.manager.players.length; i++) {
-            playerViews.push(<PlayerView player={props.game.manager.players[i]} currentPlayer={props.game.manager.currentPlayer}> </PlayerView>);
+            playerViews.push(<PlayerView player={props.game.manager.players[i]} currentPlayer={props.game.manager.currentPlayer} key={i}> </PlayerView>);
          }
 
 
@@ -43,7 +43,7 @@ const GameView = (props) => {
                     {playerViews}
                 </div>
                 <div>
-                    <GameBoard game={props.game} setGame={props.setGame}></GameBoard>
+                    <GameBoard game={props.game} manager={props.game.manager} setGame={props.setGame}></GameBoard>
                 </div>
                 <div>
                     <DiceView manager={props.game.manager} game={props.game} setGame={props.setGame}></DiceView>
