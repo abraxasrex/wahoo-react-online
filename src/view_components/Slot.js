@@ -12,13 +12,8 @@ function highlightSlots(x, y, slotType) {
         return "lightGrey"
     }
 }
+
 function Slot (props) {
- // 15 by 15 wth gaps
- // gaps are 12px
- // slots are 14px
- // place them by 19px each
-  //  render () {
-    console.log("PUNGUS!");
 
     const y_offset = 15;
     const x_offset = 15;
@@ -28,7 +23,6 @@ function Slot (props) {
             <span> {props.manager.currentPiece || 0 }</span>
             </div>
         );
-//   }
 }
 
 export default Slot;

@@ -193,7 +193,20 @@ todo [10/15]:
 
 todo [10/27]:
 1. event when selecting gamePiece that highlights it and available slots [10/27]
+
+- note the 4 jump spots
+- note the 4 entry spots
+- ? note the 4 exit spots ?
+
+- if the selected piece is in Home, and 
+- if slotType is track, and you are not yet to your endgame spot, keep going up count and adding slots to availableSlots. you only should get one pass by 0 before getting blocked though.
+- if Slottype is Center, only possible availableSlot is Jump and relevant roll is 1
+- if there is a jump, entry, or endgame slot in your availableSlot, for each of these go to secondaryPathfind()
+- secondaryPathfind, if this.currentRoll - availableSlots > 0, apply this count and add units with the same End type, or apply a one count to the Center slot.
+- you can only get to CenterSlot if it is the last stage in your availableSlots
+
 2. ability to move gamepiece (drag & drop?) to unoccupied spot.
+3. calculate based on rolls whether there is time for another roll
 
 todo [next]:
 1. sense when it's time for next turn. announce somehow and set a timeout?

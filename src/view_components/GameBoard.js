@@ -60,6 +60,21 @@ const CenterSlotStartPosition = [{x: 7, y: 7}];
 
 const CenterSlotPattern = [];
 
+const SpecialSlotPositions = [
+    {x:0, y:225, playerNumber: 3, specialSlotType: "Entry"},
+    {x:225, y:350, playerNumber: 1, specialSlotType: "Entry"},
+    {x:350, y:225, playerNumber: 4, specialSlotType: "Entry"},
+    {x:225, y:0, playerNumber: 2, specialSlotType: "Entry"},
+    {x:0, y:175, playerNumber: 3, specialSlotType: "Exit"},
+    {x:175, y:350, playerNumber: 1, specialSlotType: "Exit"},
+    {x:350, y:175, playerNumber: 4, specialSlotType: "Exit"},
+    {x:175, y:0, playerNumber: 2, specialSlotType: "Exit"},
+    {x:125, y:125, playerNumber: false, specialSlotType: "Jump"},
+    {x:125, y:225, playerNumber: false, specialSlotType: "Jump"},
+    {x:225, y:225, playerNumber: false, specialSlotType: "Jump"},
+    {x:225, y:125, playerNumber: false, specialSlotType: "Jump"}
+];
+
 
 
 class GameBoard extends React.Component  {
@@ -68,14 +83,6 @@ class GameBoard extends React.Component  {
 
     constructor(props) {
         super(props);
-        // this.setPositions = setPositions;
-        // this.addSlot = addSlot;
-        // this.setPatterns = setPatterns;
-       // this.setGameEntities();
-       // debugger;
-        // this.props;
-        // this.setState({pieces: [...this.props.game.manager.pieces]});
-        // this.setState({slots: [...this.props.game.manager.slots]});
     }
 
     async setPatterns (players) {
@@ -88,30 +95,35 @@ class GameBoard extends React.Component  {
         return slots; 
     }
     
+    async assignSpecialSlots(slot) {
+        for  (var i = 0; i < SpecialSlotPositions.length; i++) {
+            if(SpecialSlotPositions[i].x === slot.x && SpecialSlotPositions.y === slot.y) {
+                slot.specialPosition = SpecialSlotPositions[i].specialSlotType;
+            }
+        }
+    }
+
     async addSlot(slot, slots, counter) {
-         
-        let _slot = <Slot x={slot.x} y={slot.y} occupied={slot.occupied} slotType={slot.slotType} game={this.props.game} setGame={this.props.setGame} manager={this.props.game.manager}
-            order={slot.order} key={ (counter.toString() + slot.owner.toString() + slot.order.toString() + slot.slotType.toString() + slot.y.toString() + slot.x.toString())} owner={slot.owner}>
+        await this.assignSpecialSlots(slot);
+        let _slot = <Slot x={slot.x} y={slot.y} occupied={slot.occupied} slotType={slot.slotType} 
+                game={this.props.game} 
+                setGame={this.props.setGame} 
+                manager={this.props.game.manager}
+                order={slot.order} 
+                key={ (counter.toString() + slot.owner.toString() + slot.order.toString() + slot.slotType.toString() + slot.y.toString() + slot.x.toString())} 
+                owner={slot.owner}>
             </Slot>
         await slots.push(_slot);
         await (counter += 1);
     }
     
     setPositions (pattern, startPositions, slots, slotType, players, directMap, orientation) {
-        // Slot--------------
-    // x: int
-    // y: int
-    // occupied: GamePiece | falsey
-    // slotType: "Track" | "Start" | "End"
-    // order: 0-56 (track), 0-4 (start, end)
-    // owner: Player ()
-    // ------------------------
+
         let x = 0;
         let y = 0;
         let count = 0;
         let occupied = false;
         let player = false;
-        // let slotType = slotType;
     
         // calculate path of slots from 1 or more starting places
         for (var i = 0; i < startPositions.length; i++) {
@@ -124,7 +136,6 @@ class GameBoard extends React.Component  {
             if (slotType === "End" || slotType === "Start") {
                 player = players[i];
             }
-            // let props = this.props;
             let slot = {x: x, y: y, occupied: occupied, slotType: slotType, order: count, owner: player}
             this.addSlot(slot, slots, count, this.props);     
     
@@ -169,27 +180,18 @@ class GameBoard extends React.Component  {
     async setManagerState(field, values) {
         let manager = this.props.game.manager;
         manager[field] = values;
-        // debugger;
         await this.props.setGame({manager: manager});
     }
 
     async getPositions() {
         let players = this.props.game.manager.players;
         let slots = await this.setPatterns(players, this.props);
-        // this.setState({slots: slots});
-        // debugger;
         await this.setManagerState("slots", slots);
     }
-    async setPieces() {
 
-    //     let _slot = <Slot x={slot.x} y={slot.y} occupied={slot.occupied} slotType={slot.slotType} 
-    //     order={slot.order} owner={slot.owner}>
-    //     </Slot>
-    // await slots.push(_slot);
-    // await (counter += 1);
+    async setPieces() {
         let pieces = [];
         let slots = this.props.game.manager.slots;
-        // debugger;
         for (var i = 0; i < slots.length; i++) {
             if(slots[i].props.slotType === "Start") {
                 let game = this.props.game;
@@ -199,81 +201,28 @@ class GameBoard extends React.Component  {
                 await pieces.push(piece);
             }
         }
-
-       // await this.setState({pieces: pieces});
         await this.setManagerState("pieces", pieces)
 
     }
 
     async setGameEntities() {
-        console.log("props in entities: ", this.props);
         await this.getPositions(this.props);
-        console.log("did slots load? :", this.props.game.manager.slots)
         await this.setPieces(this.props);
-        console.log("did pieces load? :", this.props.game.manager.pieces)
-        // this.setState({pieces: [...this.props.game.manager.pieces]});
-        // this.setState({slots: [...this.props.game.manager.slots]});
     }
-    selectPiece = () => {
-        console.log("entities", this.setGameEntities);
-        // debugger;
-        // this.setGameEntities();
-        this.setPieces(this.props);
 
-        // this.setState({pieces: [...this.props.game.manager.pieces]});
-        // this.setState({slots: [...this.props.game.manager.slots]});
-        // this.setState({pieces: []});
+    selectPiece = () => {
+        this.setPieces(this.props);
     }
+
     componentDidMount() {
         this.setGameEntities();
-        // let pieces = [];
-        // for(var i = 0; i < this.props.game.manager.pieces; i++) {
-        //     pieces.push({...this.props.game.manager.pieces[i]});
-        // }
-        // this.state.pieces = pieces;    
-        // this.setState({pieces: [...this.props.game.manager.pieces]})
-        // this.setState({slots: [...this.props.game.manager.slots]})
-    }
-
-    componentWillUpdate(nextProps, nextState) {
-        console.log("NEXT: ", nextProps);
-      //  let pieces = [];
-        // for(var i = 0; i < nextProps.game.manager.pieces; i++) {
-        //     pieces.push({...nextProps.game.manager.pieces[i]});
-        // }
-        // this.state.pieces = pieces;
-
     }
 
     render() {
-        // let pieces = [];
-
-        // for(var i = 0; i < this.props.game.manager.pieces; i++) {
-        //     pieces.push({...this.props.game.manager.pieces[i]});
-        // }
-        // this.pieces = pieces;    
-
-        // this.state.pieces = [];
-        // for (var i = 0; i < this.props.game.manager.pieces; i++) {
-        //     this.state.pieces.push(this.props.game.manager.pieces[i]);
-        // }
-
-        // this.state.slots = [...this.props["game"]["manager"]["slots"]] || [];        
-        // this.state.pieces = [...this.props["game"]["manager"]["pieces"]] || [];
-
         return (
             <div className="game-board">
-
-            {this.props["game"]["manager"]["slots"]}
-            {this.props["game"]["manager"]["pieces"]}
-            {/*this.state.slots.map(slot => slot)*/}
-            {/*this.state.pieces.map(piece => piece)*/}
-
-            {/*(<GamePieceList gamePieces={this.props["game"]["manager"]["pieces"]}></GamePieceList>)*/}
-
-            {/*<p>plungus: {this.props["game"]["manager"]["currentPiece"] || "plungus"} </p>*/}
-                {/*this.props["game"]["manager"]["slots"].map(slot => slot ) || []*/}
-                {/*this.props["game"]["manager"]["pieces"].map(piece => piece) || []*/}
+                {this.props["game"]["manager"]["slots"]}
+                {this.props["game"]["manager"]["pieces"]}
             </div>
         );
     }

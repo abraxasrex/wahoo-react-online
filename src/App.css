@@ -83,6 +83,11 @@
   border: 1px solid black;
 }
 
+
+.selected-piece {
+  border: 2px solid purple;
+}
+
 .game-board {
   background-color: goldenrod;
   width: 400px;
