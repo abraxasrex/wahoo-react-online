@@ -194,11 +194,18 @@ todo [10/15]:
 todo [10/27]:
 1. event when selecting gamePiece that highlights it and available slots [10/27]
 
-- note the 4 jump spots
-- note the 4 entry spots
-- ? note the 4 exit spots ?
 
-- if the selected piece is in Home, and 
+todo [1/27]:
+
+1. assign specialSlot to player. problem: slot data gets processed, not slot iself
+solution: specialslots need to be reckoned with by addslot being called with special info in mind, from setPositions
+
+2. get first place slot highlighting for once!
+------------------------------------------------------------
+
+specialSlotType: Entry, Exit, Jump, or [null]
+
+- if the selected piece is slotType:Start, and current roll is 1 or 6, highlight 
 - if slotType is track, and you are not yet to your endgame spot, keep going up count and adding slots to availableSlots. you only should get one pass by 0 before getting blocked though.
 - if Slottype is Center, only possible availableSlot is Jump and relevant roll is 1
 - if there is a jump, entry, or endgame slot in your availableSlot, for each of these go to secondaryPathfind()
@@ -238,3 +245,9 @@ todo [next]:
 todo [next]:
 
 1. UI cleanup
+
+
+
+ --------- Best practices changes: -----------
+ 1. move any functions, constants etc possible to own files.
+ 2. stop hauling your ownstate management: switch over to redux or something.

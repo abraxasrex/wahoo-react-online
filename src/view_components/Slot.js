@@ -1,26 +1,54 @@
 import React from 'react';
 
 
-function highlightSlots(x, y, slotType) {
+function highlightSlots(x, y, slotType, specialSlotType) {
+    // special slots
+
+    // if(specialSlotType) {
+    //     console.log("an invisible special: ", specialSlotType);
+    // }
+
+    if(specialSlotType && specialSlotType === "Entry") {
+        return "brown"
+    }
+
+    if(specialSlotType && specialSlotType === "Exit") {
+        return "pink"
+    }
+
+    if(specialSlotType && specialSlotType === "Jump") {
+        return "turquoise"
+    }
+
+    // slot types for testing mainly
     if(x === 0 && y === 125) {
         return "orange";
     } else if (slotType === "End" || slotType === "Start") {
         return "Grey"
     } else if (slotType === "Center"){
         return "Blue"
-    } else {
-        return "lightGrey"
-    }
+    } 
+
+    return "lightgrey";
 }
 
 function Slot (props) {
 
     const y_offset = 15;
     const x_offset = 15;
+
+    // let availability = props.availableSlot;
+
+    // function clearAvailability () {
+    //     availability = false;
+    // }
+    // uncomment:
+   // props.manager.availableSlots[props._key]
         return (
-            <div className={"game-slot " + (props.availableSlot ? ' available-slot' : '')} style={{left: props.x + x_offset, bottom: props.y + y_offset, 
-                backgroundColor: highlightSlots(props.x, props.y, props.slotType)}}>
-            <span> {props.manager.currentPiece || 0 }</span>
+            <div className={"game-slot" + (props.manager.availableSlots[props._key] ? ' available-slot' : '')} 
+                style={{left: props.x + x_offset, bottom: props.y + y_offset, 
+                backgroundColor: highlightSlots(props.x, props.y, props.slotType, props.specialSlotType)}}>
+            <span> { props.x + "," + props.y } </span> 
             </div>
         );
 }

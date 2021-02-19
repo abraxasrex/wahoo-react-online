@@ -1,11 +1,7 @@
-
-
-
 import GameManager from './GameManager';
 import Player from './Player';
 
 const colorSet = ["Red", "Blue", "Green", "Yellow"];
-
 
 class Game {
     constructor(playerNumber) {

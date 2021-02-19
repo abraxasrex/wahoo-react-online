@@ -13,6 +13,7 @@ class Player {
         this.playerName = "Test";
         this.currentScore = 0;
         this.currentTurn = false;
+        this.specialSlots = {};
 
     }
 

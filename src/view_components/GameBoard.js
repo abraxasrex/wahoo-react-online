@@ -3,121 +3,85 @@ import Slot from './Slot';
 import GamePiece from './GamePiece';
 import GamePieceList from './GamePieceList';
 
-const GridStartBound = 0;
-
-const GridEndBound = 14;
-
-const TrackMax = 56;
-const EndMax = 12;
-
-// multiplier to expand slot distribution to fit board.
-const multiplier = 25;
-
-const TrackStartPositions = [{x:0, y:5}];
-
-const TrackPattern = [
-    ["y", 1, 4],
-    ["x", 1, 5],
-    ["y", 1, 5],
-    ["x", 1, 4],
-    ["y", -1, 5],
-    ["x", 1, 5],
-    ["y", -1, 4],
-    ["x", -1, 5],
-    ["y", -1, 5],
-    ["x", -1, 4],
-    ["y", 1, 5],
-    ["x", -1, 4]
-];
-
-const StartLaneStartPositions = [
-    {x: 1, y: 1},
-    {x: 1, y: 13},
-    {x: 13, y: 13},
-    {x: 13, y: 1}
-]
-    
-const StartLanePattern = [
-    {x: 1, y: 1, duration: 3},
-    {x: 1, y: -1, duration: 3},
-    {x: -1, y: -1, duration: 3},
-    {x: -1, y: 1, duration: 3}
-];
-const EndLaneStartPositions = [
-    {x: 1, y: 7},
-    {x: 7, y: 13},
-    {x: 13, y: 7},
-    {x: 7, y: 1}
-]
-const EndLanePattern = [
-    ["x", 1, 3],
-    ["y", -1, 3],
-    ["x", -1, 3],
-    ["y", 1, 3]
-];
-
-const CenterSlotStartPosition = [{x: 7, y: 7}];
-
-const CenterSlotPattern = [];
-
-const SpecialSlotPositions = [
-    {x:0, y:225, playerNumber: 3, specialSlotType: "Entry"},
-    {x:225, y:350, playerNumber: 1, specialSlotType: "Entry"},
-    {x:350, y:225, playerNumber: 4, specialSlotType: "Entry"},
-    {x:225, y:0, playerNumber: 2, specialSlotType: "Entry"},
-    {x:0, y:175, playerNumber: 3, specialSlotType: "Exit"},
-    {x:175, y:350, playerNumber: 1, specialSlotType: "Exit"},
-    {x:350, y:175, playerNumber: 4, specialSlotType: "Exit"},
-    {x:175, y:0, playerNumber: 2, specialSlotType: "Exit"},
-    {x:125, y:125, playerNumber: false, specialSlotType: "Jump"},
-    {x:125, y:225, playerNumber: false, specialSlotType: "Jump"},
-    {x:225, y:225, playerNumber: false, specialSlotType: "Jump"},
-    {x:225, y:125, playerNumber: false, specialSlotType: "Jump"}
-];
-
+import {GridStartBound, GridEndBound, TrackMax, EndMax, multiplier,
+TrackStartPositions, TrackPattern, StartLaneStartPositions, StartLanePattern,
+EndLanePattern, EndLaneStartPositions, CenterSlotPattern, CenterSlotStartPosition, 
+SpecialSlotPositions} from '../constants/board_constants';
 
 
 class GameBoard extends React.Component  {
 
-    state = {slots: [], pieces: []};
+    // state = {slots: [], pieces: []};
 
     constructor(props) {
         super(props);
     }
 
-    async setPatterns (players) {
+    async setAllSlots (players) {
 
         const slots = [];
-        await this.setPositions(TrackPattern, TrackStartPositions, slots, "Track", players, false, "Straight");
-        await this.setPositions(EndLanePattern, EndLaneStartPositions, slots, "End", players, true, "Straight");
-        await this.setPositions(CenterSlotPattern, CenterSlotStartPosition, slots, "Center", players, false, "Straight");
-        await this.setPositions(StartLanePattern, StartLaneStartPositions, slots, "Start", players, true, "Diagonal");
+        await this.addSlotBatch(TrackPattern, TrackStartPositions, slots, "Track", players, false, "Straight");
+        await this.addSlotBatch(EndLanePattern, EndLaneStartPositions, slots, "End", players, true, "Straight");
+        await this.addSlotBatch(CenterSlotPattern, CenterSlotStartPosition, slots, "Center", players, false, "Straight");
+        await this.addSlotBatch(StartLanePattern, StartLaneStartPositions, slots, "Start", players, true, "Diagonal");
         return slots; 
     }
     
-    async assignSpecialSlots(slot) {
+    async assignSpecialSlots(slot, key) {
         for  (var i = 0; i < SpecialSlotPositions.length; i++) {
-            if(SpecialSlotPositions[i].x === slot.x && SpecialSlotPositions.y === slot.y) {
-                slot.specialPosition = SpecialSlotPositions[i].specialSlotType;
+
+            let specialSlot = SpecialSlotPositions[i]
+            // find match
+            if(specialSlot.x === slot.x && specialSlot.y === slot.y) {
+
+                slot.specialSlotType = specialSlot.specialSlotType;
+
+                if(specialSlot.playerNumber) {
+                 //   console.log("ENTRY OR EXIT: ", SpecialSlotPositions[i]);
+                    slot.playerNumber = specialSlot.playerNumber;
+                    let players = this.props.game.manager.players;
+                    specialSlot.key = key;
+                    players[slot.playerNumber - 1].specialSlots[slot.specialSlotType] = specialSlot;
+                    await this.setManagerState("players", players);
+                    console.log("PLAYERS: ", this.props.game.manager.players);
+                }
+
+                // add to specials reference
+                var specials = this.props.game.manager["specialSlots"];
+                specials[key] = slot;
+                await this.setManagerState("specialSlots", specials);
             }
         }
     }
 
+    async createKey(slot, counter) {
+        return counter.toString() + slot.owner.toString() + slot.order.toString() + slot.slotType.toString() + slot.y.toString() + slot.x.toString();
+    }
+
     async addSlot(slot, slots, counter) {
-        await this.assignSpecialSlots(slot);
-        let _slot = <Slot x={slot.x} y={slot.y} occupied={slot.occupied} slotType={slot.slotType} 
+        let newKey = await this.createKey(slot, counter);
+        await this.assignSpecialSlots(slot, newKey);
+        if(slot.specialSlotType) {
+            console.log("added special: ", slot);
+          //  debugger;
+        }
+        let _slot = <Slot x={slot.x} y={slot.y} occupied={slot.occupied} 
+                slotType={slot.slotType} specialSlotType={slot.specialSlotType}
                 game={this.props.game} 
                 setGame={this.props.setGame} 
                 manager={this.props.game.manager}
                 order={slot.order} 
-                key={ (counter.toString() + slot.owner.toString() + slot.order.toString() + slot.slotType.toString() + slot.y.toString() + slot.x.toString())} 
+                key={ newKey }
+                _key = {newKey} 
+                counter = {counter}
                 owner={slot.owner}>
             </Slot>
         await slots.push(_slot);
-        await (counter += 1);
+        await (counter = counter + 1);
+ 
     }
     
-    setPositions (pattern, startPositions, slots, slotType, players, directMap, orientation) {
+    async addSlotBatch (pattern, startPositions, slots, slotType, players, directMap, orientation) {
 
         let x = 0;
         let y = 0;
@@ -137,7 +101,7 @@ class GameBoard extends React.Component  {
                 player = players[i];
             }
             let slot = {x: x, y: y, occupied: occupied, slotType: slotType, order: count, owner: player}
-            this.addSlot(slot, slots, count, this.props);     
+            await this.addSlot(slot, slots, count, this.props);     
     
             // calculates tht direction to move and place the next slot
             // if its directly mapped the pattern is 1:1 with the startposition array
@@ -154,7 +118,7 @@ class GameBoard extends React.Component  {
                         model["x"] += (pattern[j]["x"] * multiplier);
                         model["y"] += (pattern[j]["y"] * multiplier);
                         let slot = {x: model.x, y: model.y, occupied: occupied, slotType: slotType, order: count, owner: player}
-                        this.addSlot(slot, slots, count);
+                        await this.addSlot(slot, slots, count);
                         x = model.x;
                         y = model.y;
                     }
@@ -166,7 +130,7 @@ class GameBoard extends React.Component  {
                         model[pattern[j][0]] += (pattern[j][1] * multiplier);
         
                         let slot = {x: model.x, y: model.y, occupied: occupied, slotType: slotType, order: count, owner: player}
-                        this.addSlot(slot, slots, count);
+                        await this.addSlot(slot, slots, count);
         
                         x = model.x;
                         y = model.y;
@@ -183,20 +147,29 @@ class GameBoard extends React.Component  {
         await this.props.setGame({manager: manager});
     }
 
-    async getPositions() {
+    async initAllSlots() {
         let players = this.props.game.manager.players;
-        let slots = await this.setPatterns(players, this.props);
+        let slots = await this.setAllSlots(players, this.props);
+       // debugger;
         await this.setManagerState("slots", slots);
     }
 
-    async setPieces() {
+    async setPieces(id) {
+       // debugger;
+        if (id) {
+            await this.props.game.manager.selectPiece(id);
+        }
+
         let pieces = [];
         let slots = this.props.game.manager.slots;
         for (var i = 0; i < slots.length; i++) {
             if(slots[i].props.slotType === "Start") {
                 let game = this.props.game;
                 let setGame = this.props.setGame;
-                let piece = <GamePiece slot={slots[i]} key={i} _id={i} game={game} manager={game.manager}
+                // await this.editSlot(slots[i], slots);
+                // debugger;
+                let piece = <GamePiece slot={slots[i]} key={i} _id={i} 
+                    game={game} manager={game.manager} player={slots[i].props.owner}
                     setGame={setGame} selectPiece={this.selectPiece}></GamePiece>;
                 await pieces.push(piece);
             }
@@ -205,13 +178,32 @@ class GameBoard extends React.Component  {
 
     }
 
-    async setGameEntities() {
-        await this.getPositions(this.props);
-        await this.setPieces(this.props);
+    async resetPiecesAndSlots () {
+        let pieces = this.props.manager.pieces;
+        let slots = this.props.manager.slots;
+        let _pieces = [];
+        let _slots = [];
+        for (var i = 0; i < pieces.length; i++) {
+            _pieces.push(React.cloneElement(pieces[i]));
+        }
+        await this.setManagerState("pieces", _pieces);
+        for(var j = 0; j < slots.length; j++) {
+            _slots.push(React.cloneElement(slots[j]));
+        }
+        await this.setManagerState("slots", _slots);
     }
 
-    selectPiece = () => {
-        this.setPieces(this.props);
+    // Initialization
+    async setGameEntities() {
+        await this.initAllSlots(this.props);
+       // debugger;
+        await this.setPieces(false);
+    }
+
+    // UI
+     selectPiece = (id) => {
+         this.props.game.manager.selectPiece(id);
+         this.resetPiecesAndSlots();
     }
 
     componentDidMount() {

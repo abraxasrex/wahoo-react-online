@@ -54,25 +54,25 @@
 .player-1 {
  top: 0%;
  left: 0%;
- background-color: blue;
+ background-color: red;
 }
 
 .player-2 {
   top: 0%;
   right: 0%;
-  background-color: yellow;
+  background-color: blue;
 }
 
 .player-3 {
   top: 90%;
   left: 0%;
-  background-color: red;
+  background-color: green;
 }
 
 .player-4 {
   top: 90%;
   right: 0%;
-  background-color: green;
+  background-color: yellow;
 }
 
 .current-player {
@@ -81,10 +81,11 @@
 
 .available-slot {
   border: 1px solid black;
+  background-color: black;
 }
 
 
-.selected-piece {
+.selected-piece, .available-slot {
   border: 2px solid purple;
 }
 
@@ -104,6 +105,11 @@
   width: 16px;
   background-color: lightgrey;
   position: absolute;
+  /* border: 1px solid black; */
+}
+
+.game-slot, .game-piece span {
+  font-size: 10px;
 }
 
 .game-piece {
