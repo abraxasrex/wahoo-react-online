@@ -1,6 +1,6 @@
 import React from 'react';
 
-
+import Dot from './Dot';
 
 
 function DiceView (props) {
@@ -15,13 +15,15 @@ function DiceView (props) {
     
     const dots = [];
     for(var i = 0; i < props.manager.currentRoll; i++) {
-        dots.push(<div className="dot">.</div>)
+        dots.push(i);
     }
     return (
         <div className="dice-view">
             <div className="dice-object">
                 <div className="dice">
-                    {dots}
+                    {dots.map((dot)=> {
+                        return <Dot key={dot} />
+                    })}
                 </div>
                 <p> current roll: {props.game.manager.currentRoll || 0} </p>
                 <p> current piece: {props.game.manager.currentPieceId || 0} </p>

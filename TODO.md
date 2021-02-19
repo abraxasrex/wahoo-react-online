@@ -202,6 +202,38 @@ solution: specialslots need to be reckoned with by addslot being called with spe
 
 2. get first place slot highlighting for once!
 ------------------------------------------------------------
+todo [2/18]:
+
+1. movePiece logic. Story:
+a. doubleclicking (?) an availableSlot should move the game piece to it
+a1. doubleclick event that triggers movePiece; might need resetPiecesAndSlots
+a2. movePiece function: cannibalize setPiece code for this if necessary
+( this will not be fullproof until after 2)
+a3. change turns/players. might want to indicate this on the current player's "console"
+a4. write an AI to "play" the game with a short timeout to watch it progress.
+
+2. piece movement logic while on track
+a. calculate # of steps based on current roll
+b. highlight slots for step # until hitting exit which belongs to player, or players piece
+c. if highlight encompasses player exit, and there are remaining steps, start highlighting those
+a. if player's piece, count up step but do not highlight/ allow move
+
+3. if movePiece onto other player's piece, send their piece home after you move yours
+
+4. if movepiece onto a jump slot, and roll is 1, allow highlighting thru jump zone
+
+5. if movepiece onto an exit and remaining steps, move into exit lane
+
+6. logic for rolling 6: countSixes,  allow an extra move after first 6, ... consult Dad
+
+7. rename project Oofda
+
+8. if piece in exit lane, can only move further up exit lane
+
+9. if all pieces in exit lane
+
+
+--------------------------------------------
 
 specialSlotType: Entry, Exit, Jump, or [null]
 

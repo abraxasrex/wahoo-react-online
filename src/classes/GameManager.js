@@ -17,11 +17,8 @@ class GameManager {
 
         this.slots = [];
         this.pieces = [];
-
         this.specialSlots = [];
-
         this.currentPieceId = 420;
-
         this.availableSlots = {};
     }
 
@@ -32,39 +29,30 @@ class GameManager {
 
     rollDice(event) {
         this.currentRoll = getRandomInt(6);
-      //  console.log("dice: ", this.currentRoll);
         return this.currentRoll;
     }
 
     async selectPiece(id) {
-        
         this.currentPieceId = id;
         this.currentPiece = this.pieces.find((piece)=> {
             return piece.props._id === id;
         });
-      //  console.log("clicked piece: ", this.currentPiece);
-      //  debugger;
-        if (this.currentPiece.props.player.playerNumber === this.currentPlayer.playerNumber) {
-      //  debugger;
 
-          //  console.log("piece!: ", this.currentPieceId);
-          //  await this.clearAvailability();
+        if (this.currentPiece.props.player.playerNumber === this.currentPlayer.playerNumber) {
             await this.highlightSteps();
         }
-
-        // return;
     }
 
-    async clearAvailability () {
-        for(var i = 0; i < this.slots.length;i++) {
-            if(this.slots[i].props.availableSlot) {
-                this.slots.splice(
-                    React.cloneElement(this.slots[i], { availableSlot: false }), 1
-                );
-            }
-        }
-        return;
-    }
+    // async clearAvailability () {
+    //     for(var i = 0; i < this.slots.length;i++) {
+    //         if(this.slots[i].props.availableSlot) {
+    //             this.slots.splice(
+    //                 React.cloneElement(this.slots[i], { availableSlot: false }), 1
+    //             );
+    //         }
+    //     }
+    //     return;
+    // }
 
     async secondaryPathfinding() {
 
@@ -77,17 +65,11 @@ class GameManager {
     }
 
     async highlightSlotArray (slots) {
-        debugger;
-      //  console.log("highlight these slots: ");
+
         this.availableSlots = {};
         for (let i = 0; i < slots.length; i++) {
             this.availableSlots[slots[i].key] = true;
         }
-        // blah blah blah, highlighting logic. 
-        // - also: make sure this gets selection and moving UI triggered
-
-        // make use of similar logic to the selected-piece class application,
-        // - but: with a different color on GamePiece border from the selection color
     }
 
     countTracks() {
@@ -102,7 +84,6 @@ class GameManager {
 
         let currentSlot = this.currentPiece.props.slot.props;
         // in Start 
-     //   debugger;
         if (currentSlot.slotType === "Start" && (this.currentRoll === 1 || this.currentRoll === 6)) {
             // slot with specialSlotType Entry && its playerNumber matches this.currentPlayer
             let entrySlot = currentSlot.owner.specialSlots["Entry"]

@@ -2,11 +2,6 @@ import React from 'react';
 
 
 function highlightSlots(x, y, slotType, specialSlotType) {
-    // special slots
-
-    // if(specialSlotType) {
-    //     console.log("an invisible special: ", specialSlotType);
-    // }
 
     if(specialSlotType && specialSlotType === "Entry") {
         return "brown"
@@ -37,13 +32,6 @@ function Slot (props) {
     const y_offset = 15;
     const x_offset = 15;
 
-    // let availability = props.availableSlot;
-
-    // function clearAvailability () {
-    //     availability = false;
-    // }
-    // uncomment:
-   // props.manager.availableSlots[props._key]
         return (
             <div className={"game-slot" + (props.manager.availableSlots[props._key] ? ' available-slot' : '')} 
                 style={{left: props.x + x_offset, bottom: props.y + y_offset, 
