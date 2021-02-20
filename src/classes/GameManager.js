@@ -14,6 +14,7 @@ class GameManager {
         this.players = players;
         this.rollDice = this.rollDice.bind(this);
         this.selectPiece = this.selectPiece.bind(this);
+        this.moveToSlot = this.moveToSlot.bind(this);
 
         this.slots = [];
         this.pieces = [];
@@ -41,6 +42,28 @@ class GameManager {
         if (this.currentPiece.props.player.playerNumber === this.currentPlayer.playerNumber) {
             await this.highlightSteps();
         }
+    }
+
+    async moveToSlot(key) {
+        debugger;
+        this.currentSlotKey = key;
+        this.currentSlot = this.slots.find((slot)=> {
+            return slot.props._key === key;
+        });
+
+        let currentPiece = React.cloneElement(this.currentPiece, 
+            {slot: this.currentSlot, x: this.currentSlot.props.x, y: this.currentSlot.props.y});
+        this.currentPiece = currentPiece;
+        let pieces = this.pieces;
+        let pieceIndex = pieces.findIndex((piece) => {
+            // crappy test until pieces get their own ids...
+            return piece.props.player === this.currentPiece.props.player 
+                && piece.props._id === this.currentPiece.props._id;
+        });
+
+        pieces[pieceIndex] = this.currentPiece;
+        this.pieces = pieces;
+        debugger;
     }
 
     // async clearAvailability () {

@@ -19,7 +19,7 @@ function  GamePiece (props) {
         return (
             <div className={"game-piece " + (props.manager.currentPieceId === props._id ? 'selected-piece' : '')}
                 onClick={(e) => selectPiece(props)}
-                style={{ backgroundColor: slot.owner.gameColor || "purple", 
+                style={{ backgroundColor: props.player.gameColor || "purple", 
                         left: slot.x + x_offset,
                         bottom: slot.y + y_offset
                     }} >

@@ -204,13 +204,15 @@ solution: specialslots need to be reckoned with by addslot being called with spe
 ------------------------------------------------------------
 todo [2/18]:
 
+I. base game
+
 1. movePiece logic. Story:
 a. doubleclicking (?) an availableSlot should move the game piece to it
 a1. doubleclick event that triggers movePiece; might need resetPiecesAndSlots
 a2. movePiece function: cannibalize setPiece code for this if necessary
 ( this will not be fullproof until after 2)
+[here]
 a3. change turns/players. might want to indicate this on the current player's "console"
-a4. write an AI to "play" the game with a short timeout to watch it progress.
 
 2. piece movement logic while on track
 a. calculate # of steps based on current roll
@@ -230,9 +232,17 @@ a. if player's piece, count up step but do not highlight/ allow move
 
 8. if piece in exit lane, can only move further up exit lane
 
-9. if all pieces in exit lane
+8b. write an AI to "play" the game with a short timeout to watch it progress.
+
+9. if all pieces in exit lane, player wins game. throw up an alert for now
+9b. option to restart game, make sure that works.
 
 
+II. online component
+
+1. Option on landing to either join game or start new game
+2. https://dev.to/sauravmh/browser-game-design-using-websockets-and-deployments-on-scale-1iaa
+3. https://codeburst.io/how-to-make-a-simple-multiplayer-online-car-game-with-javascript-89d47908f995
 --------------------------------------------
 
 specialSlotType: Entry, Exit, Jump, or [null]

@@ -75,9 +75,10 @@ class GameBoard extends React.Component  {
                 game={this.props.game} 
                 setGame={this.props.setGame} 
                 manager={this.props.game.manager}
+                moveToSlot={this.moveToSlot}
                 order={slot.order} 
-                key={ newKey }
-                _key = {newKey} 
+                _key={newKey} 
+                key={newKey}
                 counter = {counter}
                 owner={slot.owner}>
             </Slot>
@@ -143,6 +144,12 @@ class GameBoard extends React.Component  {
      selectPiece = (id) => {
          this.props.game.manager.selectPiece(id);
          this.resetPiecesAndSlots();
+    }
+
+    moveToSlot = (key) => {
+        this.props.game.manager.moveToSlot(key);
+        debugger;
+        this.resetPiecesAndSlots();
     }
 
     componentDidMount() {
