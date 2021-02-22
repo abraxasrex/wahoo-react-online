@@ -76,7 +76,7 @@
 }
 
 .current-player {
-  border: 1px solid black;
+  border: 2px solid purple;
 }
 
 .available-slot {

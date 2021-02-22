@@ -45,7 +45,6 @@ class GameManager {
     }
 
     async moveToSlot(key) {
-        debugger;
         this.currentSlotKey = key;
         this.currentSlot = this.slots.find((slot)=> {
             return slot.props._key === key;
@@ -63,7 +62,17 @@ class GameManager {
 
         pieces[pieceIndex] = this.currentPiece;
         this.pieces = pieces;
-        debugger;
+        this.changePlayer();
+    }
+
+    changePlayer() {
+        let currentPlayer = this.currentPlayer;
+        if(currentPlayer.playerNumber === 4) {
+            this.currentPlayer = this.players[0]
+        } else {
+            // playernumber should be one more than index
+            this.currentPlayer = this.players[currentPlayer.playerNumber];
+        }
     }
 
     // async clearAvailability () {
@@ -110,7 +119,6 @@ class GameManager {
         if (currentSlot.slotType === "Start" && (this.currentRoll === 1 || this.currentRoll === 6)) {
             // slot with specialSlotType Entry && its playerNumber matches this.currentPlayer
             let entrySlot = currentSlot.owner.specialSlots["Entry"]
-        //    debugger;
             this.highlightSlotArray([entrySlot])
           //  this.players[this.currentPlayer]
             // if(currentSlot.specialSlotType ==="Entry" && this.currentPlayer === currentSlot.playerNumber) {

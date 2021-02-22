@@ -39,16 +39,16 @@ export const StartLanePattern = [
     {x: 1, y: -1, duration: 3, playerNumber: 4},
 ];
 export const EndLaneStartPositions = [
+        {x: 7, y: 13},
+         {x: 13, y: 7},
     {x: 1, y: 7},
-    {x: 7, y: 13},
-    {x: 13, y: 7},
-    {x: 7, y: 1}
+    {x: 7, y: 1},
 ]
 export const EndLanePattern = [
-    ["x", 1, 3],
     ["y", -1, 3],
     ["x", -1, 3],
-    ["y", 1, 3]
+      ["x", 1, 3],
+      ["y", 1, 3]
 ];
 
 export const CenterSlotStartPosition = [{x: 7, y: 7}];
@@ -58,8 +58,8 @@ export const CenterSlotPattern = [];
 export const SpecialSlotPositions = [
     {x:0, y:225, playerNumber: 3, specialSlotType: "Entry"},
     {x:225, y:350, playerNumber: 1, specialSlotType: "Entry"},
-    {x:350, y:225, playerNumber: 4, specialSlotType: "Entry"},
-    {x:225, y:0, playerNumber: 2, specialSlotType: "Entry"},
+    {x:350, y:125, playerNumber: 2, specialSlotType: "Entry"},
+    {x:125, y:0, playerNumber: 4, specialSlotType: "Entry"},
     {x:0, y:175, playerNumber: 3, specialSlotType: "Exit"},
     {x:175, y:350, playerNumber: 1, specialSlotType: "Exit"},
     {x:350, y:175, playerNumber: 4, specialSlotType: "Exit"},

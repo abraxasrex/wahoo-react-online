@@ -7,13 +7,13 @@ function moveHere(props){
     if(managerState.availableSlots[key]) {
         managerState.currentSlot = props;
         props.setGame({manager: managerState});
-        props.manager.moveToSlot(key);
+    //    props.manager.moveToSlot(key);
         props.moveToSlot(key);
     }
    // this.availableSlots[slots[i].key] = true;
 }
 
-function highlightSlots(x, y, slotType, specialSlotType) {
+function highlightSlots(x, y, slotType, specialSlotType, owner) {
 
     if(specialSlotType && specialSlotType === "Entry") {
         return "brown"
@@ -28,7 +28,7 @@ function highlightSlots(x, y, slotType, specialSlotType) {
     if(x === 0 && y === 125) {
         return "orange";
     } else if (slotType === "End" || slotType === "Start") {
-        return "Grey"
+        return owner.gameColor || "Grey"
     } else if (slotType === "Center"){
         return "Blue"
     } 
@@ -43,7 +43,7 @@ function Slot (props) {
         return (
             <div className={"game-slot" + (props.manager.availableSlots[props._key] ? ' available-slot' : '')} 
                 style={{left: props.x + x_offset, bottom: props.y + y_offset, 
-                backgroundColor: highlightSlots(props.x, props.y, props.slotType, props.specialSlotType)}}
+                backgroundColor: highlightSlots(props.x, props.y, props.slotType, props.specialSlotType, props.owner)}}
                 onClick={(e) => moveHere(props)}>
                 <span> { props.x + "," + props.y } </span> 
             </div>
