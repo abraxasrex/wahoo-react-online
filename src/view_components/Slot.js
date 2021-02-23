@@ -1,16 +1,14 @@
 import React from 'react';
 
-function moveHere(props){
+function moveHere(props, e){
+    e.preventDefault();
     const key = props._key;
     const managerState = props.manager;
 
     if(managerState.availableSlots[key]) {
         managerState.currentSlot = props;
-        props.setGame({manager: managerState});
-    //    props.manager.moveToSlot(key);
         props.moveToSlot(key);
     }
-   // this.availableSlots[slots[i].key] = true;
 }
 
 function highlightSlots(x, y, slotType, specialSlotType, owner) {
@@ -44,8 +42,11 @@ function Slot (props) {
             <div className={"game-slot" + (props.manager.availableSlots[props._key] ? ' available-slot' : '')} 
                 style={{left: props.x + x_offset, bottom: props.y + y_offset, 
                 backgroundColor: highlightSlots(props.x, props.y, props.slotType, props.specialSlotType, props.owner)}}
-                onClick={(e) => moveHere(props)}>
-                <span> { props.x + "," + props.y } </span> 
+                onClick={(e) => moveHere(props, e)}>
+                <span> 
+                    {/* props.x + "," + props.y */} 
+                    {props.count}
+                </span> 
             </div>
         );
 }

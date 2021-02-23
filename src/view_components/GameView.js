@@ -23,7 +23,8 @@ const GameView = (props) => {
                 <GameBoard game={props.game} manager={props.game.manager} setGame={props.setGame}></GameBoard>
             </div>
             <div>
-                <DiceView manager={props.game.manager} game={props.game} setGame={props.setGame}></DiceView>
+                <DiceView manager={props.game.manager} currentRoll={props.currentRoll}
+                game={props.game} setGame={props.setGame}></DiceView>
             </div> 
         </div>
     );

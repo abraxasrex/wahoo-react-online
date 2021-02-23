@@ -66,25 +66,25 @@ class GameBoard extends React.Component  {
 
     async addSlot(slot, slots, counter) {
         // create unique key
-        let newKey = await createKey(slot, counter);
+        let newKey = await createKey(slot, counter.count);
         // check for overlap with special slot types
         await this.assignSpecialSlots(slot, newKey);
 
         let _slot = <Slot x={slot.x} y={slot.y} occupied={slot.occupied} 
                 slotType={slot.slotType} specialSlotType={slot.specialSlotType}
                 game={this.props.game} 
+                availableSlots={this.props.game.manager.availableSlots}
                 setGame={this.props.setGame} 
                 manager={this.props.game.manager}
                 moveToSlot={this.moveToSlot}
                 order={slot.order} 
                 _key={newKey} 
                 key={newKey}
-                counter = {counter}
+                count = {counter.count}
                 owner={slot.owner}>
             </Slot>
-        await slots.push(_slot);
-        await (counter = counter + 1);
- 
+        counter.count += 1;
+        await slots.push(_slot); 
     }
 
     async setManagerState(field, values) {
@@ -112,7 +112,8 @@ class GameBoard extends React.Component  {
                 let setGame = this.props.setGame;
                 let piece = <GamePiece slot={slots[i]} key={i} _id={i} 
                     game={game} manager={game.manager} player={slots[i].props.owner}
-                    setGame={setGame} selectPiece={this.selectPiece}></GamePiece>;
+                    setGame={setGame} cancelSelect={this.cancelSelect}
+                    selectPiece={this.selectPiece}></GamePiece>;
                 await pieces.push(piece);
             }
         }
@@ -146,19 +147,31 @@ class GameBoard extends React.Component  {
          this.resetPiecesAndSlots();
     }
 
+    cancelSelect = () => {
+        this.props.manager.cancelSelect();
+        this.resetPiecesAndSlots();
+    }
+
     moveToSlot = (key) => {
         this.props.game.manager.moveToSlot(key);
-        debugger;
+      //  debugger;
         this.resetPiecesAndSlots();
     }
 
     componentDidMount() {
         this.setGameEntities();
     }
+    checkCancelSelect (e) {
+        if (e.type === 'contextmenu') {
+            console.log('Right click');
+            this.props.game.manager.cancelSelect();
+            this.resetPiecesAndSlots();
+        }
+    }
 
     render() {
         return (
-            <div className="game-board">
+            <div className="game-board" onClick={(e)=> this.checkCancelSelect(e)}>
                 {this.props["game"]["manager"]["slots"]}
                 {this.props["game"]["manager"]["pieces"]}
             </div>

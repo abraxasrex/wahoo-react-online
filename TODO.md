@@ -211,14 +211,16 @@ a. doubleclicking (?) an availableSlot should move the game piece to it
 a1. doubleclick event that triggers movePiece; might need resetPiecesAndSlots
 a2. movePiece function: cannibalize setPiece code for this if necessary
 ( this will not be fullproof until after 2)
-[here]
 a3. change turns/players. might want to indicate this on the current player's "console"
 
+[here]
 2. piece movement logic while on track
 a. calculate # of steps based on current roll
 b. highlight slots for step # until hitting exit which belongs to player, or players piece
 c. if highlight encompasses player exit, and there are remaining steps, start highlighting those
-a. if player's piece, count up step but do not highlight/ allow move
+d. if player's piece, count up step but do not highlight/ allow move
+d2. currently, you can get out of Entry slots onto your own piece
+
 
 3. if movePiece onto other player's piece, send their piece home after you move yours
 
@@ -227,6 +229,8 @@ a. if player's piece, count up step but do not highlight/ allow move
 5. if movepiece onto an exit and remaining steps, move into exit lane
 
 6. logic for rolling 6: countSixes,  allow an extra move after first 6, ... consult Dad
+
+6.5. if rolled once and not a six, changeplayer. also allow for "counting" sixes.
 
 7. rename project Oofda
 

@@ -29,7 +29,7 @@ function App() {
         <p>
           Wahoo
         </p>
-          <GameView game={game} setGame={setGame} />
+          <GameView game={game} setGame={setGame} currentRoll={game.manager.currentRoll}  />
       </header>
     </div>
   );

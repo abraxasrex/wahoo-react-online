@@ -21,6 +21,7 @@ class GameManager {
         this.specialSlots = [];
         this.currentPieceId = 420;
         this.availableSlots = {};
+        this.hasRolled = false;
     }
 
     startGame(players) {
@@ -29,11 +30,15 @@ class GameManager {
     }
 
     rollDice(event) {
-        this.currentRoll = getRandomInt(6);
+      // TODO: put line back after testing
+      //  this.currentRoll = getRandomInt(6);
+        this.currentRoll = 6;
+        this.hasRolled = true;
         return this.currentRoll;
     }
 
     async selectPiece(id) {
+      //  debugger;
         this.currentPieceId = id;
         this.currentPiece = this.pieces.find((piece)=> {
             return piece.props._id === id;
@@ -42,6 +47,14 @@ class GameManager {
         if (this.currentPiece.props.player.playerNumber === this.currentPlayer.playerNumber) {
             await this.highlightSteps();
         }
+    }
+
+    async cancelSelect () {
+      //  debugger;
+        this.currentPieceId = false;
+        this.currentPiece = false;
+        this.currentSlot = false;
+        this.availableSlots = {};
     }
 
     async moveToSlot(key) {
@@ -73,6 +86,12 @@ class GameManager {
             // playernumber should be one more than index
             this.currentPlayer = this.players[currentPlayer.playerNumber];
         }
+        this.availableSlots = {};
+        this.hasRolled = false;
+        this.currentPieceId = false;
+        this.currentPiece = false;    
+        this.currentRoll = false;
+    
     }
 
     // async clearAvailability () {
@@ -117,19 +136,8 @@ class GameManager {
         let currentSlot = this.currentPiece.props.slot.props;
         // in Start 
         if (currentSlot.slotType === "Start" && (this.currentRoll === 1 || this.currentRoll === 6)) {
-            // slot with specialSlotType Entry && its playerNumber matches this.currentPlayer
             let entrySlot = currentSlot.owner.specialSlots["Entry"]
             this.highlightSlotArray([entrySlot])
-          //  this.players[this.currentPlayer]
-            // if(currentSlot.specialSlotType ==="Entry" && this.currentPlayer === currentSlot.playerNumber) {
-            //     console.log("bump!: ", currentSlot, this.currentPlayer);
-            // }
-            // this shouldn't have to cycle; needs object map :/ ???
-        //    console.log("SpecialSlots : ", this.specialSlots);
-            // 1. go and map the player's starting slot to the player's state
-            // 2. call highlightSlotArray with this player's starting slot.
-        } else if (currentSlot.slotType === "Start") {
-            return false;
         }
 
         //on Track
@@ -141,7 +149,38 @@ class GameManager {
             // then add the remaining numbers to register the first slots of your end lane.
 
             //2. it's a corner slot ("Jump" specialSlotType)
+           // debugger;
+        //   debugger;
+            if(currentSlot.specialSlotType === "Jump") {
+                return;
+            }
             //3. it's a closing spot ("exit")
+            if(currentSlot.owner && currentSlot.owner.specialSlots["Exit"]) {
+                return;
+            }
+
+          //  this.currentRoll
+            // 1. find Index in this.slots of  currentSlot
+            debugger;
+            let stepIndex = this.slots.findIndex((slot)=> {
+                return slot.props._key === currentSlot._key;
+            });
+
+            let steps = [];
+
+            for(var i = 0; i < this.currentRoll; i++) {
+                stepIndex +=1;
+                if(stepIndex === this.slots.length) {
+                    stepIndex = 0;
+                }
+
+                steps.push(this.slots[stepIndex]);
+            }
+
+            this.highlightSlotArray(steps);
+            // 2. using that index, count up in array along the track until you find elements with order +1.
+            // 2.5. save their indices
+            // 3. send all keys to highlightSlotArray
 
         }
 

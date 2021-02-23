@@ -14,7 +14,7 @@ export async function addSlotBatch (context, pattern, startPositions, slots, slo
 
   let x = 0;
   let y = 0;
-  let count = 0;
+  let counter = {count: 0};
   let occupied = false;
   let player = false;
 
@@ -29,8 +29,8 @@ export async function addSlotBatch (context, pattern, startPositions, slots, slo
       if (slotType === "End" || slotType === "Start") {
           player = players[i];
       }
-      let slot = {x: x, y: y, occupied: occupied, slotType: slotType, order: count, owner: player}
-      await context.addSlot(slot, slots, count, context.props);     
+      let slot = {x: x, y: y, occupied: occupied, slotType: slotType, order: counter.count, owner: player}
+      await context.addSlot(slot, slots, counter);     
 
       // calculates tht direction to move and place the next slot
       // if its directly mapped the pattern is 1:1 with the startposition array
@@ -46,8 +46,8 @@ export async function addSlotBatch (context, pattern, startPositions, slots, slo
                   let model = {x: x, y: y};
                   model["x"] += (pattern[j]["x"] * context.multiplier);
                   model["y"] += (pattern[j]["y"] * context.multiplier);
-                  let slot = {x: model.x, y: model.y, occupied: occupied, slotType: slotType, order: count, owner: player}
-                  await context.addSlot(slot, slots, count);
+                  let slot = {x: model.x, y: model.y, occupied: occupied, slotType: slotType, order: counter.count, owner: player}
+                  await context.addSlot(slot, slots, counter);
                   x = model.x;
                   y = model.y;
               }
@@ -58,8 +58,8 @@ export async function addSlotBatch (context, pattern, startPositions, slots, slo
   
                   model[pattern[j][0]] += (pattern[j][1] * context.multiplier);
   
-                  let slot = {x: model.x, y: model.y, occupied: occupied, slotType: slotType, order: count, owner: player}
-                  await context.addSlot(slot, slots, count);
+                  let slot = {x: model.x, y: model.y, occupied: occupied, slotType: slotType, order: counter.count, owner: player}
+                  await context.addSlot(slot, slots, counter);
   
                   x = model.x;
                   y = model.y;
