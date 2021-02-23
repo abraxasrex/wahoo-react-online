@@ -49,13 +49,7 @@ class GameManager {
         }
     }
 
-    async cancelSelect () {
-      //  debugger;
-        this.currentPieceId = false;
-        this.currentPiece = false;
-        this.currentSlot = false;
-        this.availableSlots = {};
-    }
+ 
 
     async moveToSlot(key) {
         this.currentSlotKey = key;
@@ -86,13 +80,28 @@ class GameManager {
             // playernumber should be one more than index
             this.currentPlayer = this.players[currentPlayer.playerNumber];
         }
-        this.availableSlots = {};
+        this.clearSlate();
+
         this.hasRolled = false;
-        this.currentPieceId = false;
-        this.currentPiece = false;    
         this.currentRoll = false;
     
     }
+
+    clearSlate() {
+        this.currentPieceId = false;
+        this.currentPiece = false;
+        this.currentSlot = false;
+        this.availableSlots = {};
+    }
+
+    async cancelSelect () {
+        //  debugger;
+        //   this.currentPieceId = false;
+        //   this.currentPiece = false;
+        //   this.currentSlot = false;
+        //   this.availableSlots = {};
+        this.clearSlate();
+      }
 
     // async clearAvailability () {
     //     for(var i = 0; i < this.slots.length;i++) {
@@ -152,11 +161,12 @@ class GameManager {
            // debugger;
         //   debugger;
             if(currentSlot.specialSlotType === "Jump") {
-                return;
+               // return;
+               console.log("Jump!")
             }
             //3. it's a closing spot ("exit")
             if(currentSlot.owner && currentSlot.owner.specialSlots["Exit"]) {
-                return;
+                console.log("Exit!")
             }
 
           //  this.currentRoll

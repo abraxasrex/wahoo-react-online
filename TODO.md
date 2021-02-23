@@ -213,9 +213,10 @@ a2. movePiece function: cannibalize setPiece code for this if necessary
 ( this will not be fullproof until after 2)
 a3. change turns/players. might want to indicate this on the current player's "console"
 
-[here]
+
 2. piece movement logic while on track
 a. calculate # of steps based on current roll
+[here]
 b. highlight slots for step # until hitting exit which belongs to player, or players piece
 c. if highlight encompasses player exit, and there are remaining steps, start highlighting those
 d. if player's piece, count up step but do not highlight/ allow move
