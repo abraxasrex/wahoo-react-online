@@ -217,6 +217,7 @@ a3. change turns/players. might want to indicate this on the current player's "c
 2. piece movement logic while on track
 a. calculate # of steps based on current roll
 [here]
+a2. write tests for 1-2 !!! this will save you time and thought!
 b. highlight slots for step # until hitting exit which belongs to player, or players piece
 c. if highlight encompasses player exit, and there are remaining steps, start highlighting those
 d. if player's piece, count up step but do not highlight/ allow move
