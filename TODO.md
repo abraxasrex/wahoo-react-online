@@ -216,12 +216,14 @@ a3. change turns/players. might want to indicate this on the current player's "c
 
 2. piece movement logic while on track
 a. calculate # of steps based on current roll
-[here]
+d. if player's piece, count up step but do not highlight/ allow move
 a2. write tests for 1-2 !!! this will save you time and thought!
+
+[here]
+d2. currently, you can get out of Entry slots onto your own piece (there's a poor game design element potentially where the player's slot map isn't updated)
+
 b. highlight slots for step # until hitting exit which belongs to player, or players piece
 c. if highlight encompasses player exit, and there are remaining steps, start highlighting those
-d. if player's piece, count up step but do not highlight/ allow move
-d2. currently, you can get out of Entry slots onto your own piece
 
 
 3. if movePiece onto other player's piece, send their piece home after you move yours

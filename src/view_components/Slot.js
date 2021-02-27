@@ -6,7 +6,7 @@ function moveHere(props, e){
     const managerState = props.manager;
 
     if(managerState.availableSlots[key]) {
-        managerState.currentSlot = props;
+      //  managerState.currentSlot = props;
         props.moveToSlot(key);
     }
 }
