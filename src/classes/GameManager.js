@@ -18,15 +18,10 @@ class GameManager {
 
         this.slots = [];
         this.pieces = [];
-        this.specialSlots = [];
+        this.specialSlots = {};
         this.currentPieceId = 420;
         this.availableSlots = {};
         this.hasRolled = false;
-    }
-
-    startGame(players) {
-        this.currentPlayer = players[0];
-        return this.currentPlayer;
     }
 
     rollDice(event) {
