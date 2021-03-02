@@ -142,10 +142,10 @@ class GameManager {
     }
 
     async highlightSlotArray (slots) {
-
+        debugger;
         this.availableSlots = {};
         for (let i = 0; i < slots.length; i++) {
-            this.availableSlots[slots[i].key] = true;
+            this.availableSlots[slots[i]] = true;
         }
     }
 
@@ -193,8 +193,9 @@ class GameManager {
         if (currentSlot.slotType === "Start" && (this.currentRoll === 1 || this.currentRoll === 6)) {
            let entrySlot = currentSlot.owner.specialSlots["Entry"].key;
            // debugger;
-            
+            debugger;
             if(!entrySlot.occupied) {
+                debugger;
                 this.highlightSlotArray([entrySlot])
             }
         }
