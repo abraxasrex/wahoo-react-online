@@ -16,7 +16,7 @@ class GameManager {
         this.moveToSlot = this.moveToSlot.bind(this);
 
         this.slots = [];
-        this.pieces = [];
+        this.pieces = {};
         this.specialSlots = {};
         this.currentPiece = {key: undefined};
         this.availableSlots = {};
@@ -32,10 +32,7 @@ class GameManager {
     }
 
     async selectPiece(id) {
-        this.currentPiece = this.pieces.find((piece)=> {
-            return piece.props._id === id;
-        });
-
+        this.currentPiece = this.pieces[id];
         this.currentSlot = this.currentPiece.props.slot;
 
         if (this.currentPiece.props.player.playerNumber === this.currentPlayer.playerNumber) {
@@ -46,48 +43,24 @@ class GameManager {
  
 
     async moveToSlot(targetSlot) {
-      //  let destKey = targetSlot.key || targetSlot._key;
         let lastSlot = this.currentSlot;
         let currentSlotIndex = targetSlot.order;
         let lastSlotIndex = lastSlot.order;
+        let slots = this.slots;
+        let pieces = this.pieces;
 
+        // update piece to next slot
         this.currentSlot = this.slots[targetSlot.order];
-      //  this.currentSlot = this.slots[currentSlotIndex];
-
-        // 1. take in whateverSlotInfo available on this slot + current state
-        // a. this.currentSlot
-        // b. this.currentPiece
-        // c. slot: order, occupied, order/count,
-        // 2.  get cloned and modified instances of last and current slots and current piece
-        // 2.5. break into two async sub functions changePiece and changeSlot
-        // 3. changeplayer
-
-        // let currentSlotIndex = this.slots.findIndex((slot)=> {
-        //     return slot.props._key === destKey;
-        // });
-
-        // let lastSlotIndex = this.slots.findIndex((slot)=> {
-        //   //  debugger;
-        //     return slot.key === lastSlot.key;
-        // });
-      //  this.currentSlot = this.slots[currentSlotIndex];
-
         let currentPiece = React.cloneElement(this.currentPiece, 
             {slot: this.currentSlot, x: this.currentSlot.props.x, y: this.currentSlot.props.y});
         this.currentPiece = currentPiece;
-        let pieces = this.pieces;
-        let pieceIndex = pieces.findIndex((piece) => {
-            // crappy test until pieces get their own ids...
-            return piece.props.player === this.currentPiece.props.player 
-                && piece.props._id === this.currentPiece.props._id;
-        });
-        debugger;
 
-      //  debugger;
-        let slots = this.slots;
+        // clone updated elements
         slots[currentSlotIndex] = React.cloneElement(this.currentSlot, {occupied: this.currentPiece.props.player});
         slots[lastSlotIndex] = React.cloneElement(lastSlot, {occupied: false});
-        pieces[pieceIndex] = this.currentPiece;
+        pieces[this.currentPiece.props._id] = this.currentPiece;
+
+        // update state
         this.slots = slots;
         this.pieces = pieces;
         this.changePlayer();
@@ -121,7 +94,6 @@ class GameManager {
 
 
     async highlightSlotArray (slots) {
-      //  debugger;
         this.availableSlots = {};
         for (let i = 0; i < slots.length; i++) {
             this.availableSlots[slots[i]] = true;
@@ -129,7 +101,6 @@ class GameManager {
     }
 
     async getTrackSteps () {
-
         let currentSlot = this.currentPiece.props.slot.props;
 
         let stepIndex = this.slots.findIndex((slot)=> {
@@ -163,10 +134,7 @@ class GameManager {
         // in Start 
         if (currentSlot.slotType === "Start" && (this.currentRoll === 1 || this.currentRoll === 6)) {
            let entrySlot = currentSlot.owner.specialSlots["Entry"].key;
-           // debugger;
-           // debugger;
             if(!entrySlot.occupied) {
-               // debugger;
                 this.highlightSlotArray([entrySlot])
             }
         }
@@ -180,13 +148,10 @@ class GameManager {
             // then add the remaining numbers to register the first slots of your end lane.
 
             //2. it's a corner slot ("Jump" specialSlotType)
-           // debugger;
-        //   debugger;
             if(currentSlot.specialSlotType === "Jump") {
                // return;
                console.log("Jump!")
             }
-            //3. it's a closing spot ("exit")
             if(currentSlot.owner && currentSlot.owner.specialSlots["Exit"]) {
                 console.log("Exit!");
                 
@@ -194,23 +159,14 @@ class GameManager {
 
             }
 
-          //  this.currentRoll
             // 1. find Index in this.slots of  currentSlot
-          //  debugger;
             let steps = await this.getTrackSteps()
-
             this.highlightSlotArray(steps);
-            // 2. using that index, count up in array along the track until you find elements with order +1.
-            // 2.5. save their indices
-            // 3. send all keys to highlightSlotArray
-
         }
 
         //in End
 
         for(var i = 0; i < this.slots.length; i++) {
-
-            
 
         }
 

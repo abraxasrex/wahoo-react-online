@@ -101,7 +101,7 @@ class GameBoard extends React.Component  {
             await this.props.game.manager.selectPiece(id);
         }
 
-        let pieces = [];
+        let pieces = {};
         let slots = this.props.game.manager.slots;
         for (var i = 0; i < slots.length; i++) {
             if(slots[i].props.slotType === "Start") {
@@ -111,7 +111,7 @@ class GameBoard extends React.Component  {
                     game={game} manager={game.manager} player={slots[i].props.owner}
                     setGame={setGame} cancelSelect={this.cancelSelect}
                     selectPiece={this.selectPiece}></GamePiece>;
-                await pieces.push(piece);
+                pieces[piece.props._id] = piece;
             }
         }
         await this.setManagerState("pieces", pieces)
@@ -120,11 +120,12 @@ class GameBoard extends React.Component  {
     async resetPiecesAndSlots () {
         let pieces = this.props.manager.pieces;
         let slots = this.props.manager.slots;
-        let _pieces = [];
+        let _pieces = {};
         let _slots = [];
-        for (var i = 0; i < pieces.length; i++) {
-            _pieces.push(React.cloneElement(pieces[i]));
+        for (const piece in pieces) {
+            _pieces[pieces[piece].key] = React.cloneElement(this.props.manager.pieces[piece]);
         }
+
         await this.setManagerState("pieces", _pieces);
         for(var j = 0; j < slots.length; j++) {
             _slots.push(React.cloneElement(slots[j]));
@@ -151,7 +152,6 @@ class GameBoard extends React.Component  {
 
     moveToSlot = (targetSlot) => {
         this.props.game.manager.moveToSlot(targetSlot);
-      //  debugger;
         this.resetPiecesAndSlots();
     }
 
@@ -167,16 +167,13 @@ class GameBoard extends React.Component  {
     }
 
     render() {
-
-       // let pieces = Object.keys(this.props["game"]["manager"]["pieces"]);
+        let pieces = Object.entries(this.props["game"]["manager"]["pieces"]).map((piece)=> {
+            return piece[1];
+        }) || [];
         return (
             <div className="game-board" onClick={(e)=> this.checkCancelSelect(e)}>
                 {this.props["game"]["manager"]["slots"]}
-                {
-                    this.props["game"]["manager"]["pieces"].map((piece)=>{
-                        return (piece);
-                    })
-                }  
+                { pieces }  
             </div>
         );
     }
