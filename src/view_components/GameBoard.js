@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import Slot from './Slot';
 import GamePiece from './GamePiece';
-import GamePieceList from './GamePieceList';
 
 import {GridStartBound, GridEndBound, TrackMax, EndMax, multiplier,
 TrackStartPositions, TrackPattern, StartLaneStartPositions, StartLanePattern,
@@ -13,7 +12,6 @@ import {createKey, addSlotBatch} from '../helpers/Helpers';
 
 class GameBoard extends React.Component  {
 
-    // state = {slots: [], pieces: []};
 
     constructor(props) {
         super(props);
@@ -80,7 +78,6 @@ class GameBoard extends React.Component  {
                 order={slot.order} 
                 _key={newKey} 
                 key={newKey}
-                count = {counter.count}
                 owner={slot.owner}>
             </Slot>
         counter.count += 1;
@@ -152,8 +149,8 @@ class GameBoard extends React.Component  {
         this.resetPiecesAndSlots();
     }
 
-    moveToSlot = (key) => {
-        this.props.game.manager.moveToSlot(key);
+    moveToSlot = (targetSlot) => {
+        this.props.game.manager.moveToSlot(targetSlot);
       //  debugger;
         this.resetPiecesAndSlots();
     }
@@ -170,10 +167,16 @@ class GameBoard extends React.Component  {
     }
 
     render() {
+
+       // let pieces = Object.keys(this.props["game"]["manager"]["pieces"]);
         return (
             <div className="game-board" onClick={(e)=> this.checkCancelSelect(e)}>
                 {this.props["game"]["manager"]["slots"]}
-                {this.props["game"]["manager"]["pieces"]}
+                {
+                    this.props["game"]["manager"]["pieces"].map((piece)=>{
+                        return (piece);
+                    })
+                }  
             </div>
         );
     }

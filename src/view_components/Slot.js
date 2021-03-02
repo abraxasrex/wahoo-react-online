@@ -3,11 +3,12 @@ import React from 'react';
 function moveHere(props, e){
     e.preventDefault();
     const key = props._key;
+    debugger;
     const managerState = props.manager;
 
     if(managerState.availableSlots[key]) {
       //  managerState.currentSlot = props;
-        props.moveToSlot(key);
+        props.moveToSlot(props);
     }
 }
 
@@ -45,7 +46,7 @@ function Slot (props) {
                 onClick={(e) => moveHere(props, e)}>
                 <span> 
                     {/* props.x + "," + props.y */} 
-                    {props.count}
+                    {props.order}
                 </span> 
             </div>
         );
