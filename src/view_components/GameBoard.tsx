@@ -8,26 +8,28 @@ EndLanePattern, EndLaneStartPositions, CenterSlotPattern, CenterSlotStartPositio
 SpecialSlotPositions} from '../constants/board_constants';
 
 import {createKey, addSlotBatch} from '../helpers/Helpers';
+import Player from '../classes/Player';
 
 
-class GameBoard extends React.Component  {
+class GameBoard extends React.Component<any>  {
 
+    ctx: any;
 
-    constructor(props) {
+    constructor(props: any) {
         super(props);
         this.ctx = this.createContext();
     }
 
-    createContext() {
-        let ctx = {};
+    createContext(): any {
+        let ctx: any = {};
         ctx.addSlot = this.addSlot.bind(this);
         ctx.props = this.props;
         ctx.multiplier = multiplier;
         return ctx;
     }
 
-    async setAllSlots (players) {
-        const slots = [];
+    async setAllSlots (players: Array<Player>) {
+        const slots: any[] = [];
 
         await addSlotBatch(this.ctx, TrackPattern, TrackStartPositions, slots, "Track", players, false, "Straight");
         await addSlotBatch(this.ctx, EndLanePattern, EndLaneStartPositions, slots, "End", players, true, "Straight");
@@ -36,10 +38,10 @@ class GameBoard extends React.Component  {
         return slots; 
     }
     
-    async assignSpecialSlots(slot, key) {
+    async assignSpecialSlots(slot: any, key: string) {
         for  (var i = 0; i < SpecialSlotPositions.length; i++) {
 
-            let specialSlot = SpecialSlotPositions[i]
+            let specialSlot: any = SpecialSlotPositions[i]
             // find match
             if(specialSlot.x === slot.x && specialSlot.y === slot.y) {
                 slot.specialSlotType = specialSlot.specialSlotType;
@@ -62,7 +64,7 @@ class GameBoard extends React.Component  {
         }
     }
 
-    async addSlot(slot, slots, counter) {
+    async addSlot(slot: any, slots: Array<any>, counter: any) {
         // create unique key
         let newKey = await createKey(slot, counter.count);
         // check for overlap with special slot types
@@ -84,7 +86,7 @@ class GameBoard extends React.Component  {
         await slots.push(_slot); 
     }
 
-    async setManagerState(field, values) {
+    async setManagerState(field: any, values: any) {
         let manager = this.props.game.manager;
         manager[field] = values;
         await this.props.setGame({manager: manager});
@@ -92,22 +94,19 @@ class GameBoard extends React.Component  {
 
     async initAllSlots() {
         let players = this.props.game.manager.players;
-        let slots = await this.setAllSlots(players, this.props);
+        let slots = await this.setAllSlots(players);
         await this.setManagerState("slots", slots);
     }
 
-    async setPieces(id) {
-        if (id) {
-            await this.props.game.manager.selectPiece(id);
-        }
+    async setPieces() {
 
-        let pieces = {};
+        let pieces: any = {};
         let slots = this.props.game.manager.slots;
         for (var i = 0; i < slots.length; i++) {
             if(slots[i].props.slotType === "Start") {
                 let game = this.props.game;
                 let setGame = this.props.setGame;
-                let piece = <GamePiece slot={slots[i]} key={i} _id={i} 
+                let piece: any = <GamePiece slot={slots[i]} key={i} _id={i} 
                     game={game} manager={game.manager} player={slots[i].props.owner}
                     setGame={setGame} cancelSelect={this.cancelSelect}
                     selectPiece={this.selectPiece}></GamePiece>;
@@ -120,7 +119,7 @@ class GameBoard extends React.Component  {
     async resetPiecesAndSlots () {
         let pieces = this.props.manager.pieces;
         let slots = this.props.manager.slots;
-        let _pieces = {};
+        let _pieces: any = {};
         let _slots = [];
         for (const piece in pieces) {
             _pieces[pieces[piece].key] = React.cloneElement(this.props.manager.pieces[piece]);
@@ -135,12 +134,12 @@ class GameBoard extends React.Component  {
 
     // Initialization
     async setGameEntities() {
-        await this.initAllSlots(this.props);
-        await this.setPieces(false);
+        await this.initAllSlots();
+        await this.setPieces();
     }
 
     // UI
-     selectPiece = (id) => {
+     selectPiece = (id: string) => {
          this.props.game.manager.selectPiece(id);
          this.resetPiecesAndSlots();
     }
@@ -150,7 +149,7 @@ class GameBoard extends React.Component  {
         this.resetPiecesAndSlots();
     }
 
-    moveToSlot = (targetSlot) => {
+    moveToSlot = (targetSlot: any) => {
         this.props.game.manager.moveToSlot(targetSlot);
         this.resetPiecesAndSlots();
     }
@@ -158,7 +157,7 @@ class GameBoard extends React.Component  {
     componentDidMount() {
         this.setGameEntities();
     }
-    checkCancelSelect (e) {
+    checkCancelSelect (e: any) {
         if (e.type === 'contextmenu') {
             console.log('Right click');
             this.props.game.manager.cancelSelect();

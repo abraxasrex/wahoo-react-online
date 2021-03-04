@@ -5,7 +5,7 @@ import PlayerView from './PlayerView';
 
 
 
-const GameView = (props) => {
+const GameView = (props: any) => {
     const playerViews = [];
 
     if (props && props.game && props.game.manager && props.game.manager.players) {

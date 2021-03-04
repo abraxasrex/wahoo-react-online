@@ -1,16 +1,15 @@
 
 
-export function getRandomInt(max) {
+export function getRandomInt(max: number) {
     return Math.floor(Math.random() * Math.floor(max)) + 1;
   }
 
 
-export async function createKey(slot, counter) {
+export async function createKey(slot: any, counter: number) {
     return counter.toString() + slot.owner.toString() + slot.order.toString() + slot.slotType.toString() + slot.y.toString() + slot.x.toString();
 }
 
-
-export async function addSlotBatch (context, pattern, startPositions, slots, slotType, players, directMap, orientation) {
+export async function addSlotBatch (context: any, pattern: any, startPositions: any, slots: any, slotType: string, players: Array<any>, directMap: boolean, orientation: string) {
 
   let x = 0;
   let y = 0;
@@ -54,8 +53,8 @@ export async function addSlotBatch (context, pattern, startPositions, slots, slo
           } else {
               for (let k = 0; k < pattern[j][2]; k++) {
 
-                  let model = {x: x, y: y};
-  
+                  let model: any = {x: x, y: y};
+                  
                   model[pattern[j][0]] += (pattern[j][1] * context.multiplier);
   
                   let slot = {x: model.x, y: model.y, occupied: occupied, slotType: slotType, order: counter.count, owner: player}

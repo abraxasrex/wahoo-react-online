@@ -35,7 +35,7 @@ class GameManager {
         this.currentSlot = undefined;
     }
 
-    rollDice(event: Event) {
+    rollDice(event: Event): number {
       // TODO: put line back after testing
       //  this.currentRoll = getRandomInt(6);
         this.currentRoll = 6;

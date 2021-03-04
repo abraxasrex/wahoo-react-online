@@ -1,6 +1,7 @@
 import React from 'react';
+import Player from '../classes/Player';
 
-function moveHere(props, e){
+function moveHere(props: any, e: any){
     e.preventDefault();
     const key = props._key;
     debugger;
@@ -12,7 +13,7 @@ function moveHere(props, e){
     }
 }
 
-function highlightSlots(x, y, slotType, specialSlotType, owner) {
+function highlightSlots(x: number, y: number, slotType: string, specialSlotType: string, owner: Player) {
 
     if(specialSlotType && specialSlotType === "Entry") {
         return "brown"
@@ -34,7 +35,7 @@ function highlightSlots(x, y, slotType, specialSlotType, owner) {
     return "lightgrey";
 }
 
-function Slot (props) {
+function Slot (props: any) {
 
     const y_offset = 15;
     const x_offset = 15;

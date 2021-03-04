@@ -3,11 +3,11 @@ import React from 'react';
 const y_offset = 15;
 const x_offset = 15;
 
-function  GamePiece (props) {
+function  GamePiece (props: any) {
 
         let slot = props.slot.props;
 
-        function selectPiece(e){
+        function selectPiece(e: any){
             const id = props._id;
             const managerState = props.manager;
             // allow to deselect piece

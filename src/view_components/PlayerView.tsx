@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-const PlayerView = (props) => {
+const PlayerView = (props: any) => {
         console.log("player: ", props.player);
         return (
             <div className={"player player-view player-" + props.player.playerNumber +

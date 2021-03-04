@@ -7,7 +7,7 @@ import './App.css';
 
 
 
-function startGame(game, setGame) {
+function startGame(game: Game, setGame: any) {
 
   if (game && game.players && game.players.length > 0) {
       const player = game.players[0];

@@ -3,9 +3,9 @@ import React from 'react';
 import Dot from './Dot';
 
 
-function DiceView (props) {
+function DiceView (props: any) {
 
-    function setDice(props){
+    function setDice(props: any){
 
         const newRoll = props.game.manager.rollDice();
         let managerState = props.game.manager;
