@@ -1,15 +1,25 @@
 
 import {getRandomInt} from '../helpers/Helpers';
 import React from 'react';
+import Player from './Player';
+import Slot from '../view_components/Slot';
+import { AnyARecord } from 'dns';
 
 class GameManager {
 
-    currentRoll = 0;
-    currentPlayer;
-    winner;
-    specialSlots;
+    currentRoll: number | undefined = 0;
+    currentPlayer: Player | undefined;
+    players: Array<Player>;
+    winner: Player | undefined;
+    specialSlots: object;
+    slots: Array<any>;
+    pieces: object | any;
+    currentPiece: any;
+    availableSlots: any;
+    hasRolled: boolean;
+    currentSlot: any;
 
-    constructor(players) {
+    constructor(players: Array<Player>) {
         this.players = players;
         this.rollDice = this.rollDice.bind(this);
         this.selectPiece = this.selectPiece.bind(this);
@@ -21,9 +31,11 @@ class GameManager {
         this.currentPiece = {key: undefined};
         this.availableSlots = {};
         this.hasRolled = false;
+        this.currentPlayer = undefined;
+        this.currentSlot = undefined;
     }
 
-    rollDice(event) {
+    rollDice(event: Event) {
       // TODO: put line back after testing
       //  this.currentRoll = getRandomInt(6);
         this.currentRoll = 6;
@@ -31,21 +43,21 @@ class GameManager {
         return this.currentRoll;
     }
 
-    async selectPiece(id) {
+    async selectPiece(id: any) {
         this.currentPiece = this.pieces[id];
         this.currentSlot = this.currentPiece.props.slot;
 
-        if (this.currentPiece.props.player.playerNumber === this.currentPlayer.playerNumber) {
+        if (this.currentPiece.props.player.playerNumber === this.currentPlayer?.playerNumber) {
             await this.highlightSteps();
         }
     }
 
  
 
-    async moveToSlot(targetSlot) {
+    async moveToSlot(targetSlot: any) {
         let lastSlot = this.currentSlot;
         let currentSlotIndex = targetSlot.order;
-        let lastSlotIndex = lastSlot.order;
+        let lastSlotIndex = lastSlot?.order;
         let slots = this.slots;
         let pieces = this.pieces;
 
@@ -68,16 +80,16 @@ class GameManager {
 
     changePlayer() {
         let currentPlayer = this.currentPlayer;
-        if(currentPlayer.playerNumber === 4) {
+        if(currentPlayer?.playerNumber === 4) {
             this.currentPlayer = this.players[0]
         } else {
             // playernumber should be one more than index
-            this.currentPlayer = this.players[currentPlayer.playerNumber];
+            this.currentPlayer = this.players[currentPlayer?.playerNumber || 0];
         }
         this.clearSlate();
 
         this.hasRolled = false;
-        this.currentRoll = false;
+        this.currentRoll = undefined;
     
     }
 
@@ -93,9 +105,9 @@ class GameManager {
     }
 
 
-    async highlightSlotArray (slots) {
+    async highlightSlotArray (slots: Array<any> = []) {
         this.availableSlots = {};
-        for (let i = 0; i < slots.length; i++) {
+        for (let i = 0; i < (slots?.length || 0); i++) {
             this.availableSlots[slots[i]] = true;
         }
     }
@@ -109,7 +121,7 @@ class GameManager {
 
         let steps = [];
 
-        for(var i = 0; i < this.currentRoll; i++) {
+        for(var i = 0; i < (this.currentRoll || 0); i++) {
             stepIndex +=1;
             if(stepIndex === this.slots.length) {
                 stepIndex = 0;
@@ -117,7 +129,7 @@ class GameManager {
 
             // to-add: remove steps with own piece before returning
             if(this.slots[stepIndex].props.occupied ) {
-                if(this.slots[stepIndex].props.occupied.playerNumber !== this.currentPlayer.playerNumber) {
+                if(this.slots[stepIndex].props.occupied.playerNumber !== this.currentPlayer?.playerNumber) {
                     steps.push(this.slots[stepIndex]);
                 }
             } else {

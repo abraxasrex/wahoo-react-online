@@ -3,12 +3,20 @@ import Player from './Player';
 
 const colorSet = ["Red", "Blue", "Green", "Yellow"];
 
-class Game {
-    constructor(playerNumber) {
+// export interface IGame {
+//     players: Array<IPlayer>;
+
+// }
+export class Game {
+
+    players: Array<Player>;
+    manager: GameManager;
+
+    constructor(playerNumber: number) {
         const players = [];
         
         
-        for (var i=0; i < 4; i++) {
+        for (var i=0; i < playerNumber; i++) {
             players.push(new Player((i + 1), colorSet[i]));
         }
         

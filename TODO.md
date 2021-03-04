@@ -220,28 +220,19 @@ d. if player's piece, count up step but do not highlight/ allow move
 a2. write tests for 1-2 !!! this will save you time and thought!
 
 [here]
+a. write optional testing starting places for piece : capture player, jump, exit lane, and dont capture own piece
 d2. currently, you can get out of Entry slots onto your own piece (there's a poor game design element potentially where the player's slot map isn't updated)
-
 b. highlight slots for step # until hitting exit which belongs to player, or players piece
 c. if highlight encompasses player exit, and there are remaining steps, start highlighting those
-
-
 3. if movePiece onto other player's piece, send their piece home after you move yours
 
 4. if movepiece onto a jump slot, and roll is 1, allow highlighting thru jump zone
-
-5. if movepiece onto an exit and remaining steps, move into exit lane
-
 6. logic for rolling 6: countSixes,  allow an extra move after first 6, ... consult Dad
-
 6.5. if rolled once and not a six, changeplayer. also allow for "counting" sixes.
-
 7. rename project Oofda
-
 8. if piece in exit lane, can only move further up exit lane
 
 8b. write an AI to "play" the game with a short timeout to watch it progress.
-
 9. if all pieces in exit lane, player wins game. throw up an alert for now
 9b. option to restart game, make sure that works.
 
