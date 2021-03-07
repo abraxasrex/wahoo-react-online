@@ -4,12 +4,13 @@ import Player from '../classes/Player';
 function moveHere(props: any, e: any){
     e.preventDefault();
     const key = props._key;
-    debugger;
+   // debugger;
     const managerState = props.manager;
 
     if(managerState.availableSlots[key]) {
       //  managerState.currentSlot = props;
-        props.moveToSlot(props);
+        let lastSlot = managerState.currentPiece.props.slot;
+        props.moveToSlot(props, lastSlot);
     }
 }
 
@@ -46,8 +47,8 @@ function Slot (props: any) {
                 backgroundColor: highlightSlots(props.x, props.y, props.slotType, props.specialSlotType, props.owner)}}
                 onClick={(e) => moveHere(props, e)}>
                 <span> 
-                    {/* props.x + "," + props.y */} 
-                    {props.order}
+                    { props.x + "," + props.y } 
+                    {/* props.order */}
                 </span> 
             </div>
         );

@@ -11,7 +11,7 @@ function  GamePiece (props: any) {
             const id = props._id;
             const managerState = props.manager;
             // allow to deselect piece
-            if(managerState.currentPiece.key === id) {
+            if(managerState.currentPiece.key == id) {
                 props.cancelSelect();
                 return;
             }

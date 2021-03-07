@@ -53,23 +53,33 @@ class GameManager {
     }
 
  
+    async initCurrentSlot () {
 
-    async moveToSlot(targetSlot: any) {
-        let lastSlot = this.currentSlot;
-        let currentSlotIndex = targetSlot.order;
-        let lastSlotIndex = lastSlot?.order;
+    }
+
+    async moveToSlot(targetSlot: any, lastSlot: any) {
+
+        // if(!this.currentSlot) {
+        //     await this.initCurrentSlot();
+        // }
+
+      //  let lastSlot = lastSlot;
+        let currentSlotIndex = targetSlot.order ? targetSlot.order : targetSlot.props.order;
+        let lastSlotIndex = (lastSlot && lastSlot.props) ? lastSlot.props.order : undefined;
         let slots = this.slots;
         let pieces = this.pieces;
 
         // update piece to next slot
-        this.currentSlot = this.slots[targetSlot.order || targetSlot.props.order];
+        this.currentSlot = this.slots[currentSlotIndex];
         let currentPiece = React.cloneElement(this.currentPiece, 
             {slot: this.currentSlot, x: this.currentSlot.props.x, y: this.currentSlot.props.y});
         this.currentPiece = currentPiece;
 
         // clone updated elements
         slots[currentSlotIndex] = React.cloneElement(this.currentSlot, {occupied: this.currentPiece.props.player});
-        slots[lastSlotIndex] = React.cloneElement(lastSlot, {occupied: false});
+        if(lastSlot && lastSlot.props){
+            slots[lastSlotIndex] = React.cloneElement(lastSlot, {occupied: false});
+        } 
         pieces[this.currentPiece.props._id] = this.currentPiece;
 
         // update state
@@ -84,18 +94,17 @@ class GameManager {
             this.currentPlayer = this.players[0]
         } else {
             // playernumber should be one more than index
-            this.currentPlayer = this.players[currentPlayer?.playerNumber || 0];
+            this.currentPlayer = this.players[(currentPlayer?.playerNumber) || 0];
         }
         this.clearSlate();
 
         this.hasRolled = false;
         this.currentRoll = undefined;
-    
     }
 
     clearSlate() {
         this.currentPiece = {key: undefined};
-        this.currentPiece = false;
+     //   this.currentPiece = false;
         this.currentSlot = false;
         this.availableSlots = {};
     }
@@ -108,7 +117,7 @@ class GameManager {
     async highlightSlotArray (slots: Array<any> = []) {
         this.availableSlots = {};
         for (let i = 0; i < (slots?.length || 0); i++) {
-            this.availableSlots[slots[i]] = true;
+            this.availableSlots[slots[i].key] = true;
         }
     }
 
@@ -127,9 +136,12 @@ class GameManager {
                 stepIndex = 0;
             }
 
+            let matchSlot = this.slots.find((slot)=> {
+                return slot.props.order == stepIndex;
+            });
             // to-add: remove steps with own piece before returning
-            if(this.slots[stepIndex].props.occupied ) {
-                if(this.slots[stepIndex].props.occupied.playerNumber !== this.currentPlayer?.playerNumber) {
+            if(matchSlot.props.occupied ) {
+                if(matchSlot.props.occupied.playerNumber !== this.currentPlayer?.playerNumber) {
                     steps.push(this.slots[stepIndex]);
                 }
             } else {
@@ -144,10 +156,16 @@ class GameManager {
 
         let currentSlot = this.currentPiece.props.slot.props;
         // in Start 
+       // let slotsRef = this.slots;
         if (currentSlot.slotType === "Start" && (this.currentRoll === 1 || this.currentRoll === 6)) {
-           let entrySlot = currentSlot.owner.specialSlots["Entry"].key;
-            if(!entrySlot.occupied) {
-                this.highlightSlotArray([entrySlot])
+           let entrySlot = currentSlot.owner.specialSlots["Entry"];
+
+           let slotRef = this.slots.find((slot)=> {
+                return slot.props.x === entrySlot.x && slot.props.y === entrySlot.y;
+           });
+
+            if(!slotRef.occupied && !slotRef.props.occupied) {
+                this.highlightSlotArray([entrySlot]);
             }
         }
 
@@ -171,6 +189,7 @@ class GameManager {
 
             }
 
+            
             // 1. find Index in this.slots of  currentSlot
             let steps = await this.getTrackSteps()
             this.highlightSlotArray(steps);

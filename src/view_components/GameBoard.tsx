@@ -103,6 +103,8 @@ class GameBoard extends React.Component<any>  {
     }
 
     async setTestPieces () {
+
+      //  return;
             //sllot info to get:
             // slots[id/order index]
 
@@ -115,16 +117,30 @@ class GameBoard extends React.Component<any>  {
             let slots: any[] = this.props.game.manager.slots;
             let pieces: any[] = this.props.game.manager.pieces;
             for (let i = 0; i < TestPositions.length; i++) {
+
                 let slotNumber = TestPositions[i]["slotNumber"];
                 let slot = slots[slotNumber];
 
+                // if(!this.props.game.manager.currentSlot) {
+                //     await this.setManagerState("currentSlot", slot);
+                // }
+
+                // if(!this.props.game.manager.currentPiece) {
+                //     let pieceNumber =  TestPositions[i].pieceNumber;
+                //     let piece = pieces[pieceNumber];
+                //    // debugger; 
+                //     await this.setManagerState("currentPiece", piece)
+                // }
+            //    await this.setManagerState("pieces", )
                 let pieceNumber =  TestPositions[i].pieceNumber;
                 let piece = pieces[pieceNumber];
-               // debugger; 
-                await this.setManagerState("currentSlot", slot);
-                await this.setManagerState("currentPiece", piece)
-            //    await this.setManagerState("pieces", )
-                this.moveToSlot(slot);
+                let currentPiece = this.props.manager.currentPiece.props ? this.props.manager.currentPiece : undefined
+                await this.asyncSelectPiece(piece.props._id);
+             //   let move = this.moveToSlot;
+            //    setTimeout(()=> {
+               //     move(slot, currentPiece);
+           //     }, 200);
+                this.moveToSlot(slot, currentPiece ? currentPiece.props.slot : undefined);
             }
     }
 
@@ -175,6 +191,11 @@ class GameBoard extends React.Component<any>  {
      selectPiece = (id: string) => {
          this.props.game.manager.selectPiece(id);
          this.resetPiecesAndSlots();
+         return true;
+    }
+
+    async asyncSelectPiece(id: string) {
+        await this.selectPiece(id);
     }
 
     cancelSelect = () => {
@@ -182,8 +203,8 @@ class GameBoard extends React.Component<any>  {
         this.resetPiecesAndSlots();
     }
 
-    moveToSlot = (targetSlot: any) => {
-        this.props.game.manager.moveToSlot(targetSlot);
+    moveToSlot = (targetSlot: any, lastSlot: any) => {
+        this.props.game.manager.moveToSlot(targetSlot, lastSlot);
         this.resetPiecesAndSlots();
     }
 
