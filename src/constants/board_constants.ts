@@ -69,3 +69,10 @@ export const SpecialSlotPositions = [
     {x:225, y:225, playerNumber: false, specialSlotType: "Jump"},
     {x:225, y:125, playerNumber: false, specialSlotType: "Jump"}
 ];
+
+export const TestPositions = [
+    {player: 1, slotNumber: 18, pieceNumber: 75},
+    {player: 2, slotNumber: 37, pieceNumber: 78},
+    {player: 3, slotNumber: 1, pieceNumber: 82},
+    {player: 4, slotNumber: 35, pieceNumber: 87}
+]

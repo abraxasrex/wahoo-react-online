@@ -62,7 +62,7 @@ class GameManager {
         let pieces = this.pieces;
 
         // update piece to next slot
-        this.currentSlot = this.slots[targetSlot.order];
+        this.currentSlot = this.slots[targetSlot.order || targetSlot.props.order];
         let currentPiece = React.cloneElement(this.currentPiece, 
             {slot: this.currentSlot, x: this.currentSlot.props.x, y: this.currentSlot.props.y});
         this.currentPiece = currentPiece;

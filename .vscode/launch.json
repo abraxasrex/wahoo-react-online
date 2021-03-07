@@ -1,0 +1,19 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "chrome", // Debug chrome
+      "request": "attach", // VS Code has to launch the program
+      "name": "Attach to localhost", // Just a name
+      "port": 9222, // Port number where debugging is enabled
+      // Where are the files that are being served in the URL including the source maps
+      "webRoot": "${workspaceFolder}",
+      /* Override the URLs in source map which will be like localhost:port to chrome
+         Port these to the .ts files in the project
+         Use this only if you're having issues with source map not linking to js */
+      "sourceMapPathOverrides": {
+        "./src/*": "${workspaceFolder}/src/*"
+      }
+    }
+  ]
+}

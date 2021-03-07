@@ -5,7 +5,7 @@ import GamePiece from './GamePiece';
 import {GridStartBound, GridEndBound, TrackMax, EndMax, multiplier,
 TrackStartPositions, TrackPattern, StartLaneStartPositions, StartLanePattern,
 EndLanePattern, EndLaneStartPositions, CenterSlotPattern, CenterSlotStartPosition, 
-SpecialSlotPositions} from '../constants/board_constants';
+SpecialSlotPositions, TestPositions} from '../constants/board_constants';
 
 import {createKey, addSlotBatch} from '../helpers/Helpers';
 import Player from '../classes/Player';
@@ -14,10 +14,14 @@ import Player from '../classes/Player';
 class GameBoard extends React.Component<any>  {
 
     ctx: any;
+    testMode: boolean = false;
 
     constructor(props: any) {
         super(props);
         this.ctx = this.createContext();
+
+        //uncomment below to test
+        this.testMode = true;
     }
 
     createContext(): any {
@@ -98,8 +102,33 @@ class GameBoard extends React.Component<any>  {
         await this.setManagerState("slots", slots);
     }
 
-    async setPieces() {
+    async setTestPieces () {
+            //sllot info to get:
+            // slots[id/order index]
 
+       //     this.currentPiece = this.pieces[id];
+      //  this.currentSlot = this.currentPiece.props.slot;
+
+        // use slotNumber and pieceNumber to get slot and piece references
+
+        //    debugger;
+            let slots: any[] = this.props.game.manager.slots;
+            let pieces: any[] = this.props.game.manager.pieces;
+            for (let i = 0; i < TestPositions.length; i++) {
+                let slotNumber = TestPositions[i]["slotNumber"];
+                let slot = slots[slotNumber];
+
+                let pieceNumber =  TestPositions[i].pieceNumber;
+                let piece = pieces[pieceNumber];
+               // debugger; 
+                await this.setManagerState("currentSlot", slot);
+                await this.setManagerState("currentPiece", piece)
+            //    await this.setManagerState("pieces", )
+                this.moveToSlot(slot);
+            }
+    }
+
+    async setPieces() {
         let pieces: any = {};
         let slots = this.props.game.manager.slots;
         for (var i = 0; i < slots.length; i++) {
@@ -113,7 +142,11 @@ class GameBoard extends React.Component<any>  {
                 pieces[piece.props._id] = piece;
             }
         }
-        await this.setManagerState("pieces", pieces)
+        await this.setManagerState("pieces", pieces);
+
+        if(this.testMode) {
+           await this.setTestPieces();
+        }
     }
 
     async resetPiecesAndSlots () {

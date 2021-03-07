@@ -219,8 +219,10 @@ a. calculate # of steps based on current roll
 d. if player's piece, count up step but do not highlight/ allow move
 a2. write tests for 1-2 !!! this will save you time and thought!
 
-[here]
+
 a. write optional testing starting places for piece : capture player, jump, exit lane, and dont capture own piece
+[here]
+
 d2. currently, you can get out of Entry slots onto your own piece (there's a poor game design element potentially where the player's slot map isn't updated)
 b. highlight slots for step # until hitting exit which belongs to player, or players piece
 c. if highlight encompasses player exit, and there are remaining steps, start highlighting those
