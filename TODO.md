@@ -222,13 +222,32 @@ a2. write tests for 1-2 !!! this will save you time and thought!
 
 a. write optional testing starting places for piece : capture player, jump, exit lane, and dont capture own piece
 d2. currently, you can get out of Entry slots onto your own piece (there's a poor game design element potentially where the player's slot map isn't updated)
+b. highlight slots for step # until  players piece
+b. highlight slots for step # until hitting exit which belongs to player
+
+-------------------
+build notes:
+
+cmd: chrome.exe --remote-debugging-port=9222 --user-data-dir=remote-profile
+tsc - w
+npm start
+-------------------
+bug 2: piece will move to track corresponding #, not end lane
+c. if highlight encompasses player exit, and there are remaining steps, start highlighting those
 [here]
 
-b. highlight slots for step # until hitting exit which belongs to player, or players piece
-c. if highlight encompasses player exit, and there are remaining steps, start highlighting those
-3. if movePiece onto other player's piece, send their piece home after you move yours
+-------- [potential refactor] --------------------
+1. checkpoint to prevent duplicate key creation
+2. standardization of piece and slot keys!
+3. store Slots as a map, but *with* their order as key (*gasp*). make extra sure that no slot can possibly be added with same key tho
+4. decouple Slot/GamePiece elements from being held in memory.....this seems more and more wrong as time goes on lol.....
 
+----------------------------------
+
+bug 1: slots with matching order #s are getting confused with one another during play. there are also duplicate keys.
+3. if movePiece onto other player's piece, send their piece home after you move yours
 4. if movepiece onto a jump slot, and roll is 1, allow highlighting thru jump zone
+
 6. logic for rolling 6: countSixes,  allow an extra move after first 6, ... consult Dad
 6.5. if rolled once and not a six, changeplayer. also allow for "counting" sixes.
 7. rename project Oofda

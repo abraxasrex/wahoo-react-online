@@ -52,25 +52,19 @@ class GameManager {
         }
     }
 
- 
-    async initCurrentSlot () {
-
-    }
-
     async moveToSlot(targetSlot: any, lastSlot: any) {
 
-        // if(!this.currentSlot) {
-        //     await this.initCurrentSlot();
-        // }
-
-      //  let lastSlot = lastSlot;
         let currentSlotIndex = targetSlot.order ? targetSlot.order : targetSlot.props.order;
         let lastSlotIndex = (lastSlot && lastSlot.props) ? lastSlot.props.order : undefined;
         let slots = this.slots;
         let pieces = this.pieces;
 
         // update piece to next slot
-        this.currentSlot = this.slots[currentSlotIndex];
+     //   this.currentSlot = this.slots[currentSlotIndex];
+        this.currentSlot = this.slots.find((slot: any) => {
+            return slot.key == (targetSlot._key ? targetSlot._key : targetSlot.props._key);
+        });
+
         let currentPiece = React.cloneElement(this.currentPiece, 
             {slot: this.currentSlot, x: this.currentSlot.props.x, y: this.currentSlot.props.y});
         this.currentPiece = currentPiece;
@@ -129,6 +123,7 @@ class GameManager {
         });
 
         let steps = [];
+        let endCount = 0;
 
         for(var i = 0; i < (this.currentRoll || 0); i++) {
             stepIndex +=1;
@@ -136,10 +131,30 @@ class GameManager {
                 stepIndex = 0;
             }
 
-            let matchSlot = this.slots.find((slot)=> {
-                return slot.props.order == stepIndex;
-            });
-            // to-add: remove steps with own piece before returning
+            // let matchSlot = this.slots.find((slot)=> {
+            //     return slot.props.order == stepIndex;
+            // });
+            let matchSlot = this.slots[stepIndex];
+
+            // 1. if matchSlot is an "Exit" special type,
+            if(matchSlot.props.specialSlotType == "Exit") {
+                // 2. find first index of a start piece matching the player
+                let endIndex = this.slots.findIndex((slot)=> {
+                    return slot.props.owner._id == this.currentPlayer?._id && 
+                    slot.props.slotType == "End";
+                });
+                // 3. set stepIndex here... and pray
+                stepIndex = endIndex;
+            }
+
+            if(matchSlot.props.slotType == "End") {
+                endCount += 1;
+
+                if(endCount == 4) {
+                    return steps;
+                }
+            }
+
             if(matchSlot.props.occupied ) {
                 if(matchSlot.props.occupied.playerNumber !== this.currentPlayer?.playerNumber) {
                     steps.push(this.slots[stepIndex]);
@@ -184,8 +199,18 @@ class GameManager {
             }
             if(currentSlot.owner && currentSlot.owner.specialSlots["Exit"]) {
                 console.log("Exit!");
+
+                // let entrySlot = currentSlot.owner.specialSlots["Entry"];
+
+                // let slotRef = this.slots.find((slot)=> {
+                //      return slot.props.x === entrySlot.x && slot.props.y === entrySlot.y;
+                // });
+     
+                //  if(!slotRef.occupied && !slotRef.props.occupied) {
+                //      this.highlightSlotArray([entrySlot]);
+                //  }
                 
-                this.highlightSlotArray()
+                // this.highlightSlotArray()
 
             }
 

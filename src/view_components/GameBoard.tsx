@@ -21,7 +21,7 @@ class GameBoard extends React.Component<any>  {
         this.ctx = this.createContext();
 
         //uncomment below to test
-        this.testMode = true;
+       this.testMode = true;
     }
 
     createContext(): any {
@@ -104,42 +104,17 @@ class GameBoard extends React.Component<any>  {
 
     async setTestPieces () {
 
-      //  return;
-            //sllot info to get:
-            // slots[id/order index]
-
-       //     this.currentPiece = this.pieces[id];
-      //  this.currentSlot = this.currentPiece.props.slot;
-
-        // use slotNumber and pieceNumber to get slot and piece references
-
-        //    debugger;
             let slots: any[] = this.props.game.manager.slots;
             let pieces: any[] = this.props.game.manager.pieces;
             for (let i = 0; i < TestPositions.length; i++) {
 
                 let slotNumber = TestPositions[i]["slotNumber"];
                 let slot = slots[slotNumber];
-
-                // if(!this.props.game.manager.currentSlot) {
-                //     await this.setManagerState("currentSlot", slot);
-                // }
-
-                // if(!this.props.game.manager.currentPiece) {
-                //     let pieceNumber =  TestPositions[i].pieceNumber;
-                //     let piece = pieces[pieceNumber];
-                //    // debugger; 
-                //     await this.setManagerState("currentPiece", piece)
-                // }
-            //    await this.setManagerState("pieces", )
                 let pieceNumber =  TestPositions[i].pieceNumber;
                 let piece = pieces[pieceNumber];
+
                 let currentPiece = this.props.manager.currentPiece.props ? this.props.manager.currentPiece : undefined
                 await this.asyncSelectPiece(piece.props._id);
-             //   let move = this.moveToSlot;
-            //    setTimeout(()=> {
-               //     move(slot, currentPiece);
-           //     }, 200);
                 this.moveToSlot(slot, currentPiece ? currentPiece.props.slot : undefined);
             }
     }
@@ -162,6 +137,16 @@ class GameBoard extends React.Component<any>  {
 
         if(this.testMode) {
            await this.setTestPieces();
+        }
+    }
+
+    slotSort (lastSlot: any, nextSlot: any) {
+        if(parseInt(lastSlot.props._key) < parseInt(nextSlot.props._key)) {
+            return -1;
+        } else if (parseInt(lastSlot.props._key) > parseInt(nextSlot.props._key)){
+            return 1;
+        } else {
+            return 0;
         }
     }
 

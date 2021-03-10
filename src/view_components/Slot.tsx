@@ -47,8 +47,8 @@ function Slot (props: any) {
                 backgroundColor: highlightSlots(props.x, props.y, props.slotType, props.specialSlotType, props.owner)}}
                 onClick={(e) => moveHere(props, e)}>
                 <span> 
-                    { props.x + "," + props.y } 
-                    {/* props.order */}
+                    { /* props.x + "," + props.y */} 
+                    { props.order }
                 </span> 
             </div>
         );
