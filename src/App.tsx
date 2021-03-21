@@ -1,38 +1,55 @@
 import React,{useState} from 'react';
 import GameBoard from './view_components/GameBoard';
-import Game from './classes/Game';
+// import Game from './classes/Game';
 import GameView from './view_components/GameView';
 import logo from './logo.svg';
 import './App.css';
 
 
+import {Game, iGame} from './classes/Game';
+import {colorSet } from './classes/Game';
+import {iPlayer, Player} from './classes/Player';
 
-function startGame(game: Game, setGame: any) {
+const startGame = async (game: any, gameSetter: any)  => {
+  
+  const players: iPlayer[] = [];
+  const numberOfPlayers = 4;
 
-  if (game && game.players && game.players.length > 0) {
-      const player = game.players[0];
-      const manager = game.manager;
-      manager.currentPlayer = player;
-      setGame({manager: manager});
+  for (var i=0; i < numberOfPlayers; i++) {
+    players.push(Player((i + 1), colorSet[i]));
   }
-}
+  await gameSetter({...game, players: players});
+
+  return players;
+};
 
 function App() {
-
-  const gameInit = new Game(4);
-  const [game, setGame] = useState(gameInit);
-  startGame(game, setGame);
-
+  
   return (
     <div className="App">
       <header className="App-header">
         <p>
           Wahoo
-        </p>
-          <GameView game={game} setGame={setGame} currentRoll={game.manager.currentRoll}  />
+        </p>  
+        <div className="wahoo-game">
+          <GameView startGame={startGame}></GameView>
+        </div>
       </header>
     </div>
   );
 }
+
+{/* <div className="wahoo-game">
+<div>
+    {playerViews}
+</div>
+<div>
+    <GameBoard game={props.game} manager={props.game.manager} setGame={props.setGame}></GameBoard>
+</div>
+<div>
+    <DiceView manager={props.game.manager} currentRoll={props.currentRoll}
+    game={props.game} setGame={props.setGame}></DiceView>
+</div> 
+</div> */}
 
 export default App;

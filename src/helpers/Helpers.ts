@@ -1,3 +1,4 @@
+import { iSlot, iSlotType } from "../classes/Slot";
 
 
 export function getRandomInt(max: number) {
@@ -5,17 +6,17 @@ export function getRandomInt(max: number) {
   }
 
 
-export async function createKey(slot: any, counter: number) {
-    return counter.toString() + slot.owner.toString() + slot.order.toString() + slot.slotType.toString() + slot.y.toString() + slot.x.toString();
+export async function createKey(slot: iSlot, counter: number) {
+    return counter.toString() + slot?.owner?.toString() + slot.orderId.toString() + slot.slotType.toString() + slot.y.toString() + slot.x.toString();
 }
 
-export async function addSlotBatch (context: any, pattern: any, startPositions: any, slots: any, slotType: string, players: Array<any>, directMap: boolean, orientation: string) {
+export async function addSlotBatch (context: any, pattern: any, startPositions: any, slots: any, slotType: iSlotType, players: Array<any>, directMap: boolean, orientation: string) {
 
   let x = 0;
   let y = 0;
   let counter = {count: 0};
   let occupied = false;
-  let player = false;
+  let player = undefined;
 
   // calculate path of slots from 1 or more starting places
   for (var i = 0; i < startPositions.length; i++) {
@@ -25,10 +26,10 @@ export async function addSlotBatch (context: any, pattern: any, startPositions: 
       y = (startPositions[i].y * context.multiplier);
 
       // if there's a player, set player
-      if (slotType === "End" || slotType === "Start") {
+      if (slotType === iSlotType.End || slotType === iSlotType.Start) {
           player = players[i];
       }
-      let slot = {x: x, y: y, occupied: occupied, slotType: slotType, order: counter.count, owner: player}
+      let slot: iSlot = {x: x, y: y, occupied: occupied, slotType: slotType, orderId: counter.count, owner: player, key: undefined}
       await context.addSlot(slot, slots, counter);     
 
       // calculates tht direction to move and place the next slot
@@ -45,7 +46,8 @@ export async function addSlotBatch (context: any, pattern: any, startPositions: 
                   let model = {x: x, y: y};
                   model["x"] += (pattern[j]["x"] * context.multiplier);
                   model["y"] += (pattern[j]["y"] * context.multiplier);
-                  let slot = {x: model.x, y: model.y, occupied: occupied, slotType: slotType, order: counter.count, owner: player}
+                  let slot: iSlot = {x: model.x, y: model.y, occupied: occupied, slotType: slotType, 
+                    orderId: counter.count, owner: player, key: undefined}
                   await context.addSlot(slot, slots, counter);
                   x = model.x;
                   y = model.y;

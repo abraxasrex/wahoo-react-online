@@ -236,11 +236,18 @@ bug 2: piece will move to track corresponding #, not end lane
 c. if highlight encompasses player exit, and there are remaining steps, start highlighting those
 [here]
 
+-------------- [ ongoing refactor] ---------------------
+1. Move Slots and Pieces into container Components
+2. Reconcile new relationship between GameView and GameBoard (or just remove the latter)
+
 -------- [potential refactor] --------------------
 1. checkpoint to prevent duplicate key creation
 2. standardization of piece and slot keys!
 3. store Slots as a map, but *with* their order as key (*gasp*). make extra sure that no slot can possibly be added with same key tho
 4. decouple Slot/GamePiece elements from being held in memory.....this seems more and more wrong as time goes on lol.....
+
+A. Solve some of this by moving logic into <Game />, not an abstract Manager
+B. Move to Redux as Single source of truth.
 
 ----------------------------------
 

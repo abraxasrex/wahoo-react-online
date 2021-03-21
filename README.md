@@ -66,3 +66,14 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `npm run build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+
+### 
+
+-------------------
+Typescript build notes:
+
+cmd: chrome.exe --remote-debugging-port=9222 --user-data-dir=remote-profile
+tsc - w
+npm start
+-------------------

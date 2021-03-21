@@ -1,28 +1,31 @@
-import GameManager from './GameManager';
-import Player from './Player';
+import GameManager from '../helpers/GameManager';
+import {iPlayer} from './Player';
 
-const colorSet = ["Red", "Blue", "Green", "Yellow"];
+export const colorSet = ["Red", "Blue", "Green", "Yellow"];
 
-// export interface IGame {
-//     players: Array<IPlayer>;
+export interface iGame {
+    players: iPlayer[],
+    slots: object,
+    pieces: object,
+    currentPiece: object,
+    availableSlots: object,
+    hasRolled: boolean,
+    currentPlayer?: iPlayer,
+    currentSlot?: object,
+    currentRound: number,
+    currentRoll?: number
+} 
 
-// }
-export class Game {
+export const Game: iGame = {
 
-    players: Array<Player>;
-    manager: GameManager;
-
-    constructor(playerNumber: number) {
-        const players = [];
-        
-        
-        for (var i=0; i < playerNumber; i++) {
-            players.push(new Player((i + 1), colorSet[i]));
-        }
-        
-        this.players = players;
-        this.manager = new GameManager(players);
-    }
+    players: [],
+    slots:{},
+    pieces: {},
+    currentPiece: {key: undefined},
+    availableSlots: {},
+    hasRolled: false,
+    currentPlayer: undefined,
+    currentSlot: undefined,
+    currentRound: 0,
+    currentRoll: undefined
 }
-
-export default Game;

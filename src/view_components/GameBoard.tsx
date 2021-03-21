@@ -8,15 +8,27 @@ EndLanePattern, EndLaneStartPositions, CenterSlotPattern, CenterSlotStartPositio
 SpecialSlotPositions, TestPositions} from '../constants/board_constants';
 
 import {createKey, addSlotBatch} from '../helpers/Helpers';
-import Player from '../classes/Player';
+// import Player from '../classes/Player';
 
+import { iPlayer } from '../classes/Player';
+import { iSlot } from '../classes/Slot';
+import { iPiece } from '../classes/Piece';
 
+export interface iManagerSetter {
+
+}
+
+interface iGameBoardProps {
+    props: any,
+    slots: iSlot[],
+    pieces: iPiece[]
+}
 class GameBoard extends React.Component<any>  {
 
     ctx: any;
     testMode: boolean = false;
 
-    constructor(props: any) {
+    constructor({slots, pieces, ...props}: iGameBoardProps) {
         super(props);
         this.ctx = this.createContext();
 
@@ -32,7 +44,7 @@ class GameBoard extends React.Component<any>  {
         return ctx;
     }
 
-    async setAllSlots (players: Array<Player>) {
+    async setAllSlots (players: iPlayer[]) {
         const slots: any[] = [];
 
         await addSlotBatch(this.ctx, TrackPattern, TrackStartPositions, slots, "Track", players, false, "Straight");
@@ -92,7 +104,13 @@ class GameBoard extends React.Component<any>  {
 
     async setManagerState(field: any, values: any) {
         let manager = this.props.game.manager;
-        manager[field] = values;
+        if(field && field.length && field.length > 0) {
+            for(let i = 0; i < field.length; i++) {
+                manager[field[i]] = values;
+            }
+        } else {
+            manager[field] = values;
+        }
         await this.props.setGame({manager: manager});
     }
 
@@ -205,13 +223,18 @@ class GameBoard extends React.Component<any>  {
     }
 
     render() {
-        let pieces = Object.entries(this.props["game"]["manager"]["pieces"]).map((piece)=> {
-            return piece[1];
-        }) || [];
+        // let pieces = Object.entries(this.props["game"]["manager"]["pieces"]).map((piece)=> {
+        //     return piece[1];
+        // }) || [];
+        // return (
+        //     <div className="game-board" onClick={(e)=> this.checkCancelSelect(e)}>
+        //         {this.props["game"]["manager"]["slots"]}
+        //         { pieces }  
+        //     </div>
+        // );
         return (
             <div className="game-board" onClick={(e)=> this.checkCancelSelect(e)}>
-                {this.props["game"]["manager"]["slots"]}
-                { pieces }  
+                {this.props.children}
             </div>
         );
     }
