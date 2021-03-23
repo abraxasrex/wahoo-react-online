@@ -234,11 +234,14 @@ npm start
 -------------------
 bug 2: piece will move to track corresponding #, not end lane
 c. if highlight encompasses player exit, and there are remaining steps, start highlighting those
-[here]
+
 
 -------------- [ ongoing refactor] ---------------------
 1. Move Slots and Pieces into container Components
 2. Reconcile new relationship between GameView and GameBoard (or just remove the latter)
+3. Get UI events pipelined down to Slots and GamePieces
+[here]
+4. 
 
 -------- [potential refactor] --------------------
 1. checkpoint to prevent duplicate key creation

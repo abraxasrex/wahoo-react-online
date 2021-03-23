@@ -13,9 +13,34 @@ import {Player} from '../classes/Player';
 import {GameManager} from '../helpers/GameManager';
 import { iSlot } from '../classes/Slot';
 
+import Slots from './Slots';
+import Pieces from './Pieces';
+
 interface iGameViewProps {
     startGame: Function
 }
+
+   // UI
+   const selectPiece = (id: string, manager: any) => {
+        manager.selectPiece(id);
+    //   this.resetPiecesAndSlots();
+        return true;
+    }
+
+    // asyncSelectPiece(id: string) {
+    // await this.selectPiece(id);
+    // }
+
+    const cancelSelect = (manager: any) => {
+        manager.cancelSelect();
+    //   this.resetPiecesAndSlots();
+    }
+
+    const moveToSlot = (targetSlot: any, lastSlot: any, manager: any) => {
+        manager.moveToSlot(targetSlot, lastSlot);
+    // this.resetPiecesAndSlots();
+    }
+
 const GameView = ({startGame}: iGameViewProps) => {
 
 
@@ -36,12 +61,13 @@ const GameView = ({startGame}: iGameViewProps) => {
 
     let slots = Object.entries(game.slots).map((slot: any)=> {
         return <Slot game={game} setGame={setGame} key={slot.key}
-                    slot={slot} manager={manager}>
+                    slot={slot} manager={manager} moveToSlot={moveToSlot}>
                 </Slot>
     }) || [];
 
     let pieces = Object.entries(game.pieces).map((piece: any)=> {
         return <GamePiece game={game} setGame={setGame} key={piece.key}
+                    selectPiece={selectPiece} cancelSelect={cancelSelect}
                     piece={piece} manager={manager}>
                 </GamePiece>
     }) || [];
@@ -54,8 +80,8 @@ const GameView = ({startGame}: iGameViewProps) => {
             </div>
             <div>
                 <GameBoard game={game} manager={manager} setGame={setGame}>
-                    {slots}
-                    {pieces}
+                    <Slots game={game} manager={manager}  slots={slots} />
+                    <Pieces game={game} manager={manager}  pieces={pieces} />
                 </GameBoard>
             </div>
             <div>

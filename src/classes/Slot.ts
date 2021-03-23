@@ -10,7 +10,8 @@ export enum iSpecialSlotType {
 export enum iSlotType {
     Track,
     End,
-    Start
+    Start,
+    Center
 }
 
 export interface iSlot {

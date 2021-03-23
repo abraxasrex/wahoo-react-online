@@ -1,5 +1,5 @@
 import React from 'react';
-import Player from '../classes/Player';
+import {iPlayer, Player} from '../classes/Player';
 
 function moveHere(props: any, e: any){
     e.preventDefault();
@@ -14,7 +14,7 @@ function moveHere(props: any, e: any){
     }
 }
 
-function highlightSlots(x: number, y: number, slotType: string, specialSlotType: string, owner: Player) {
+function highlightSlots(x: number, y: number, slotType: string, specialSlotType: string, owner: iPlayer) {
 
     if(specialSlotType && specialSlotType === "Entry") {
         return "brown"
