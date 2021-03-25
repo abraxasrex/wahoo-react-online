@@ -241,7 +241,9 @@ c. if highlight encompasses player exit, and there are remaining steps, start hi
 2. Reconcile new relationship between GameView and GameBoard (or just remove the latter)
 3. Get UI events pipelined down to Slots and GamePieces
 [here]
-4. 
+4. turn off test piece setting, just get pieces and slots to appear on the board
+5. get back to piece moving functionality
+6. get back to testing mode functionality
 
 -------- [potential refactor] --------------------
 1. checkpoint to prevent duplicate key creation

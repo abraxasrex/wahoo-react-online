@@ -1,5 +1,6 @@
 
 import {getRandomInt} from '../helpers/Helpers';
+import { iSpecialSlot } from '../view_components/GameBoard';
 import GamePiece from '../view_components/GamePiece';
 import { iPiece } from './Piece';
 import { iSlot } from './Slot';
@@ -14,7 +15,7 @@ export interface iPlayer {
     playerName?: string;
     currentScore: number;
     currentTurn?: boolean;
-    specialSlots: object;
+    specialSlots: any;
     key?: any;
 }
 

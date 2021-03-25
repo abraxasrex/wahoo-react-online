@@ -19,6 +19,10 @@ export interface iManagerSetter {
 
 }
 
+export interface iSpecialSlot {
+    key: string;
+}
+
 export interface iBoardCounter {
     count: number
 }
@@ -74,7 +78,8 @@ class GameBoard extends React.Component<any>  {
         return slots; 
     }
     
-    async assignSpecialSlots(slot: any, key: string) {
+  
+    async assignSpecialSlots(slot: iSlot, key: string) {
         for  (var i = 0; i < SpecialSlotPositions.length; i++) {
 
             let specialSlot: any = SpecialSlotPositions[i]
@@ -82,18 +87,20 @@ class GameBoard extends React.Component<any>  {
             if(specialSlot.x === slot.x && specialSlot.y === slot.y) {
                 slot.specialSlotType = specialSlot.specialSlotType;
 
-                if(specialSlot.playerNumber) {
+                if(specialSlot.playerNumber && slot?.owner) {
                     // assign player # to regular slot info
-                    slot.playerNumber = specialSlot.playerNumber;
+                    let players: iPlayer[] = this.game.players;
+
+                    slot.owner = players[specialSlot.playerNumber - 1];
                     // add special slot to the game manager
-                    let players = this.manager.players;
-                    specialSlot.key = key;
-                    players[slot.playerNumber - 1].specialSlots[slot.specialSlotType] = specialSlot;
+                    let typedSpecialSlot: iSpecialSlot = specialSlot;
+                    typedSpecialSlot.key = key || "default";
+                    players[slot.owner.playerNumber - 1].specialSlots[typedSpecialSlot.key] = specialSlot;
                     await this.setManagerState("players", players);
                 }
 
                 // add to specials reference
-                var specials = this.manager["specialSlots"];
+                var specials = this.game.specialSlots;
                 specials[key] = slot;
                 await this.setManagerState("specialSlots", specials);
             }
@@ -141,44 +148,44 @@ class GameBoard extends React.Component<any>  {
 
     async setTestPieces () {
 
-            let slots: any[] = this.props.game.manager.slots;
-            let pieces: any[] = this.props.game.manager.pieces;
+            let slots: any = this.game.slots;
+            let pieces: any = this.game.pieces;
             for (let i = 0; i < TestPositions.length; i++) {
 
                 let slotNumber = TestPositions[i]["slotNumber"];
                 let slot = slots[slotNumber];
                 let pieceNumber =  TestPositions[i].pieceNumber;
-                let piece = pieces[pieceNumber];
+                let piece: iPiece = pieces[pieceNumber];
 
-                let currentPiece = this.props.manager.currentPiece.props ? this.props.manager.currentPiece : undefined
-                await this.asyncSelectPiece(piece.props._id);
-                this.props.moveToSlot(slot, currentPiece ? currentPiece.props.slot : undefined);
+                let currentPiece: iPiece = this.game?.currentPiece;
+                await this.asyncSelectPiece(piece?._id || '');
+                this.props.moveToSlot(slot, currentPiece ? currentPiece.slot : undefined, this.manager, this.game, this.setGame);
             }
     }
 
     async setPieces() {
         let pieces: any = {};
-        let slots = this.props.game.manager.slots;
-        for (var i = 0; i < slots.length; i++) {
-            if(slots[i].props.slotType === "Start") {
-                let game = this.props.game;
-                let setGame = this.props.setGame;
+      //  let slots = Object.keys(this.game.slots);
+        for ( let [index, [key, value]] of Object.entries(this.game.slots)) {
+            if(value.slotType === "Start") {
+                let game = this.game;
+                let setGame = this.setGame;
                 // slot: iSlot;
                 // key: any;
                 // _id: string;
                 // owner: iPlayer;
                 let piece: iPiece = {
-                    slot: slots[i],
-                    key: i,
-                    _id: i?.toString(),
-                    owner: slots[i]?.owner,
+                    slot: value,
+                    key: index,
+                    _id: index.toString(),
+                    owner: value?.owner,
                 }
 
                 // let piece: any = <GamePiece slot={slots[i]} key={i} _id={i} 
                 //     game={game} manager={game.manager} player={slots[i].props.owner}
                 //     setGame={setGame} cancelSelect={this.props.cancelSelect}
                 //     selectPiece={this.selectPiece}></GamePiece>;
-                pieces[piece._id] = piece;
+                pieces[piece._id || ""] = piece;
             }
         }
         await this.setManagerState("pieces", pieces);
@@ -231,7 +238,7 @@ class GameBoard extends React.Component<any>  {
     }
 
     async asyncSelectPiece(id: string) {
-        await this.props.selectPiece(id);
+        await this.props.selectPiece(id, this.game, this.setGame, this.manager);
     }
 
     // lifecycles

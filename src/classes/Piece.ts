@@ -3,10 +3,10 @@ import { iSlot } from "./Slot";
 
 
 export interface iPiece {
-    slot: iSlot;
-    key: any;
-    _id: string;
-    owner: iPlayer;
+    slot?: iSlot;
+    key?: any;
+    _id?: string;
+    owner?: iPlayer;
 
 }
 

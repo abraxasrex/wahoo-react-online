@@ -15,13 +15,13 @@ export enum iSlotType {
 }
 
 export interface iSlot {
-    x: number;
-    y: number;
-    occupied: boolean;
-    slotType: iSlotType;
+    x?: number;
+    y?: number;
+    occupied?: boolean;
+    slotType?: iSlotType;
     specialSlotType?: iSpecialSlotType;
-    orderId: number;
-    key: any;
+    orderId?: number;
+    key?: any;
     owner?: iPlayer;
 }
 

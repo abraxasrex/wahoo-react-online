@@ -13,7 +13,8 @@ export interface iGame {
     currentPlayer?: iPlayer,
     currentSlot?: object,
     currentRound: number,
-    currentRoll?: number
+    currentRoll?: number,
+    specialSlots?: any
 } 
 
 export const Game: iGame = {
@@ -27,5 +28,6 @@ export const Game: iGame = {
     currentPlayer: undefined,
     currentSlot: undefined,
     currentRound: 0,
-    currentRoll: undefined
+    currentRoll: undefined,
+    specialSlots: {}
 }

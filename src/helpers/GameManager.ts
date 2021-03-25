@@ -32,9 +32,9 @@ export class GameManager {
 
     async selectPiece (id: string, state: any, setter: any) {
 
-        let currentPiece: iPiece = state.pieces[id];
-        let currentSlot: iSlot = currentPiece.slot;
-        let currentPlayer = state.currentPlayer;
+        let currentPiece: iPiece = state?.pieces[id];
+        let currentSlot: iSlot = currentPiece?.slot || {};
+        let currentPlayer = state?.currentPlayer;
 
         if(currentPiece?.owner?.playerNumber === currentPlayer?.playerNumber) {
             await this.highlightSteps(state, setter);
@@ -49,7 +49,7 @@ export class GameManager {
         let specialSlots: any = currentSlot?.owner?.specialSlots
         // in Start 
        // let slotsRef = this.slots;
-        if (currentSlot.slotType === iSlotType.Start && (state.currentRoll === 1 || state.currentRoll === 6)) {
+        if (currentSlot?.slotType === iSlotType.Start && (state.currentRoll === 1 || state.currentRoll === 6)) {
            let entrySlot = specialSlots["Entry"];
 
            let slotRef = state.slots.find((slot: iSlot)=> {
@@ -62,7 +62,7 @@ export class GameManager {
         }
 
         //on Track
-        if(currentSlot.slotType === iSlotType.Track){
+        if(currentSlot?.slotType === iSlotType.Track){
             //1. it's a regular track slot: finish  the countTrack function to get your number and
             // then call highLightSlot Array with the slots added up from your current roll,
             // *unless* a highlighted step would pass your finish line.
@@ -104,26 +104,36 @@ export class GameManager {
 
     async moveToSlot (targetSlot: iSlot, lastSlot: iSlot, state: any, stateSetter: any) {
 
-        let currentSlotIndex = targetSlot.orderId ? targetSlot.orderId : targetSlot.orderId;
+        let currentSlotIndex = targetSlot?.orderId || '';
         let lastSlotIndex = (lastSlot && lastSlot) ? lastSlot.orderId : undefined;
         let slots = state.slots;
         let pieces = state.pieces;
 
         // update piece to next slot
      //   this.currentSlot = this.slots[currentSlotIndex];
-        let currentSlot:iSlot = slots.find((slot: any) => {
-            return slot.key == (targetSlot.key ? targetSlot.key : targetSlot.key);
-        });
+
+     let currentSlot: any;
+
+        for ( let [key, _value] of Object.entries(slots)) {
+            let value: any = _value;
+            if(value.key == targetSlot?.key) {
+                currentSlot = value;
+            }
+        }
+
+        // let currentSlot:iSlot = slots.find((slot: any) => {
+        //     return slot.key == (targetSlot.key ? targetSlot.key : targetSlot.key);
+        // });
 
         let currentPiece: iPiece = Object.assign(state.currentPiece, 
-            {slot: currentSlot, x: currentSlot.x, y: currentSlot.y});
+            {slot: currentSlot, x: currentSlot?.x, y: currentSlot?.y});
        // this.currentPiece = currentPiece;
 
         await stateSetter("currentPiece", currentPiece);
         await stateSetter("currentSlot", currentSlot);
 
         // clone updated elements
-        slots[currentSlotIndex] = Object.assign(currentSlot, {occupied: currentPiece.owner});
+        slots[currentSlotIndex || 0] = Object.assign((currentSlot || {}), {occupied: currentPiece.owner});
         if(lastSlot && lastSlotIndex){
             slots[lastSlotIndex] = Object.assign(lastSlot, {occupied: false});
         } 

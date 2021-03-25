@@ -1,12 +1,13 @@
 import React from 'react';
 import PlayerView from './PlayerView';
-import Player from '../classes/Player';
+import {Player, iPlayer} from '../classes/Player';
+
 
 
 class PlayerViews extends React.Component {
     
     players: Array<any>;
-    constructor(players: Array<Player>) {
+    constructor(players: iPlayer[]) {
         super(players);
         this.players = players;
     }   

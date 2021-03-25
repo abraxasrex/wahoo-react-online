@@ -9,7 +9,7 @@ interface iDiceViewProps {
     currentRoll?: number;
     game: any;
 }
-function DiceView ({manager, setGame, currentRoll}: iDiceViewProps) {
+function DiceView ({manager, setGame, game, currentRoll}: iDiceViewProps) {
    // manager.rollDice();
     function setDice(){
 
@@ -20,7 +20,7 @@ function DiceView ({manager, setGame, currentRoll}: iDiceViewProps) {
     }
     
     const dots = [];
-    for(var i = 0; i < manager.currentRoll; i++) {
+    for(var i = 0; i < game.currentRoll; i++) {
         dots.push(i);
     }
     return (
@@ -32,7 +32,7 @@ function DiceView ({manager, setGame, currentRoll}: iDiceViewProps) {
                     })}
                 </div>
                 <p> current roll: {currentRoll || 0} </p>
-                <p> current piece: {manager.currentPiece.key || 0} </p>
+                <p> current piece: {game.currentPiece?.key || 0} </p>
                 <button onClick={(e) => setDice()}>
                     Roll Dice
                 </button>

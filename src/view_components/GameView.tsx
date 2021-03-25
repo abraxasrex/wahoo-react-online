@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import GameBoard from './GameBoard';
 import DiceView from './DiceView';
 import PlayerView from './PlayerView';
@@ -8,7 +8,7 @@ import GamePiece from './GamePiece';
 import {Game, iGame} from '../classes/Game';
 import {colorSet } from '../classes/Game';
 
-import {Player} from '../classes/Player';
+import {iPlayer, Player} from '../classes/Player';
 
 import {GameManager} from '../helpers/GameManager';
 import { iSlot } from '../classes/Slot';
@@ -21,8 +21,8 @@ interface iGameViewProps {
 }
 
    // UI
-   const selectPiece = (id: string, manager: any) => {
-        manager.selectPiece(id);
+   const selectPiece = (id: string, game: iGame, setGame: any, manager: any) => {
+        manager.selectPiece(id ,game, setGame);
     //   this.resetPiecesAndSlots();
         return true;
     }
@@ -36,41 +36,61 @@ interface iGameViewProps {
     //   this.resetPiecesAndSlots();
     }
 
-    const moveToSlot = (targetSlot: any, lastSlot: any, manager: any) => {
-        manager.moveToSlot(targetSlot, lastSlot);
+    const moveToSlot = (targetSlot: any, lastSlot: any, manager: any, game: iGame, setGame: any) => {
+        manager.moveToSlot(targetSlot, lastSlot, game, setGame);
     // this.resetPiecesAndSlots();
     }
 
 const GameView = ({startGame}: iGameViewProps) => {
-
-
-    // TODO: mechanism for starting first round, skipping for next rounds
-    let players;
+ 
+    let players: iPlayer[];
     let gameInit: iGame = Game;
     const manager = new GameManager();
+
     const [game, setGame] = useState<iGame>(gameInit);
 
-    players = startGame();
-    setGame({...game, players: players});
+
+    useEffect(()=> {
+        if(game.currentRound === 0) {
+           // let round = game.currentRound;
+           players = startGame(game, setGame);
+            setGame({...game, players: players, currentRound: 1});
+        }
+    });
+    // TODO: mechanism for starting first round, skipping for next rounds
+    // let players;
+    // let gameInit: iGame = Game;
+    // const manager = new GameManager();
+    // const [game, setGame] = useState<iGame>(gameInit);
+
+    // players = startGame();
+    // setGame({...game, players: players});
 
     const playerViews = [];
 
-    for (var i = 0; i < game.players.length; i++) {
+    for (var i = 0; i < game?.players?.length; i++) {
         playerViews.push(<PlayerView player={game.players[i]} currentPlayer={game.currentPlayer} key={i}> </PlayerView>);
     }
 
-    let slots = Object.entries(game.slots).map((slot: any)=> {
-        return <Slot game={game} setGame={setGame} key={slot.key}
-                    slot={slot} manager={manager} moveToSlot={moveToSlot}>
-                </Slot>
-    }) || [];
+    let slots;
+    if(game.slots) {
+        let slots = Object.entries(game?.slots).map((slot: any)=> {
+            return <Slot game={game} setGame={setGame} key={slot.key}
+                        slot={slot} manager={manager} moveToSlot={moveToSlot}>
+                    </Slot>
+        }) || [];
+    }
+  
 
-    let pieces = Object.entries(game.pieces).map((piece: any)=> {
-        return <GamePiece game={game} setGame={setGame} key={piece.key}
-                    selectPiece={selectPiece} cancelSelect={cancelSelect}
-                    piece={piece} manager={manager}>
-                </GamePiece>
-    }) || [];
+    let pieces
+    if(game.pieces) {
+        pieces = Object.entries(game?.pieces).map((piece: any)=> {
+            return <GamePiece game={game} setGame={setGame} key={piece.key}
+                        selectPiece={selectPiece} cancelSelect={cancelSelect}
+                        piece={piece} manager={manager}>
+                    </GamePiece>
+        }) || [];
+    }
 
 
     return (
@@ -79,9 +99,10 @@ const GameView = ({startGame}: iGameViewProps) => {
                 {playerViews}
             </div>
             <div>
-                <GameBoard game={game} manager={manager} setGame={setGame}>
-                    <Slots game={game} manager={manager}  slots={slots} />
-                    <Pieces game={game} manager={manager}  pieces={pieces} />
+                <GameBoard game={game} manager={manager} setGame={setGame} 
+                    selectPiece={selectPiece} moveToSlot={moveToSlot}>
+                    <Slots game={game} manager={manager}  slots={slots || []} />
+                    <Pieces game={game} manager={manager}  pieces={pieces || []} />
                 </GameBoard>
             </div>
             <div>
