@@ -18,6 +18,7 @@ import Pieces from './Pieces';
 
 interface iGameViewProps {
     startGame: Function
+    players: iPlayer[]
 }
 
    // UI
@@ -41,22 +42,29 @@ interface iGameViewProps {
     // this.resetPiecesAndSlots();
     }
 
-const GameView = ({startGame}: iGameViewProps) => {
+const GameView = ({startGame, players}: iGameViewProps) => {
  
-    let players: iPlayer[];
+    // let players: iPlayer[] = [];
     let gameInit: iGame = Game;
     const manager = new GameManager();
+
+    gameInit.players = players;
 
     const [game, setGame] = useState<iGame>(gameInit);
 
 
-    useEffect(()=> {
-        if(game.currentRound === 0) {
-           // let round = game.currentRound;
-           players = startGame(game, setGame);
-            setGame({...game, players: players, currentRound: 1});
-        }
-    });
+    // useEffect(()=> {
+    //     if(game.currentRound === 0) {
+    //        // let round = game.currentRound;
+    //        debugger;
+    //        startGame(game, setGame).then((_players: iPlayer[])=> {
+    //            players = _players
+    //        });
+    //     }
+    // }, []);
+
+    // setGame({...game, players: players, currentRound: 1});
+
     // TODO: mechanism for starting first round, skipping for next rounds
     // let players;
     // let gameInit: iGame = Game;
@@ -92,7 +100,7 @@ const GameView = ({startGame}: iGameViewProps) => {
         }) || [];
     }
 
-
+    debugger;
     return (
         <div className="wahoo-game">
             <div>

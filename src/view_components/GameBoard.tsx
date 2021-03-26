@@ -57,7 +57,7 @@ class GameBoard extends React.Component<any>  {
         this.ctx = this.createContext();
 
         //uncomment below to test
-       this.testMode = true;
+      // this.testMode = true;
     }
 
     createContext(): any {
@@ -142,6 +142,7 @@ class GameBoard extends React.Component<any>  {
 
     async initAllSlots() {
         let players = this.game.players;
+        debugger;
         let slots = await this.setAllSlots(players);
         await this.setManagerState("slots", slots);
     }
@@ -228,11 +229,10 @@ class GameBoard extends React.Component<any>  {
     }
 
  // UI
-
     checkCancelSelect (e: any) {
         if (e.type === 'contextmenu') {
             console.log('Right click');
-            this.props.game.manager.cancelSelect();
+            this.props.manager.cancelSelect();
             this.resetPiecesAndSlots();
         }
     }
@@ -243,7 +243,9 @@ class GameBoard extends React.Component<any>  {
 
     // lifecycles
     componentDidMount() {
-        this.setGameEntities();
+        if(this.game.players?.length > 0) {
+            this.setGameEntities();
+        }
     }
 
 

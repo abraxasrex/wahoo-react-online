@@ -25,6 +25,13 @@ const startGame = async (game: any, gameSetter: any)  => {
 
 function App() {
   
+  const players: iPlayer[] = [];
+  const numberOfPlayers = 4;
+
+  for (var i=0; i < numberOfPlayers; i++) {
+    players.push(Player((i + 1), colorSet[i]));
+  }
+  
   return (
     <div className="App">
       <header className="App-header">
@@ -32,7 +39,7 @@ function App() {
           Wahoo
         </p>  
         <div className="wahoo-game">
-          <GameView startGame={startGame}></GameView>
+          <GameView startGame={startGame} players={players}></GameView>
         </div>
       </header>
     </div>
