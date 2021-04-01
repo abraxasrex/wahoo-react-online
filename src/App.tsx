@@ -4,6 +4,7 @@ import GameBoard from './view_components/GameBoard';
 import GameView from './view_components/GameView';
 import logo from './logo.svg';
 import './App.css';
+import {GameManager} from './helpers/GameManager';
 
 
 import {Game, iGame} from './classes/Game';
@@ -31,6 +32,13 @@ function App() {
   for (var i=0; i < numberOfPlayers; i++) {
     players.push(Player((i + 1), colorSet[i]));
   }
+
+  let gameInit: iGame = Game;
+  const manager = new GameManager();
+
+  gameInit.players = players;
+
+  const [game, setGame] = useState<iGame>(gameInit);
   
   return (
     <div className="App">
@@ -39,7 +47,8 @@ function App() {
           Wahoo
         </p>  
         <div className="wahoo-game">
-          <GameView startGame={startGame} players={players}></GameView>
+          <GameView startGame={startGame} players={players} manager={manager}
+            game={game} setGame={setGame}></GameView>
         </div>
       </header>
     </div>

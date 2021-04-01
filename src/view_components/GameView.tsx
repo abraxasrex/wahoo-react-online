@@ -15,10 +15,14 @@ import { iSlot } from '../classes/Slot';
 
 import Slots from './Slots';
 import Pieces from './Pieces';
+import PlayerViews from './PlayerViews';
 
 interface iGameViewProps {
-    startGame: Function
-    players: iPlayer[]
+    startGame: Function;
+    players: iPlayer[];
+    game: iGame;
+    setGame: any;
+    manager: any;
 }
 
    // UI
@@ -42,15 +46,10 @@ interface iGameViewProps {
     // this.resetPiecesAndSlots();
     }
 
-const GameView = ({startGame, players}: iGameViewProps) => {
+    const GameView = ({startGame, players, game, setGame, manager}: iGameViewProps) => {
  
     // let players: iPlayer[] = [];
-    let gameInit: iGame = Game;
-    const manager = new GameManager();
-
-    gameInit.players = players;
-
-    const [game, setGame] = useState<iGame>(gameInit);
+  
 
 
     // useEffect(()=> {
@@ -74,11 +73,11 @@ const GameView = ({startGame, players}: iGameViewProps) => {
     // players = startGame();
     // setGame({...game, players: players});
 
-    const playerViews = [];
+    // const playerViews = [];
 
-    for (var i = 0; i < game?.players?.length; i++) {
-        playerViews.push(<PlayerView player={game.players[i]} currentPlayer={game.currentPlayer} key={i}> </PlayerView>);
-    }
+    // for (var i = 0; i < game?.players?.length; i++) {
+    //     playerViews.push(<PlayerView player={game.players[i]} currentPlayer={game.currentPlayer} key={i}> </PlayerView>);
+    // }
 
     let slots;
     if(game.slots) {
@@ -100,12 +99,12 @@ const GameView = ({startGame, players}: iGameViewProps) => {
         }) || [];
     }
 
-    debugger;
+   // Object.entries(game)
+
+    // debugger;
     return (
         <div className="wahoo-game">
-            <div>
-                {playerViews}
-            </div>
+            <PlayerViews players={players}></PlayerViews>
             <div>
                 <GameBoard game={game} manager={manager} setGame={setGame} 
                     selectPiece={selectPiece} moveToSlot={moveToSlot}>

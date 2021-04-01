@@ -240,6 +240,8 @@ c. if highlight encompasses player exit, and there are remaining steps, start hi
 1. Move Slots and Pieces into container Components
 2. Reconcile new relationship between GameView and GameBoard (or just remove the latter)
 3. Get UI events pipelined down to Slots and GamePieces
+
+3.5. restructure playerviews to use entries
 [here]
 4. turn off test piece setting, just get pieces and slots to appear on the board
 5. get back to piece moving functionality

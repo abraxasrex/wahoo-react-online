@@ -45,14 +45,14 @@ class GameBoard extends React.Component<any>  {
     manager: any;
     setGame: any;
 
-    constructor({slots, pieces, game, manager, setGame, ...props}: iGameBoardProps) {
+    constructor(props: any) {
         super(props);
 
-        this.slots = slots;
-        this.pieces = pieces;
-        this.game = game;
-        this.manager = manager;
-        this.setGame = setGame;
+        this.slots = props.slots;
+        this.pieces = props.pieces;
+        this.game =props. game;
+        this.manager = props.manager;
+        this.setGame = props.setGame;
 
         this.ctx = this.createContext();
 
@@ -129,21 +129,26 @@ class GameBoard extends React.Component<any>  {
     }
 
     async setManagerState(field: any, values: any) {
-        let manager = this.manager;
-        if(field && field.length && field.length > 0) {
-            for(let i = 0; i < field.length; i++) {
-                manager[field[i]] = values;
-            }
+        let state: any = this.game;
+    //    if(field && field.length && field.length > 0) {
+
+        if(false) {
+            // for(let i = 0; i < field.length; i++) {
+            //     state[field[i]] = values;
+            // }
         } else {
-            manager[field] = values;
+            state[field] = values;
         }
-        await this.setGame({manager: manager});
+        await this.setGame(state);
     }
+
+ 
 
     async initAllSlots() {
         let players = this.game.players;
-        debugger;
+       // debugger;
         let slots = await this.setAllSlots(players);
+        console.log(slots, "slots after init");
         await this.setManagerState("slots", slots);
     }
 
@@ -167,8 +172,9 @@ class GameBoard extends React.Component<any>  {
     async setPieces() {
         let pieces: any = {};
       //  let slots = Object.keys(this.game.slots);
-        for ( let [index, [key, value]] of Object.entries(this.game.slots)) {
-            if(value.slotType === "Start") {
+      let count = 0;
+        for ( let [key, value] of Object.entries(this.game.slots)) {
+            if(value.slotType === iSlotType.Start) {
                 let game = this.game;
                 let setGame = this.setGame;
                 // slot: iSlot;
@@ -177,10 +183,12 @@ class GameBoard extends React.Component<any>  {
                 // owner: iPlayer;
                 let piece: iPiece = {
                     slot: value,
-                    key: index,
-                    _id: index.toString(),
+                    key: count,
+                    _id: count.toString(),
                     owner: value?.owner,
                 }
+
+                count +=1;
 
                 // let piece: any = <GamePiece slot={slots[i]} key={i} _id={i} 
                 //     game={game} manager={game.manager} player={slots[i].props.owner}
@@ -243,6 +251,7 @@ class GameBoard extends React.Component<any>  {
 
     // lifecycles
     componentDidMount() {
+       // debugger;
         if(this.game.players?.length > 0) {
             this.setGameEntities();
         }

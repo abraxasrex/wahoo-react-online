@@ -4,23 +4,23 @@ import {Player, iPlayer} from '../classes/Player';
 
 
 
-class PlayerViews extends React.Component {
+class PlayerViews extends React.Component<any> {
     
-    players: Array<any>;
-    constructor(players: iPlayer[]) {
-        super(players);
-        this.players = players;
+    players: iPlayer[];
+    constructor(props: any) {
+        super(props);
+        this.players = props.players;
     }   
     render() {
         const playerViews: Array<any>= [];
 
-        for (var i = 0; i < this.players.length; i++) {
+        for (var i = 0; i < this.players?.length; i++) {
            // let playerView: any = new PlayerView(this.players[i]);
-            let playerView: any = <PlayerView player={this.players[i]}></PlayerView>;
+            let playerView: any = <PlayerView player={this.players[i]} key={this.players[i]._id}></PlayerView>;
             playerViews.push(playerView);
         }
 
-        return ({playerViews});
+        return (playerViews);
     }
 }
 export default PlayerViews;
