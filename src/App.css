@@ -133,3 +133,9 @@
   width: 5px;
   height:5px;
 }
+
+.slots-container {
+  position: relative;
+  height: 400px;
+  width: 400px;
+}

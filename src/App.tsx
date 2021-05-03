@@ -40,6 +40,12 @@ function App() {
 
   const [game, setGame] = useState<iGame>(gameInit);
   
+  const triggerSetGame = (newState: iGame):any => {
+    console.log("app view slots: ", newState.slots);
+    let state = {...newState};
+    setGame(state);
+  }
+
   return (
     <div className="App">
       <header className="App-header">
@@ -48,7 +54,8 @@ function App() {
         </p>  
         <div className="wahoo-game">
           <GameView startGame={startGame} players={players} manager={manager}
-            game={game} setGame={setGame}></GameView>
+            _slots={game.slots} _pieces={game.pieces}
+            game={game} setGame={triggerSetGame}></GameView>
         </div>
       </header>
     </div>

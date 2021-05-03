@@ -7,12 +7,12 @@ interface iSlotsProps {
     manager: any
 }
 
-function Slots({slots, game, manager}: iSlotsProps):JSX.Element {
-
+function Slots({slots = [], game, manager}: iSlotsProps):JSX.Element {
+  //  console.log("slots component slots: ", slots);
     return (
-        <span>
+        <div className="slots-container">
             {slots.map(slot=> slot)}
-        </span>
+        </div>
     );
 }
 

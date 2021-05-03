@@ -7,6 +7,7 @@ function  GamePiece (props: any) {
 
         let slot = props.slot.props;
 
+        // TODO: change to use game state object, not manager
         function selectPiece(e: any){
             const id = props._id;
             const managerState = props.manager;
@@ -20,6 +21,7 @@ function  GamePiece (props: any) {
                 || (!managerState.hasRolled)) {
                 return;
             }
+          //  debugger;
             props.setGame({manager: managerState});
             props.selectPiece(id);
         }

@@ -242,8 +242,10 @@ c. if highlight encompasses player exit, and there are remaining steps, start hi
 3. Get UI events pipelined down to Slots and GamePieces
 
 3.5. restructure playerviews to use entries
-[here]
+
 4. turn off test piece setting, just get pieces and slots to appear on the board
+[here]
+4.5. get pieces back on the board
 5. get back to piece moving functionality
 6. get back to testing mode functionality
 

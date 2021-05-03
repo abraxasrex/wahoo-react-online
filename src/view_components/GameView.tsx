@@ -23,6 +23,8 @@ interface iGameViewProps {
     game: iGame;
     setGame: any;
     manager: any;
+    _slots: any;
+    _pieces: any;
 }
 
    // UI
@@ -46,12 +48,42 @@ interface iGameViewProps {
     // this.resetPiecesAndSlots();
     }
 
-    const GameView = ({startGame, players, game, setGame, manager}: iGameViewProps) => {
+    const GameView = ({startGame, players, game, setGame, manager, _slots, _pieces}: iGameViewProps) => {
  
     // let players: iPlayer[] = [];
-  
+      //  console.log("gameview _slots: ", _slots);
 
+        let slots: JSX.Element[] = _slots;
+        let pieces: JSX.Element[] = _pieces;
 
+        const updateEntities = () => {
+          //  console.log("update entities: ", _slots);
+            if(_slots) {
+                slots = Object.entries(_slots).map((slotPair: any)=> {
+                    return <Slot game={game} setGame={setGame} key={slotPair[0]}
+                                 availableSlots={game.availableSlots}
+                                slot={slotPair[1]} manager={manager} moveToSlot={moveToSlot}>
+                            </Slot>
+                }) || [];
+            }
+          
+        
+           
+            if(_pieces) {
+                pieces = Object.entries(_pieces).map((piecePair: any)=> {
+                    return <GamePiece game={game} setGame={setGame} key={piecePair[0]}
+                                selectPiece={selectPiece} cancelSelect={cancelSelect}
+                                piece={piecePair[1]} manager={manager}>
+                            </GamePiece>
+                }) || [];
+            }
+        }
+
+        useEffect(() => {
+            // Update the document title using the browser API
+          //  console.log("gameview updated slots: ", _slots);
+            updateEntities();
+          });
     // useEffect(()=> {
     //     if(game.currentRound === 0) {
     //        // let round = game.currentRound;
@@ -79,25 +111,8 @@ interface iGameViewProps {
     //     playerViews.push(<PlayerView player={game.players[i]} currentPlayer={game.currentPlayer} key={i}> </PlayerView>);
     // }
 
-    let slots;
-    if(game.slots) {
-        let slots = Object.entries(game?.slots).map((slot: any)=> {
-            return <Slot game={game} setGame={setGame} key={slot.key}
-                        slot={slot} manager={manager} moveToSlot={moveToSlot}>
-                    </Slot>
-        }) || [];
-    }
-  
-
-    let pieces
-    if(game.pieces) {
-        pieces = Object.entries(game?.pieces).map((piece: any)=> {
-            return <GamePiece game={game} setGame={setGame} key={piece.key}
-                        selectPiece={selectPiece} cancelSelect={cancelSelect}
-                        piece={piece} manager={manager}>
-                    </GamePiece>
-        }) || [];
-    }
+   
+   updateEntities();
 
    // Object.entries(game)
 
