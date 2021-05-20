@@ -8,7 +8,6 @@ interface iSlotsProps {
 }
 
 function Slots({slots = [], game, manager}: iSlotsProps):JSX.Element {
-  //  console.log("slots component slots: ", slots);
     return (
         <div className="slots-container">
             {slots.map(slot=> slot)}

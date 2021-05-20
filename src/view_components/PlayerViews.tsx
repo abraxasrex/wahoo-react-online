@@ -15,7 +15,6 @@ class PlayerViews extends React.Component<any> {
         const playerViews: Array<any>= [];
 
         for (var i = 0; i < this.players?.length; i++) {
-           // let playerView: any = new PlayerView(this.players[i]);
             let playerView: any = <PlayerView player={this.players[i]} key={this.players[i]._id}></PlayerView>;
             playerViews.push(playerView);
         }

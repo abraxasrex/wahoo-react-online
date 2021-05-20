@@ -244,10 +244,17 @@ c. if highlight encompasses player exit, and there are remaining steps, start hi
 3.5. restructure playerviews to use entries
 
 4. turn off test piece setting, just get pieces and slots to appear on the board
-[here]
 4.5. get pieces back on the board
-5. get back to piece moving functionality
+
+4.75. get rolling mechanism back on track
+5.1. specialSlots do not exist for player atm! this is necessary to know where the Entry slot is
+5.2. highlight piece track
+
+[here]
+5. get back to piece moving functionality: fix moveHere function
+5.5. fix cancelSelect
 6. get back to testing mode functionality
+
 
 -------- [potential refactor] --------------------
 1. checkpoint to prevent duplicate key creation

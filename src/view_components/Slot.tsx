@@ -43,14 +43,13 @@ function Slot (props: any) {
 
     const y_offset = 15;
     const x_offset = 15;
-    console.log("props SLOTTTTTT: ", props.slot);
     const x: number = props.slot?.x || 0;
     const y: number = props.slot?.y || 0;
 
         return (
-            <div className={"game-slot" + (props.availableSlots[props._key] ? ' available-slot' : '')} 
+            <div className={"game-slot" + (props.availableSlots[props.slot.key] ? ' available-slot' : '')} 
                 style={{left: x + x_offset, bottom: y + y_offset, 
-                backgroundColor: highlightSlots(x, y, props.slotType, props.specialSlotType, props.owner)}}
+                backgroundColor: highlightSlots(x, y, props.slot.slotType, props.slot.specialSlotType, props.owner)}}
                 onClick={(e) => moveHere(props, e)}>
                 <span> 
                     { /* props.x + "," + props.y */} 

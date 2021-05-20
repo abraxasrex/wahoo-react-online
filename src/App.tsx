@@ -1,6 +1,5 @@
 import React,{useState} from 'react';
 import GameBoard from './view_components/GameBoard';
-// import Game from './classes/Game';
 import GameView from './view_components/GameView';
 import logo from './logo.svg';
 import './App.css';
@@ -13,15 +12,15 @@ import {iPlayer, Player} from './classes/Player';
 
 const startGame = async (game: any, gameSetter: any)  => {
   
-  const players: iPlayer[] = [];
-  const numberOfPlayers = 4;
+  // const players: iPlayer[] = [];
+  // const numberOfPlayers = 4;
 
-  for (var i=0; i < numberOfPlayers; i++) {
-    players.push(Player((i + 1), colorSet[i]));
-  }
-  await gameSetter({...game, players: players});
+  // for (var i=0; i < numberOfPlayers; i++) {
+  //   players.push(Player((i + 1), colorSet[i]));
+  // }
+  await gameSetter({...game, currentPlayer: game.players[0]});
 
-  return players;
+  //return players;
 };
 
 function App() {
@@ -41,7 +40,6 @@ function App() {
   const [game, setGame] = useState<iGame>(gameInit);
   
   const triggerSetGame = (newState: iGame):any => {
-    console.log("app view slots: ", newState.slots);
     let state = {...newState};
     setGame(state);
   }
@@ -61,18 +59,5 @@ function App() {
     </div>
   );
 }
-
-{/* <div className="wahoo-game">
-<div>
-    {playerViews}
-</div>
-<div>
-    <GameBoard game={props.game} manager={props.game.manager} setGame={props.setGame}></GameBoard>
-</div>
-<div>
-    <DiceView manager={props.game.manager} currentRoll={props.currentRoll}
-    game={props.game} setGame={props.setGame}></DiceView>
-</div> 
-</div> */}
 
 export default App;

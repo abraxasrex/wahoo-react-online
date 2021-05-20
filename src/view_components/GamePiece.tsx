@@ -5,36 +5,38 @@ const x_offset = 15;
 
 function  GamePiece (props: any) {
 
-        let slot = props.slot.props;
+        let piece = props.piece;
 
         // TODO: change to use game state object, not manager
         function selectPiece(e: any){
-            const id = props._id;
-            const managerState = props.manager;
+            const id = piece._id;
+            const gameState = props.game;
             // allow to deselect piece
-            if(managerState.currentPiece.key == id) {
-                props.cancelSelect();
+            if(gameState.currentPiece.key == id) {
+                props.cancelSelect(props.manager, props.game, props.setGame);
                 return;
             }
             // don't select the wrong player's piece or select anything if there's no roll
-            if((props.player.playerNumber !== managerState.currentPlayer.playerNumber)
-                || (!managerState.hasRolled)) {
+            if((piece.owner.playerNumber !== gameState.currentPlayer.playerNumber)
+                || (!gameState.hasRolled)) {
+                    console.log("Selecting wrong piece!");
                 return;
             }
           //  debugger;
-            props.setGame({manager: managerState});
-            props.selectPiece(id);
+             // TODO: is the line below necessary?
+            props.setGame(gameState);
+            props.selectPiece(id, props.game, props.setGame, props.manager);
         }
 
         return (
-            <div className={"game-piece " + (props.manager.currentPiece.key === props._id ? 'selected-piece' : '')}
+            <div className={"game-piece " + (props.game.currentPiece.key === piece._id ? 'selected-piece' : '')}
                 onClick={(e) => selectPiece(e)}
-                style={{ backgroundColor: props.player.gameColor || "purple", 
-                        left: slot.x + x_offset,
-                        bottom: slot.y + y_offset
+                style={{ backgroundColor: piece.owner.gameColor || "purple", 
+                        left: piece.slot.x + x_offset,
+                        bottom: piece.slot.y + y_offset
                     }} >
                 <span>
-                   pc: {props._id} 
+                   pc: {piece._id} 
                 </span>
             </div>
         );

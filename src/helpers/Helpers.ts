@@ -7,8 +7,7 @@ export function getRandomInt(max: number) {
 
 
 export async function createKey(slot: iSlot, counter: number) {
-    return counter?.toString() + slot?.owner?.toString() + slot?.orderId?.toString() 
-        + slot?.slotType?.toString() + slot?.y?.toString() + slot?.x?.toString();
+        return counter?.toString() + slot?.y?.toString() + slot?.x?.toString();
 }
 
 export async function addSlotBatch (context: any, pattern: any, startPositions: any, slots: any, slotType: iSlotType, players: Array<any>, directMap: boolean, orientation: string) {

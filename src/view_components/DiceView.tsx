@@ -10,13 +10,11 @@ interface iDiceViewProps {
     game: any;
 }
 function DiceView ({manager, setGame, game, currentRoll}: iDiceViewProps) {
-   // manager.rollDice();
-    function setDice(){
 
-        const newRoll = manager.rollDice();
-        // let managerState = props.game;
-        // managerState.currentRoll = newRoll;
-        setGame("currentRoll", newRoll);
+    async function setDice(e: any){
+
+        const newRoll = await manager.rollDice(game, setGame);
+        console.log("currentRoll from props: ", currentRoll);
     }
     
     const dots = [];
@@ -31,9 +29,9 @@ function DiceView ({manager, setGame, game, currentRoll}: iDiceViewProps) {
                         return <Dot key={dot} />
                     })}
                 </div>
-                <p> current roll: {currentRoll || 0} </p>
-                <p> current piece: {game.currentPiece?.key || 0} </p>
-                <button onClick={(e) => setDice()}>
+                {/* <p> current roll: {game.currentRoll || 0} </p>
+                <p> current piece: {game.currentPiece?.key || 0} </p> */}
+                <button onClick={(e) => setDice(e)}>
                     Roll Dice
                 </button>
             </div>

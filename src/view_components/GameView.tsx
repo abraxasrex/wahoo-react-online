@@ -38,8 +38,8 @@ interface iGameViewProps {
     // await this.selectPiece(id);
     // }
 
-    const cancelSelect = (manager: any) => {
-        manager.cancelSelect();
+    const cancelSelect = (manager: any, state: iGame, stateSetter:any) => {
+        manager.cancelSelect(state, stateSetter);
     //   this.resetPiecesAndSlots();
     }
 
@@ -51,13 +51,11 @@ interface iGameViewProps {
     const GameView = ({startGame, players, game, setGame, manager, _slots, _pieces}: iGameViewProps) => {
  
     // let players: iPlayer[] = [];
-      //  console.log("gameview _slots: ", _slots);
 
         let slots: JSX.Element[] = _slots;
         let pieces: JSX.Element[] = _pieces;
 
         const updateEntities = () => {
-          //  console.log("update entities: ", _slots);
             if(_slots) {
                 slots = Object.entries(_slots).map((slotPair: any)=> {
                     return <Slot game={game} setGame={setGame} key={slotPair[0]}
@@ -77,11 +75,14 @@ interface iGameViewProps {
                             </GamePiece>
                 }) || [];
             }
+
+            if(!game.currentPlayer) {
+                startGame(game, setGame);
+            }
         }
 
         useEffect(() => {
             // Update the document title using the browser API
-          //  console.log("gameview updated slots: ", _slots);
             updateEntities();
           });
     // useEffect(()=> {
@@ -109,7 +110,7 @@ interface iGameViewProps {
 
     // for (var i = 0; i < game?.players?.length; i++) {
     //     playerViews.push(<PlayerView player={game.players[i]} currentPlayer={game.currentPlayer} key={i}> </PlayerView>);
-    // }
+    // } 
 
    
    updateEntities();
