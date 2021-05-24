@@ -31,7 +31,7 @@ interface iGameViewProps {
    const selectPiece = (id: string, game: iGame, setGame: any, manager: any) => {
         manager.selectPiece(id ,game, setGame);
     //   this.resetPiecesAndSlots();
-        return true;
+     //   return true;
     }
 
     // asyncSelectPiece(id: string) {

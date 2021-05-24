@@ -4,14 +4,14 @@ import { iSlot } from '../classes/Slot';
 
 function moveHere(props: any, e: any){
     e.preventDefault();
-    const key = props._key;
+    const key = props.slot.key;
    // debugger;
-    const managerState = props.manager;
+    const gameState = props.game;
 
-    if(managerState.availableSlots[key]) {
+    if(gameState.availableSlots[key]) {
       //  managerState.currentSlot = props;
-        let lastSlot = managerState.currentPiece.props.slot;
-        props.moveToSlot(props, lastSlot);
+        let lastSlot = gameState.currentPiece.slot;
+        props.moveToSlot(props.slot, lastSlot, props.manager, props.game, props.setGame);
     }
 }
 

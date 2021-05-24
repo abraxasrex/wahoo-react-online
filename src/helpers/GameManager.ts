@@ -107,10 +107,11 @@ export class GameManager {
 
     }
 
-    async moveToSlot (targetSlot: iSlot, lastSlot: iSlot, state: any, stateSetter: any) {
+    async moveToSlot (targetSlot: iSlot, lastSlot: iSlot, originalState: any, stateSetter: any) {
 
+        let state = originalState;
         let currentSlotIndex = targetSlot?.orderId || '';
-        let lastSlotIndex = (lastSlot && lastSlot) ? lastSlot.orderId : undefined;
+        let lastSlotIndex = lastSlot ? lastSlot.orderId : undefined;
         let slots = state.slots;
         let pieces = state.pieces;
 
@@ -128,8 +129,8 @@ export class GameManager {
         let currentPiece: iPiece = Object.assign(state.currentPiece, 
             {slot: currentSlot, x: currentSlot?.x, y: currentSlot?.y});
 
-        await stateSetter({...state, currentPiece: currentPiece});
-        await stateSetter({...state, currentSlot: currentSlot});
+       // await stateSetter({...state, currentPiece, currentSlot});
+        state = {...state, currentPiece, currentSlot};
 
         // clone updated elements
         slots[currentSlotIndex || 0] = Object.assign((currentSlot || {}), {occupied: currentPiece.owner});
@@ -139,30 +140,40 @@ export class GameManager {
         pieces[state.currentPiece._id] = currentPiece;
 
         // update state
-        await stateSetter({...state, slots: slots, pieces: pieces});
-        return await this.changePlayer(state, stateSetter);
+      //  await stateSetter({...state, slots, pieces});
+      state = {...state, slots, pieces};
+        await this.changePlayer(state, stateSetter, originalState);
 
     }
 
-    async changePlayer (state: any, stateSetter: any) {
+    async changePlayer (newState: any, stateSetter: any, originalState: any) {
+        let state = newState;
         // TODO: change currentRound
         let currentPlayer = state.currentPlayer;
         if(currentPlayer?.playerNumber === 4) {
-            await stateSetter({...state, currentPlayer: state.players[0]});
-        } else {
+           // await stateSetter({...state, currentPlayer: state.players[0]});
+           state = {...state, currentPlayer: state.players[0]};
+        }
+     //   } else {
             // playernumber should be one more than index
             currentPlayer = state.players[(currentPlayer?.playerNumber) || 0];
-        }
-        await this.clearSlate(state, stateSetter);
-        await stateSetter({...state, hasRolled: false, currentRoll: undefined, currentRound: state.currentRound + 1});
+     //   }
+        state = await this.clearSlate(state, stateSetter, false);
+        await stateSetter({...state, hasRolled: false, currentRoll: undefined, currentRound: state.currentRound + 1, currentPlayer});
     }
 
-    async clearSlate (state: any, stateSetter: any) {
-        stateSetter({...state, currentPiece: {key: undefined}, currentSlot: false, availableSlots: {}});
+    async clearSlate (newState: any, stateSetter: any, willSetState: boolean) {
+        if(!willSetState) {
+            return {...newState, currentPiece: {key: undefined}, currentSlot: false, availableSlots: {}};
+        }
+        else {
+            let state = newState;
+            await  stateSetter({...newState, currentPiece: {key: undefined}, currentSlot: false, availableSlots: {}});
+        }
     }
 
     cancelSelect (state: any, stateSetter: any) {
-        this.clearSlate(state, stateSetter);
+        this.clearSlate(state, stateSetter, true);
     }
 
     highlightSlotArray (slots: iSlot[], state: iGame, stateSetter: any) {
@@ -175,7 +186,7 @@ export class GameManager {
             }
         }
 
-        stateSetter({...state, availableSlots: availableSlots});
+        stateSetter({...state, availableSlots});
 
     }
 
