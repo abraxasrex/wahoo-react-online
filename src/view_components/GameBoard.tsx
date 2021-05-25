@@ -85,11 +85,12 @@ class GameBoard extends React.Component<any>  {
 
     async setAllSlots (players: iPlayer[]) {
         const slots: any = {};
+        let counter: any = {count: 0};
 
-        await addSlotBatch(this.ctx, TrackPattern, TrackStartPositions, slots, iSlotType.Track, players, false, "Straight");
-        await addSlotBatch(this.ctx, EndLanePattern, EndLaneStartPositions, slots, iSlotType.End, players, true, "Straight");
-        await addSlotBatch(this.ctx, CenterSlotPattern, CenterSlotStartPosition, slots, iSlotType.Center, players, false, "Straight");
-        await addSlotBatch(this.ctx, StartLanePattern, StartLaneStartPositions, slots, iSlotType.Start, players, true, "Diagonal");
+        await addSlotBatch(this.ctx, TrackPattern, TrackStartPositions, slots, iSlotType.Track, players, false, "Straight", counter);
+        await addSlotBatch(this.ctx, EndLanePattern, EndLaneStartPositions, slots, iSlotType.End, players, true, "Straight", counter);
+        await addSlotBatch(this.ctx, CenterSlotPattern, CenterSlotStartPosition, slots, iSlotType.Center, players, false, "Straight", counter);
+        await addSlotBatch(this.ctx, StartLanePattern, StartLaneStartPositions, slots, iSlotType.Start, players, true, "Diagonal", counter);
 
         return slots; 
     }
@@ -129,19 +130,24 @@ class GameBoard extends React.Component<any>  {
         // check for overlap with special slot types
         await this.assignSpecialSlots(slot, newKey);
 
+        if(slots[counter.count]) {
+          //  debugger;
+        }
+
         let _slot: iSlot = {
             x: slot.x,
             y: slot.y,
             occupied: slot.occupied,
             slotType: slot.slotType,
             specialSlotType: slot.specialSlotType,
-            orderId: slot.orderId,
+            orderId: counter.count,
             key: newKey,
             owner: slot.owner
         }
 
+      let order: any = slot.orderId ? slot.orderId : _slot.orderId;
+
        counter.count += 1;
-       let order: any = slot.orderId ? slot.orderId : newKey;
        slots[order] = _slot;
     }
 

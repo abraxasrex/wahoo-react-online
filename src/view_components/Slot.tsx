@@ -53,7 +53,7 @@ function Slot (props: any) {
                 onClick={(e) => moveHere(props, e)}>
                 <span> 
                     { /* props.x + "," + props.y */} 
-                    { props.order }
+                    { props.slot.orderId }
                 </span> 
             </div>
         );

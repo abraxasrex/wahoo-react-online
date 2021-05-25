@@ -10,11 +10,11 @@ export async function createKey(slot: iSlot, counter: number) {
         return counter?.toString() + slot?.y?.toString() + slot?.x?.toString();
 }
 
-export async function addSlotBatch (context: any, pattern: any, startPositions: any, slots: any, slotType: iSlotType, players: Array<any>, directMap: boolean, orientation: string) {
+export async function addSlotBatch (context: any, pattern: any, startPositions: any, slots: any, slotType: iSlotType, players: Array<any>, directMap: boolean, orientation: string, _counter: any) {
 
   let x = 0;
   let y = 0;
-  let counter = {count: 0};
+  const counter = _counter;
   let occupied = false;
   let player = undefined;
 
