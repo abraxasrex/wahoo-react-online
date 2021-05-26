@@ -71,8 +71,8 @@ export const SpecialSlotPositions = [
 ];
 
 export const TestPositions = [
-    {player: 1, slotNumber: 18, pieceNumber: 75},
-    {player: 2, slotNumber: 37, pieceNumber: 78},
-    {player: 3, slotNumber: 1, pieceNumber: 82},
-    {player: 4, slotNumber: 35, pieceNumber: 87}
+    {player: 1, slotNumber: 18, pieceNumber: 1},
+    {player: 2, slotNumber: 37, pieceNumber: 5},
+    {player: 3, slotNumber: 1, pieceNumber: 10},
+    {player: 4, slotNumber: 35, pieceNumber: 13}
 ]

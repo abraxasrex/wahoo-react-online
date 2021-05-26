@@ -58,7 +58,7 @@ class GameBoard extends React.Component<any>  {
         this.assignVals(props);
 
         //uncomment below to test
-      // this.testMode = true;
+        this.testMode = true;
     }
 
     assignVals(props: any): any {
@@ -181,9 +181,14 @@ class GameBoard extends React.Component<any>  {
                 let pieceNumber =  TestPositions[i].pieceNumber;
                 let piece: iPiece = pieces[pieceNumber];
 
-                let currentPiece: iPiece = this.game?.currentPiece;
-                await this.asyncSelectPiece(piece?._id || '');
-                this.props.moveToSlot(slot, currentPiece ? currentPiece.slot : undefined, this.manager, this.game, this.setGame);
+                let newState = await this.asyncSelectPiece(piece?._id || '');
+
+                // const moveToSlot = (targetSlot: any, lastSlot: any, manager: any, game: iGame, setGame: any) => {
+                //     manager.moveToSlot(targetSlot, lastSlot, game, setGame);
+                // }
+                let currentPiece: iPiece = this.game?.currentPiece || newState?.currentPiece;
+
+                await this.props.moveToSlot(slot, currentPiece ? currentPiece.slot : undefined, this.manager, this.game, this.setGame);
             }
     }
 
@@ -257,7 +262,7 @@ class GameBoard extends React.Component<any>  {
     }
 
     async asyncSelectPiece(id: string) {
-        await this.props.selectPiece(id, this.game, this.setGame, this.manager);
+        return await this.props.selectPiece(id, this.game, this.setGame, this.manager);
     }
 
     // lifecycles

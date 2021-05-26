@@ -249,12 +249,15 @@ c. if highlight encompasses player exit, and there are remaining steps, start hi
 5.2. highlight piece track
 5.0. moveHere in manager: chain should maintain its own state until setting state at the very end. there is similar "newState" functionality already in the manager anyway.
 5. get back to piece moving functionality: fix moveHere function
-[here]
-5.5. fix cancelSelect
+
 
 6. get back to testing mode functionality
 
+[here]
 7. expected behavior for all game pieces (big deliverable!)
+a. upon moving into end lane of the same color, a piece will enter that lane, and move up that "Count" rather than the count of the main board.
+b. upon moving onto a jump slot, the piece will be able to "jump" through the middle
+c. upon moving to a piece of another color, that piece will be sent home, and the selected piece will occupy its square.
 
 
 -------- [potential refactor] --------------------

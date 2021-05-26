@@ -31,16 +31,18 @@ export class GameManager {
 
     async selectPiece (id: string, state: any, setter: any) {
 
-        let _currentPiece: iPiece = state?.pieces[id];
-        let _currentSlot: iSlot = _currentPiece?.slot || {};
+        let currentPiece: iPiece = state?.pieces[id];
+        let currentSlot: iSlot = currentPiece?.slot || {};
         let currentPlayer = state?.currentPlayer;
 
-        let newState = {...state, currentPiece: _currentPiece, currentSlot: _currentSlot};
+        let newState = {...state, currentPiece, currentSlot};
         await setter(newState);
 
-        if(_currentPiece?.owner?.playerNumber === currentPlayer?.playerNumber) {
+        if(currentPiece?.owner?.playerNumber === currentPlayer?.playerNumber) {
             await this.highlightSteps(newState, setter);
         }
+
+        return newState;
 
     }
 
@@ -65,7 +67,7 @@ export class GameManager {
             }
 
             if(!slotRef?.occupied) {
-                this.highlightSlotArray([entrySlot], state, stateSetter);
+                await this.highlightSlotArray([entrySlot], state, stateSetter);
             }
         }
 
@@ -176,7 +178,7 @@ export class GameManager {
         this.clearSlate(state, stateSetter, true);
     }
 
-    highlightSlotArray (slots: iSlot[], state: iGame, stateSetter: any) {
+    async highlightSlotArray (slots: iSlot[], state: iGame, stateSetter: any) {
         let availableSlots: any= {};
 
         for (let i = 0; i < (slots?.length || 0); i++) {
@@ -185,8 +187,7 @@ export class GameManager {
                 availableSlots[slots[i].key] = true;
             }
         }
-
-        stateSetter({...state, availableSlots});
+        await stateSetter({...state, availableSlots});
 
     }
 
