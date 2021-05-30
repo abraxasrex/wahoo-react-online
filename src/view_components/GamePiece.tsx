@@ -29,7 +29,7 @@ function  GamePiece (props: any) {
         }
 
         return (
-            <div className={"game-piece " + (props.game.currentPiece.key === piece._id ? 'selected-piece' : '')}
+            <div className={"game-piece " + (props.game.currentPiece.key == piece._id ? 'selected-piece' : '')}
                 onClick={(e) => selectPiece(e)}
                 style={{ backgroundColor: piece.owner.gameColor || "purple", 
                         left: piece.slot.x + x_offset,

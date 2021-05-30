@@ -252,12 +252,30 @@ c. if highlight encompasses player exit, and there are remaining steps, start hi
 
 
 6. get back to testing mode functionality
+a. upon moving into end lane of the same color, a piece will enter that lane, and move up that "Count" rather than the count of the main board.
+b. upon moving onto a jump slot, the piece will be able to "jump" through the middle
 
 [here]
 7. expected behavior for all game pieces (big deliverable!)
-a. upon moving into end lane of the same color, a piece will enter that lane, and move up that "Count" rather than the count of the main board.
-b. upon moving onto a jump slot, the piece will be able to "jump" through the middle
 c. upon moving to a piece of another color, that piece will be sent home, and the selected piece will occupy its square.
+
+8. upon moving four pieces into home; you win the game
+8b. fix any bugs that might arise during this process...
+
+9. make a menu that takes you to a game lobby when you click a button
+9b. lobby should take you to the game.
+
+10. hook sockets up to the lobby; when four people join, the button should be enabled to start game.
+
+11. on playing game, control should change based on turn to the person whose round it is.
+
+12. on winning: popup appears with option to (for winner to choose):
+a. play again [with same team]
+b. go back to menu
+
+12. add animations, music, pizazz, etc, to game.
+
+13. find a way to host it.
 
 
 -------- [potential refactor] --------------------

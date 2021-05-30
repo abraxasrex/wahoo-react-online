@@ -1,6 +1,6 @@
 import React from 'react';
 import {iPlayer, Player} from '../classes/Player';
-import { iSlot } from '../classes/Slot';
+import { iSlot, iSpecialSlotType } from '../classes/Slot';
 
 function moveHere(props: any, e: any){
     e.preventDefault();
@@ -15,18 +15,19 @@ function moveHere(props: any, e: any){
     }
 }
 
-function highlightSlots(x: number, y: number, slotType: string, specialSlotType: string, owner: iPlayer) {
+function highlightSlots(x: number, y: number, slotType: string, specialSlotType: iSpecialSlotType, owner: iPlayer) {
 
 
 
-    if(specialSlotType && specialSlotType === "Entry") {
-        return "brown"
-    }
-    if(specialSlotType && specialSlotType === "Exit") {
+   
+    if(specialSlotType && specialSlotType === iSpecialSlotType.Exit) {
         return "pink"
     }
-    if(specialSlotType && specialSlotType === "Jump") {
+    if(specialSlotType && specialSlotType === iSpecialSlotType.Jump) {
         return "turquoise"
+    }
+    if(specialSlotType && specialSlotType === iSpecialSlotType.Entry) {
+        return "brown"
     }
     // slot types for testing mainly
     if(x === 0 && y === 125) {
@@ -47,7 +48,7 @@ function Slot (props: any) {
     const y: number = props.slot?.y || 0;
 
         return (
-            <div className={"game-slot" + (props.availableSlots[props.slot.key] ? ' available-slot' : '')} 
+            <div className={"game-slot" + (props?.availableSlots[props.slot.key] ? ' available-slot' : '')} 
                 style={{left: x + x_offset, bottom: y + y_offset, 
                 backgroundColor: highlightSlots(x, y, props.slot.slotType, props.slot.specialSlotType, props.owner)}}
                 onClick={(e) => moveHere(props, e)}>

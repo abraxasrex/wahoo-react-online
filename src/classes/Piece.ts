@@ -9,8 +9,3 @@ export interface iPiece {
     owner?: iPlayer;
 
 }
-
-// let piece: any = <GamePiece slot={slots[i]} key={i} _id={i} 
-// game={game} manager={game.manager} player={slots[i].props.owner}
-// setGame={setGame} cancelSelect={this.cancelSelect}
-// selectPiece={this.selectPiece}></GamePiece>;

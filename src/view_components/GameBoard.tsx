@@ -5,7 +5,7 @@ import GamePiece from './GamePiece';
 import {GridStartBound, GridEndBound, TrackMax, EndMax, multiplier,
 TrackStartPositions, TrackPattern, StartLaneStartPositions, StartLanePattern,
 EndLanePattern, EndLaneStartPositions, CenterSlotPattern, CenterSlotStartPosition, 
-SpecialSlotPositions, TestPositions} from '../constants/board_constants';
+SpecialSlotPositions, TestPositions, TestPositions2} from '../constants/board_constants';
 
 import {createKey, addSlotBatch} from '../helpers/Helpers';
 // import Player from '../classes/Player';
@@ -90,6 +90,10 @@ class GameBoard extends React.Component<any>  {
         await addSlotBatch(this.ctx, TrackPattern, TrackStartPositions, slots, iSlotType.Track, players, false, "Straight", counter);
         await addSlotBatch(this.ctx, EndLanePattern, EndLaneStartPositions, slots, iSlotType.End, players, true, "Straight", counter);
         await addSlotBatch(this.ctx, CenterSlotPattern, CenterSlotStartPosition, slots, iSlotType.Center, players, false, "Straight", counter);
+
+        // add center slot
+        await this.setGame({...this.game, centerSlotId: Object.keys(slots)[Object.keys(slots).length-1]});
+
         await addSlotBatch(this.ctx, StartLanePattern, StartLaneStartPositions, slots, iSlotType.Start, players, true, "Diagonal", counter);
 
         return slots; 
@@ -118,21 +122,32 @@ class GameBoard extends React.Component<any>  {
 
                 // add to specials reference
                 var specials = this.game.specialSlots;
+                // this is really hacky.
+                slot.key = key;
                 specials[key] = slot;
                 await this.setManagerState("specialSlots", specials);
             }
         }
     }
 
-    async addSlot(slot: iSlot, slots: iSlot[], counter: iBoardCounter) {
+    async addSlot(slot: iSlot, slots: any, counter: iBoardCounter) {
         // create unique key
         let newKey = await createKey(slot, counter.count);
         // check for overlap with special slot types
         await this.assignSpecialSlots(slot, newKey);
 
-        if(slots[counter.count]) {
-          //  debugger;
+        //need to record this...
+        if(slot.slotType === iSlotType.End){
+            if(slot.owner?.endSlotKeys) {
+                slot.owner?.endSlotKeys.push(slot.orderId);
+            } else if (slot?.owner) {
+                slot.owner.endSlotKeys = [slot.orderId];
+            }
         }
+
+        // if(slots[counter.count]) {
+        //   //  debugger;
+        // }
 
         let _slot: iSlot = {
             x: slot.x,
@@ -148,7 +163,7 @@ class GameBoard extends React.Component<any>  {
       let order: any = slot.orderId ? slot.orderId : _slot.orderId;
 
        counter.count += 1;
-       slots[order] = _slot;
+       slots[newKey] = _slot;
     }
 
     async setManagerState(field: any, values: any) {
@@ -170,22 +185,30 @@ class GameBoard extends React.Component<any>  {
         await this.setManagerState("slots", slots);
     }
 
-    async setTestPieces () {
+    async setTestPieces (testPositions: any[]) {
 
             let slots: any = this.game.slots;
             let pieces: any = this.game.pieces;
-            for (let i = 0; i < TestPositions.length; i++) {
+            for (let i = 0; i < testPositions.length; i++) {
 
-                let slotNumber = TestPositions[i]["slotNumber"];
-                let slot = slots[slotNumber];
-                let pieceNumber =  TestPositions[i].pieceNumber;
+                let slotOrder = testPositions[i]["slotNumber"];
+
+                let slot = undefined;
+
+                for( let [key, _val] of Object.entries(slots)) {
+                    let val: any = _val;
+                    if(val?.orderId == slotOrder) {
+                        slot = _val;
+                    }
+                }
+
+             //   let slot = slots[slotOrder];
+
+                let pieceNumber =  testPositions[i].pieceNumber;
                 let piece: iPiece = pieces[pieceNumber];
 
                 let newState = await this.asyncSelectPiece(piece?._id || '');
 
-                // const moveToSlot = (targetSlot: any, lastSlot: any, manager: any, game: iGame, setGame: any) => {
-                //     manager.moveToSlot(targetSlot, lastSlot, game, setGame);
-                // }
                 let currentPiece: iPiece = this.game?.currentPiece || newState?.currentPiece;
 
                 await this.props.moveToSlot(slot, currentPiece ? currentPiece.slot : undefined, this.manager, this.game, this.setGame);
@@ -214,7 +237,7 @@ class GameBoard extends React.Component<any>  {
         await this.setManagerState("pieces", pieces);
 
         if(this.testMode) {
-           await this.setTestPieces();
+           await this.setTestPieces(TestPositions2);
         }
     }
 

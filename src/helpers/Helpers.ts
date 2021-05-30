@@ -30,7 +30,9 @@ export async function addSlotBatch (context: any, pattern: any, startPositions: 
           player = players[i];
       }
       let slot: iSlot = {x: x, y: y, occupied: occupied, slotType: slotType, orderId: counter.count, owner: player, key: undefined}
-      await context.addSlot(slot, slots, counter);     
+      await context.addSlot(slot, slots, counter);   
+      
+
 
       // calculates tht direction to move and place the next slot
       // if its directly mapped the pattern is 1:1 with the startposition array
@@ -59,7 +61,8 @@ export async function addSlotBatch (context: any, pattern: any, startPositions: 
                   
                   model[pattern[j][0]] += (pattern[j][1] * context.multiplier);
   
-                  let slot = {x: model.x, y: model.y, occupied: occupied, slotType: slotType, order: counter.count, owner: player}
+                  let slot = {x: model.x, y: model.y, occupied: occupied, slotType: slotType, orderId: counter.count, owner: player}
+
                   await context.addSlot(slot, slots, counter);
   
                   x = model.x;

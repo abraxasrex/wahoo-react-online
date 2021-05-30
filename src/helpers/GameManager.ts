@@ -7,6 +7,7 @@ import { AnyARecord } from 'dns';
 import { iPiece } from '../classes/Piece';
 import {iGame} from '../classes/Game';
 import { iSlot, iSlotType, iSpecialSlotType } from '../classes/Slot';
+import {TrackMax} from '../constants/board_constants';
 
 
 export class GameManager {
@@ -53,7 +54,8 @@ export class GameManager {
         let specialSlots: any = currentSlot?.owner?.specialSlots
         // in Start 
         if (currentSlot?.slotType === iSlotType.Start && (state.currentRoll === 1 || state.currentRoll === 6)) {
-           let entrySlot = specialSlots["Entry"];
+           // this is the enum for Entry....
+            let entrySlot = specialSlots[0];
 
            let slotRef: any = undefined;
 
@@ -71,6 +73,25 @@ export class GameManager {
             }
         }
 
+        //2. it's a corner slot ("Jump" specialSlotType)
+        if(currentSlot.slotType === iSlotType.Center) {
+            
+            // for ( let [key, _value] of Object.entries(slots)) {
+            //     let value: any = _value;
+            //     if(value.key == targetSlot?.key) {
+            //         currentSlot = value;
+            //     }
+            // }
+            let steps: any = [];
+            for( let [key, _val] of Object.entries(state.specialSlots)) {
+                let val: any = _val;
+                if(val.specialSlotType === iSpecialSlotType.Jump && !state.slots[key].occupied) {
+                    steps.push(state.slots[key]);
+                }
+            }
+            this.highlightSlotArray(steps, state, stateSetter);
+
+        }
         //on Track
         if(currentSlot?.slotType === iSlotType.Track){
             //1. it's a regular track slot: finish  the countTrack function to get your number and
@@ -79,10 +100,7 @@ export class GameManager {
             // if this exception is passed, calculate only your countTrack up to the finish line,
             // then add the remaining numbers to register the first slots of your end lane.
 
-            //2. it's a corner slot ("Jump" specialSlotType)
-            if(currentSlot.specialSlotType === iSpecialSlotType.Jump) {
-               // return;
-            }
+
             if(currentSlot.owner && specialSlots["Exit"]) {
 
                 // let entrySlot = currentSlot.owner.specialSlots["Entry"];
@@ -112,8 +130,8 @@ export class GameManager {
     async moveToSlot (targetSlot: iSlot, lastSlot: iSlot, originalState: any, stateSetter: any) {
 
         let state = originalState;
-        let currentSlotIndex = targetSlot?.orderId || '';
-        let lastSlotIndex = lastSlot ? lastSlot.orderId : undefined;
+        let currentSlotIndex = targetSlot?.key || '';
+        let lastSlotIndex = lastSlot ? lastSlot.key : undefined;
         let slots = state.slots;
         let pieces = state.pieces;
 
@@ -123,7 +141,7 @@ export class GameManager {
 
         for ( let [key, _value] of Object.entries(slots)) {
             let value: any = _value;
-            if(value.key == targetSlot?.key) {
+            if(key == targetSlot?.key) {
                 currentSlot = value;
             }
         }
@@ -183,9 +201,7 @@ export class GameManager {
 
         for (let i = 0; i < (slots?.length || 0); i++) {
             let key = slots[i].key
-            if(key) {
-                availableSlots[slots[i].key] = true;
-            }
+            availableSlots[key] = slots[i];
         }
         await stateSetter({...state, availableSlots});
 
@@ -195,31 +211,22 @@ export class GameManager {
 
         let currentSlot = state.currentPiece.slot;
 
-        let stepIndex = state.slots.findIndex((slot: iSlot)=> {
-            return slot.key === currentSlot.key;
-        });
+        // let stepIndex = state.slots.findIndex((slot: iSlot)=> {
+        //     return slot.key === currentSlot.key;
+        // });
+
+        let stepIndex = parseInt(currentSlot.orderId);
 
         let steps = [];
         let endCount = 0;
 
         for(var i = 0; i < (state.currentRoll || 0); i++) {
-            stepIndex +=1;
-            if(stepIndex === state.slots.length) {
-                stepIndex = 0;
-            }
+       
 
-            let matchSlot: iSlot = state.slots[stepIndex];
+            const matchSlot: iSlot = state.slots[stepIndex];
 
             // 1. if matchSlot is an "Exit" special type,
-            if(matchSlot.specialSlotType == iSpecialSlotType.Exit) {
-                // 2. find first index of a start piece matching the player
-                let endIndex = state.slots.findIndex((slot: any)=> {
-                    return slot.owner._id == state.currentPlayer?._id && 
-                    slot.slotType == iSlotType.End;
-                });
-                // 3. set stepIndex here... and pray
-                stepIndex = endIndex;
-            }
+         
 
             if(matchSlot.slotType == iSlotType.End) {
                 endCount += 1;
@@ -235,8 +242,25 @@ export class GameManager {
                 }
             } else {
                 steps.push(state.slots[stepIndex]);
-
             }
+
+            if(matchSlot.specialSlotType === iSpecialSlotType.Jump 
+                && i < state.currentRoll
+                && !state.slots[state.centerSlotId].occupied) {
+               // steps.push
+               steps.push(state.slots[state.centerSlotId]);
+            }
+            if(matchSlot.specialSlotType === iSpecialSlotType.Exit) {
+                let endSlotKeys = matchSlot?.owner?.endSlotKeys || [];
+                stepIndex = endSlotKeys[0];
+            } else {
+                stepIndex +=1;
+            }
+
+            if(stepIndex === TrackMax) {
+                stepIndex = 0;
+            }
+
         }
         return steps;
 
