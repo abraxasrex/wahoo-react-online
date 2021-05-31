@@ -1,6 +1,6 @@
 import React from 'react';
 import {iPlayer, Player} from '../classes/Player';
-import { iSlot, iSpecialSlotType } from '../classes/Slot';
+import { iSlot, iSlotType, iSpecialSlotType } from '../classes/Slot';
 
 function moveHere(props: any, e: any){
     e.preventDefault();
@@ -15,26 +15,34 @@ function moveHere(props: any, e: any){
     }
 }
 
-function highlightSlots(x: number, y: number, slotType: string, specialSlotType: iSpecialSlotType, owner: iPlayer) {
+function highlightSlots(x: number, y: number, slotType: iSlotType, specialSlotType: iSpecialSlotType, owner: iPlayer) {
 
    
-    if(specialSlotType && specialSlotType === iSpecialSlotType.Exit) {
-        return "pink"
+  
+    if(owner) {
+        return owner?.gameColor;
     }
-    if(specialSlotType && specialSlotType === iSpecialSlotType.Jump) {
-        return "turquoise"
-    }
-    if(specialSlotType && specialSlotType === iSpecialSlotType.Entry) {
+
+    if(specialSlotType === iSpecialSlotType.Entry) {
         return "brown"
     }
+    
+    if(specialSlotType && specialSlotType === iSpecialSlotType.Jump) {
+        return "turquoise"
+    } 
+   
+  
+
+
     // slot types for testing mainly
     if(x === 0 && y === 125) {
         return "orange";
-    } else if (slotType === "End" || slotType === "Start") {
-        return owner.gameColor || "Grey"
-    } else if (slotType === "Center"){
-        return "Blue"
     } 
+    // else if (slotType === "End" || slotType === "Start") {
+    //     return owner.gameColor || "Grey"
+    // } else if (slotType === "Center"){
+    //     return "Blue"
+    // } 
     return "lightgrey";
 }
 
@@ -48,7 +56,7 @@ function Slot (props: any) {
         return (
             <div className={"game-slot" + (props?.availableSlots[props.slot.key] ? ' available-slot' : '')} 
                 style={{left: x + x_offset, bottom: y + y_offset, 
-                backgroundColor: highlightSlots(x, y, props.slot.slotType, props.slot.specialSlotType, props.owner)}}
+                backgroundColor: highlightSlots(x, y, props.slot.slotType, props.slot.specialSlotType, props.slot.owner)}}
                 onClick={(e) => moveHere(props, e)}>
                 <span> 
                     { /* props.x + "," + props.y */} 

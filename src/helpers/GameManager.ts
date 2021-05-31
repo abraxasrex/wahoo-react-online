@@ -94,10 +94,6 @@ export class GameManager {
         }
         //on Track
         if(currentSlot?.slotType === iSlotType.Track){
-
-
-
-
             
             // 1. find Index in this.slots of  currentSlot
             let steps = await this.getTrackSteps(state, stateSetter);
@@ -105,7 +101,39 @@ export class GameManager {
         }
 
         //in End
+    }
 
+    // if(gameState.availableSlots[piece.slot.key]
+    //     && piece.owner != gameState.currentPlayer) {           
+    //  //   kickHome(gameState, id);
+     
+    async kickHome (gameState: any, setGame: any, moveToSlot: any, piece: any, manager:any, keepMoving: boolean) {
+        let thisPiece = piece;
+        let thisSlot = thisPiece.slot;
+
+       for(let i = 0; i < piece.owner.startSlotKeys.length; i++) {
+         //   for(let i = 0; i < 5; i++) {
+            let key = piece.owner.startSlotKeys[i];
+            if(!gameState.slots[key].occupied) {
+
+               // thisPiece.slot = piece;
+               // thisSlot.owner = undefined;
+                thisPiece.slot = gameState.slots[key];
+                thisSlot.occupied = undefined;
+
+                let newState = gameState;
+
+                newState.pieces[thisPiece._id] = thisPiece;
+                newState.slots[thisSlot.key] = thisSlot;
+
+                setGame(newState);
+
+                if (keepMoving) {
+                    moveToSlot(thisSlot, newState.currentPiece.slot, manager, newState, setGame);
+                }
+                return;
+            }
+        }
     }
 
     async moveToSlot (targetSlot: iSlot, lastSlot: iSlot, originalState: any, stateSetter: any) {
@@ -130,7 +158,6 @@ export class GameManager {
         let currentPiece: iPiece = Object.assign(state.currentPiece, 
             {slot: currentSlot, x: currentSlot?.x, y: currentSlot?.y});
 
-       // await stateSetter({...state, currentPiece, currentSlot});
         state = {...state, currentPiece, currentSlot};
 
         // clone updated elements
@@ -140,13 +167,22 @@ export class GameManager {
         } 
         pieces[state.currentPiece._id] = currentPiece;
 
-        // if(targetSlot.occupied && targetSlot.occupied !== currentPiece.owner){
-        //     let enemyPiece = targetSlot;
-        // }
+    
 
       state = {...state, slots, pieces};
-        await this.changePlayer(state, stateSetter, originalState);
 
+      if(targetSlot.slotType == iSlotType.End) {
+        state.currentPlayer.endCounter = state.currentPlayer.endCounter + 1;
+      }
+
+      if(state.currentPlayer.endCounter > 3) {
+
+        state.winner = state.currentPlayer;
+        await stateSetter(state);
+        alert(`Player ${state.currentPlayer.playerNumber} won the game!`)
+      } else {
+        await this.changePlayer(state, stateSetter, originalState);
+      }
     }
 
     async changePlayer (newState: any, stateSetter: any, originalState: any) {
@@ -193,32 +229,61 @@ export class GameManager {
     getTrackSteps (state: any, stateSetter: any): iSlot [] {
 
         let currentSlot = state.currentPiece.slot;
-
-        // let stepIndex = state.slots.findIndex((slot: iSlot)=> {
-        //     return slot.key === currentSlot.key;
-        // });
-
         let stepIndex = parseInt(currentSlot.orderId);
-
         let steps = [];
         let endCount = 0;
 
         for(var i = 0; i < (state.currentRoll || 0); i++) {
        
-
+            // get slot at index
             const matchSlot: iSlot = state.slots[stepIndex];
 
-            // 1. if matchSlot is an "Exit" special type,
-         
-
+            // End Case
             if(matchSlot.slotType == iSlotType.End) {
-                endCount += 1;
 
-                if(endCount == 4) {
-                    return steps;
+                if(matchSlot.owner !== state.currentPlayer) {
+                    console.log("This should'nt happen!");
                 }
+                
+                if(matchSlot.owner?.endSlotKeys?.length) {
+                    let lastEndSlot: any = matchSlot?.owner?.endSlotKeys[3];
+                    if(lastEndSlot.key == matchSlot.key) {
+                        steps.push(matchSlot);
+                        return steps;
+                    }
+                }
+
+                // endCount += 1;
+
+                // if(endCount == 4) {
+                //     return steps;
+                // }
             }
 
+            // jump case
+            if(matchSlot.specialSlotType === iSpecialSlotType.Jump 
+                && i < state.currentRoll
+                && !state.slots[state.centerSlotId].occupied) {
+                // steps.push
+                steps.push(state.slots[state.centerSlotId]);
+            }
+
+            // exit case
+            if(matchSlot.specialSlotType === iSpecialSlotType.Exit
+                && matchSlot.owner == state.currentPlayer) {
+                let endSlotKeys = state.currentPlayer.endSlotKeys || [];
+                
+                let openEndKey = endSlotKeys.find((id: any)=> {
+                    if(!state.slots[id].occupied) {
+                        return true;
+                    }
+                });
+                stepIndex = openEndKey
+            //    steps.push(state.slots[stepIndex];)
+            }
+
+            // Track case
+            // if(matchSlot.slotType == iSlotType.Track) {
             if(matchSlot.occupied ) {
                 if(matchSlot?.occupied?.playerNumber != state.currentPlayer?.playerNumber) {
                     steps.push(state.slots[stepIndex]);
@@ -226,21 +291,20 @@ export class GameManager {
             } else {
                 steps.push(state.slots[stepIndex]);
             }
+            
+            if(matchSlot.specialSlotType === iSpecialSlotType.Exit
+                && matchSlot.owner == state.currentPlayer) {
+                let endSlotKeys = state.currentPlayer.endSlotKeys || [];
 
-            if(matchSlot.specialSlotType === iSpecialSlotType.Jump 
-                && i < state.currentRoll
-                && !state.slots[state.centerSlotId].occupied) {
-               // steps.push
-               steps.push(state.slots[state.centerSlotId]);
-            }
-            if(matchSlot.specialSlotType === iSpecialSlotType.Exit) {
-                let endSlotKeys = matchSlot?.owner?.endSlotKeys || [];
                 stepIndex = endSlotKeys[0];
+            //    steps.push(state.slots[stepIndex];)
             } else {
-                stepIndex +=1;
+                stepIndex += 1;
             }
+            
 
-            if(stepIndex === TrackMax) {
+            //case : reset track
+            if(stepIndex >= TrackMax) {
                 stepIndex = 0;
             }
 

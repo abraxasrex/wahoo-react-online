@@ -11,6 +11,43 @@ export async function createKey(slot: iSlot, counter: number) {
      //   return counter?.toString() + slot?.y?.toString() + slot?.x?.toString();
 }
 
+    export class  timer{
+
+        timerObj: any;
+        fn: Function;
+        t: number;
+
+        constructor(fn: Function, t: number) {
+             this.timerObj = setInterval(fn, t);
+             this.fn = fn;
+             this.t = t;
+        }
+    
+        stop() {
+            if (this.timerObj) {
+                clearInterval(this.timerObj);
+                this.timerObj = null;
+            }
+            return this;
+        }
+    
+        // start timer using current settings (if it's not already running)
+        start (){
+            if (!this.timerObj) {
+                this.stop();
+                this.timerObj = setInterval(this.fn, this.t);
+            }
+            return this;
+        }
+    
+        // start with new or original interval, stop current interval
+        reset (newT = this.t) {
+            this.t = newT;
+            return this.stop().start();
+        }
+    }
+
+
 export async function addSlotBatch (context: any, pattern: any, startPositions: any, slots: any, slotType: iSlotType, players: Array<any>, directMap: boolean, orientation: string, _counter: any) {
 
   let x = 0;

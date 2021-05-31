@@ -12,7 +12,6 @@ interface iDiceViewProps {
 function DiceView ({manager, setGame, game, currentRoll}: iDiceViewProps) {
 
     async function setDice(e: any){
-
         const newRoll = await manager.rollDice(game, setGame);
         console.log("currentRoll from props: ", currentRoll);
     }

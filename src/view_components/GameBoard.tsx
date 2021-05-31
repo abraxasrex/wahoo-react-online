@@ -7,7 +7,7 @@ TrackStartPositions, TrackPattern, StartLaneStartPositions, StartLanePattern,
 EndLanePattern, EndLaneStartPositions, CenterSlotPattern, CenterSlotStartPosition, 
 SpecialSlotPositions, TestPositions, TestPositions2} from '../constants/board_constants';
 
-import {createKey, addSlotBatch} from '../helpers/Helpers';
+import {createKey, addSlotBatch, timer, getRandomInt} from '../helpers/Helpers';
 // import Player from '../classes/Player';
 
 import { iPlayer } from '../classes/Player';
@@ -38,12 +38,17 @@ interface iGameBoardProps {
 class GameBoard extends React.Component<any>  {
 
     ctx: any;
-    testMode: boolean = false;
+
     slots: iSlot[] = [];
     pieces: iPiece[] = [];
     game: iGame;
     manager: any;
     setGame: any;
+
+    // testing props
+    testMode: boolean = false;
+    botMode: boolean = true;
+    currentBotAction: any = undefined;
 
     constructor(props: any) {
         super(props);
@@ -58,7 +63,10 @@ class GameBoard extends React.Component<any>  {
         this.assignVals(props);
 
         //uncomment below to test
-       this.testMode = true;
+      // this.testMode = true;
+        
+      // uncomment below to let bots play
+     // this.botMode = true;
     }
 
     assignVals(props: any): any {
@@ -174,7 +182,6 @@ class GameBoard extends React.Component<any>  {
 
         state[field] = values;
 
-        console.log("set manager  new state: ", state);
         console.log("f / v: ", field, values);
 
         await this.setGame(state);
@@ -276,6 +283,131 @@ class GameBoard extends React.Component<any>  {
 
         await this.initAllSlots();
         await this.setPieces();
+
+
+
+        if(this.botMode) {
+           this.botsPlayGame();
+        }
+    }
+
+
+
+    botsPlayGame() {
+        // while there isn't a winner
+        let botAction = this.botAction.bind(this);
+
+        let botTimer = new timer(botAction, 100);
+    }
+
+    botAction () {
+        if(this.game.winner) {
+            console.log("done!");
+            return;
+        }
+        // roll, select, move, repeat
+        if(this.currentBotAction == "botRoll") {
+            this.currentBotAction = "pending";
+            this.botRoll();
+        } else if (this.currentBotAction == "botSelect") {
+            this.currentBotAction = "pending";
+            this.botSelect();
+        } else if (this.currentBotAction === "botMove") {
+            this.currentBotAction = "pending";
+            this.botMove();
+        } else if(this.currentBotAction == "pending"){ 
+            console.log("waiting for next action");
+        }
+        else {
+            this.currentBotAction = "pending";
+            this.currentBotAction = "botRoll";
+            console.log("bot's first roll");
+        }
+        
+    }
+
+    botRoll () {
+        console.log("bot roll dice!");
+        this.manager.rollDice(this.game, this.setGame);
+        this.currentBotAction = "botSelect";
+
+    }
+
+    async botSelect () {
+        console.log("bot select a Piece!");
+
+        //1. for each game piece chosen randomly:
+        // 2. check if it has availableSlots
+        //3. first result with available slots: 
+        //4. trigger piece selection
+        let i = 0;
+        for(const [key, piece] of Object.entries(this.game.pieces)) {
+            if(piece.owner != this.game.currentPlayer) {
+                continue;
+            }
+
+            let newState = await this.asyncSelectPiece(piece?._id || '');
+
+            let keys = Object.entries(this.game.availableSlots);
+            if(keys.length > 0) {
+                this.currentBotAction = "botMove";
+                break;
+            } else {
+               // this.props.manager.cancelSelect(this.game, this.setGame);
+               await this.props.manager.clearSlate(this.game, this.setGame);
+            }
+            i++;
+            if(i >= Object.entries(this.game.pieces).length - 1) {
+                this.currentBotAction = "botMove";
+                break;
+            }
+
+        }
+
+    //    this.currentBotAction = "botMove";
+
+
+    }
+
+    async botMove() {
+        console.log("bot Moves a Piece!");
+
+        // 1. randomly choose an availableSlot
+        let availableSlotKeys = Object.entries(this.game.availableSlots);
+       // let random = getRandomInt(availableSlotKeys.length) - 1;
+        let random = availableSlotKeys.length - 1;
+        //2. movePiece to this availableSlot
+
+        let currentPiece: iPiece = this.game?.currentPiece;
+
+        if(!availableSlotKeys[random] ) {
+            console.log("wtf");
+        }
+
+        // gotta cover kick state without piece reference....
+        if(availableSlotKeys[random] &&
+            availableSlotKeys[random][1].occupied &&
+            availableSlotKeys[random][1].occupied != this.game.currentPlayer) {     
+
+            let kickedPlayer = availableSlotKeys[random][1].occupied;
+            let kickedPiece = undefined;
+            for(const [key, piece] of Object.entries(this.game.pieces)) {
+                if(piece.owner == kickedPlayer) {
+                    if(piece.slot.key == availableSlotKeys[random][1].key) {
+                        kickedPiece = piece;
+                        break;
+                    }
+                } else {
+                    continue;
+                }
+            }
+                
+            await this.manager.kickHome(this.game, this.setGame, this.props.moveToSlot, kickedPiece , this.manager, false);
+        }
+         await this.props.moveToSlot(availableSlotKeys[random][1], currentPiece ? currentPiece.slot : undefined, this.manager, this.game, this.setGame);
+        // this.currentBotAction = "botMove";
+
+        this.currentBotAction = "botRoll";
     }
 
  // UI

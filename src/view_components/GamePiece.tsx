@@ -1,5 +1,6 @@
 import React from 'react';
 import {iGame} from '../classes/Game';
+import { iSlotType } from '../classes/Slot';
 const y_offset = 15;
 const x_offset = 15;
 
@@ -9,32 +10,36 @@ function  GamePiece (props: any) {
 
         // TODO: change to use game state object, not manager
 
-        function kickHome (gameState: any, currentId: any) {
-            let thisPiece = piece;
-            let thisSlot = thisPiece.slot;
+        // if(gameState.availableSlots[piece.slot.key]
+        //     && piece.owner != gameState.currentPlayer) {           
+        //  //   kickHome(gameState, id);
 
-           for(let i = 0; i < piece.owner.startSlotKeys.length; i++) {
-             //   for(let i = 0; i < 5; i++) {
-                let key = piece.owner.startSlotKeys[i];
-                if(!gameState.slots[key].occupied) {
+        // function kickHome (gameState: any, currentId: any, setGame: any, moveToSlot: any) {
+        //     let thisPiece = piece;
+        //     let thisSlot = thisPiece.slot;
 
-                   // thisPiece.slot = piece;
-                   // thisSlot.owner = undefined;
-                    thisPiece.slot = gameState.slots[key];
-                    thisSlot.occupied = undefined;
+        //    for(let i = 0; i < piece.owner.startSlotKeys.length; i++) {
+        //      //   for(let i = 0; i < 5; i++) {
+        //         let key = piece.owner.startSlotKeys[i];
+        //         if(!gameState.slots[key].occupied) {
 
-                    let newState = gameState;
+        //            // thisPiece.slot = piece;
+        //            // thisSlot.owner = undefined;
+        //             thisPiece.slot = gameState.slots[key];
+        //             thisSlot.occupied = undefined;
 
-                    newState.pieces[thisPiece._id] = thisPiece;
-                    newState.slots[thisSlot.key] = thisSlot;
+        //             let newState = gameState;
 
-                    props.setGame(newState);
+        //             newState.pieces[thisPiece._id] = thisPiece;
+        //             newState.slots[thisSlot.key] = thisSlot;
 
-                    props.moveToSlot(thisSlot, newState.currentPiece.slot, props.manager, newState, props.setGame);
-                    return;
-                }
-            }
-        }
+        //             props.setGame(newState);
+
+        //             props.moveToSlot(thisSlot, newState.currentPiece.slot, props.manager, newState, props.setGame);
+        //             return;
+        //         }
+        //     }
+        // }
 
         function selectPiece(e: any){
             const id = piece._id;
@@ -43,7 +48,13 @@ function  GamePiece (props: any) {
             // if enemy piece: kickHome
             if(gameState.availableSlots[piece.slot.key]
                 && piece.owner != gameState.currentPlayer) {           
-                kickHome(gameState, id);
+             //   kickHome(gameState, id);
+           //  ameState: any, setGame: any, moveToSlot: any, piece: any, manager:any
+                    props.manager.kickHome(gameState, props.setGame, props.moveToSlot, piece, props.manager, true);
+                  //  gameState: any, currentId: any, setGame: any, moveToSlot: any, piece: any, manager:any
+            } else if(piece.slot.slotType == iSlotType.End) {
+                // you can't move this anymore!
+                return;
             }
 
             // allow to deselect piece
