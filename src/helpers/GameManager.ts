@@ -2,7 +2,6 @@
 import {getRandomInt} from './Helpers';
 import React from 'react';
 import {iPlayer} from '../classes/Player';
-// import {iSlot} from '../view_components/Slot';
 import { AnyARecord } from 'dns';
 import { iPiece } from '../classes/Piece';
 import {iGame} from '../classes/Game';
@@ -47,6 +46,13 @@ export class GameManager {
 
     }
 
+    canJump (x1: any, x2: any, y1: any, y2: any) {
+        if(x1 != x2 && y1 != y2) {
+            return true;
+        }
+
+    }
+    
     async highlightSteps (state: any, stateSetter:any) {
 
         
@@ -56,9 +62,7 @@ export class GameManager {
         if (currentSlot?.slotType === iSlotType.Start && (state.currentRoll === 1 || state.currentRoll === 6)) {
            // this is the enum for Entry....
             let entrySlot = specialSlots[0];
-
            let slotRef: any = undefined;
-
 
            for (const _slot in state.slots) {
                 let slot: any = state.slots[_slot]
@@ -68,7 +72,7 @@ export class GameManager {
                 }
             }
 
-            if(!slotRef?.occupied) {
+            if(slotRef?.occupied !== state.currentPlayer) {
                 await this.highlightSlotArray([entrySlot], state, stateSetter);
             }
         }
@@ -76,16 +80,12 @@ export class GameManager {
         //2. it's a corner slot ("Jump" specialSlotType)
         if(currentSlot.slotType === iSlotType.Center) {
             
-            // for ( let [key, _value] of Object.entries(slots)) {
-            //     let value: any = _value;
-            //     if(value.key == targetSlot?.key) {
-            //         currentSlot = value;
-            //     }
-            // }
             let steps: any = [];
             for( let [key, _val] of Object.entries(state.specialSlots)) {
                 let val: any = _val;
-                if(val.specialSlotType === iSpecialSlotType.Jump && !state.slots[key].occupied) {
+                if(val.specialSlotType === iSpecialSlotType.Jump 
+                 //   && this.canJump(val.x, val.y, currentSlot.x, currentSlot.y)
+                    && state.slots[key].owner !== state.currentPlayer) {
                     steps.push(state.slots[key]);
                 }
             }
@@ -94,28 +94,9 @@ export class GameManager {
         }
         //on Track
         if(currentSlot?.slotType === iSlotType.Track){
-            //1. it's a regular track slot: finish  the countTrack function to get your number and
-            // then call highLightSlot Array with the slots added up from your current roll,
-            // *unless* a highlighted step would pass your finish line.
-            // if this exception is passed, calculate only your countTrack up to the finish line,
-            // then add the remaining numbers to register the first slots of your end lane.
 
 
-            if(currentSlot.owner && specialSlots["Exit"]) {
 
-                // let entrySlot = currentSlot.owner.specialSlots["Entry"];
-
-                // let slotRef = this.slots.find((slot)=> {
-                //      return slot.props.x === entrySlot.x && slot.props.y === entrySlot.y;
-                // });
-     
-                //  if(!slotRef.occupied && !slotRef.props.occupied) {
-                //      this.highlightSlotArray([entrySlot]);
-                //  }
-                
-                // this.highlightSlotArray()
-
-            }
 
             
             // 1. find Index in this.slots of  currentSlot
@@ -159,8 +140,10 @@ export class GameManager {
         } 
         pieces[state.currentPiece._id] = currentPiece;
 
-        // update state
-      //  await stateSetter({...state, slots, pieces});
+        // if(targetSlot.occupied && targetSlot.occupied !== currentPiece.owner){
+        //     let enemyPiece = targetSlot;
+        // }
+
       state = {...state, slots, pieces};
         await this.changePlayer(state, stateSetter, originalState);
 
@@ -237,7 +220,7 @@ export class GameManager {
             }
 
             if(matchSlot.occupied ) {
-                if(matchSlot?.owner?.playerNumber !== state.currentPlayer?.playerNumber) {
+                if(matchSlot?.occupied?.playerNumber != state.currentPlayer?.playerNumber) {
                     steps.push(state.slots[stepIndex]);
                 }
             } else {

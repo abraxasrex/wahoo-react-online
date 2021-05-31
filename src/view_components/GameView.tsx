@@ -70,6 +70,7 @@ interface iGameViewProps {
             if(_pieces) {
                 pieces = Object.entries(_pieces).map((piecePair: any)=> {
                     return <GamePiece game={game} setGame={setGame} key={piecePair[0]}
+                                moveToSlot={moveToSlot}
                                 selectPiece={selectPiece} cancelSelect={cancelSelect}
                                 piece={piecePair[1]} manager={manager}>
                             </GamePiece>

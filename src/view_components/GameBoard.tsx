@@ -58,7 +58,7 @@ class GameBoard extends React.Component<any>  {
         this.assignVals(props);
 
         //uncomment below to test
-        this.testMode = true;
+       this.testMode = true;
     }
 
     assignVals(props: any): any {
@@ -137,17 +137,20 @@ class GameBoard extends React.Component<any>  {
         await this.assignSpecialSlots(slot, newKey);
 
         //need to record this...
-        if(slot.slotType === iSlotType.End){
-            if(slot.owner?.endSlotKeys) {
-                slot.owner?.endSlotKeys.push(slot.orderId);
-            } else if (slot?.owner) {
-                slot.owner.endSlotKeys = [slot.orderId];
-            }
+        if(slot.slotType === iSlotType.End && slot?.owner?.endSlotKeys){
+            // if(slot.owner?.endSlotKeys) {
+                slot?.owner?.endSlotKeys.push(slot.orderId);
+            // } else if (slot?.owner) {
+            //     slot.owner.endSlotKeys = [slot.orderId];
+            // }
         }
 
-        // if(slots[counter.count]) {
-        //   //  debugger;
-        // }
+        if(slot.slotType == iSlotType.Start) {
+          //  if(slot.owner?,startKeys) {
+                slot.owner?.startSlotKeys.push(slot.orderId)
+          //  }
+        }
+
 
         let _slot: iSlot = {
             x: slot.x,

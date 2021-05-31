@@ -41,8 +41,8 @@ export const StartLanePattern = [
     {x: 1, y: -1, duration: 3, playerNumber: 4},
 ];
 export const EndLaneStartPositions = [
-        {x: 7, y: 13},
-         {x: 13, y: 7},
+    {x: 7, y: 13},
+    {x: 13, y: 7},
     {x: 1, y: 7},
     {x: 7, y: 1},
 ]
@@ -80,8 +80,8 @@ export const TestPositions = [
 ]
 
 export const TestPositions2 = [
-    {player: 1, slotNumber: 72, pieceNumber: 4},
-    {player: 2, slotNumber: 37, pieceNumber: 11},
-    {player: 3, slotNumber: 1, pieceNumber: 2},
-    {player: 4, slotNumber: 35, pieceNumber: 7}
+    {player: 1, slotNumber: 72, pieceNumber: 3},
+    {player: 2, slotNumber: 37, pieceNumber: 5},
+    {player: 3, slotNumber: 1, pieceNumber: 9},
+    {player: 4, slotNumber: 32, pieceNumber: 4}
 ]

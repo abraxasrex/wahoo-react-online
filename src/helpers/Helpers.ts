@@ -7,7 +7,8 @@ export function getRandomInt(max: number) {
 
 
 export async function createKey(slot: iSlot, counter: number) {
-        return counter?.toString() + slot?.y?.toString() + slot?.x?.toString();
+        return slot.orderId?.toString() || '';
+     //   return counter?.toString() + slot?.y?.toString() + slot?.x?.toString();
 }
 
 export async function addSlotBatch (context: any, pattern: any, startPositions: any, slots: any, slotType: iSlotType, players: Array<any>, directMap: boolean, orientation: string, _counter: any) {
@@ -15,7 +16,7 @@ export async function addSlotBatch (context: any, pattern: any, startPositions: 
   let x = 0;
   let y = 0;
   const counter = _counter;
-  let occupied = false;
+  let occupied = undefined;
   let player = undefined;
 
   // calculate path of slots from 1 or more starting places

@@ -254,13 +254,17 @@ c. if highlight encompasses player exit, and there are remaining steps, start hi
 6. get back to testing mode functionality
 a. upon moving into end lane of the same color, a piece will enter that lane, and move up that "Count" rather than the count of the main board.
 b. upon moving onto a jump slot, the piece will be able to "jump" through the middle
+b. you can land on your own track piece currently :()
+c. upon moving to a piece of another color, that piece will be sent home, and the selected piece will occupy its square.
 
 [here]
 7. expected behavior for all game pieces (big deliverable!)
-c. upon moving to a piece of another color, that piece will be sent home, and the selected piece will occupy its square.
 
 8. upon moving four pieces into home; you win the game
 8b. fix any bugs that might arise during this process...
+- each player gets an endCounter
+- if they move a piece onto a slot with iSlotType End, their endCounter goes up one
+- if their endCounter reaches 4, a popup says they win the game.
 
 9. make a menu that takes you to a game lobby when you click a button
 9b. lobby should take you to the game.

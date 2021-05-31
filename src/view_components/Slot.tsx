@@ -17,8 +17,6 @@ function moveHere(props: any, e: any){
 
 function highlightSlots(x: number, y: number, slotType: string, specialSlotType: iSpecialSlotType, owner: iPlayer) {
 
-
-
    
     if(specialSlotType && specialSlotType === iSpecialSlotType.Exit) {
         return "pink"

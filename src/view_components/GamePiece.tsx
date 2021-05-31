@@ -1,5 +1,5 @@
 import React from 'react';
-
+import {iGame} from '../classes/Game';
 const y_offset = 15;
 const x_offset = 15;
 
@@ -8,25 +8,62 @@ function  GamePiece (props: any) {
         let piece = props.piece;
 
         // TODO: change to use game state object, not manager
+
+        function kickHome (gameState: any, currentId: any) {
+            let thisPiece = piece;
+            let thisSlot = thisPiece.slot;
+
+           for(let i = 0; i < piece.owner.startSlotKeys.length; i++) {
+             //   for(let i = 0; i < 5; i++) {
+                let key = piece.owner.startSlotKeys[i];
+                if(!gameState.slots[key].occupied) {
+
+                   // thisPiece.slot = piece;
+                   // thisSlot.owner = undefined;
+                    thisPiece.slot = gameState.slots[key];
+                    thisSlot.occupied = undefined;
+
+                    let newState = gameState;
+
+                    newState.pieces[thisPiece._id] = thisPiece;
+                    newState.slots[thisSlot.key] = thisSlot;
+
+                    props.setGame(newState);
+
+                    props.moveToSlot(thisSlot, newState.currentPiece.slot, props.manager, newState, props.setGame);
+                    return;
+                }
+            }
+        }
+
         function selectPiece(e: any){
             const id = piece._id;
             const gameState = props.game;
-            // allow to deselect piece
-            if(gameState.currentPiece.key == id) {
-                props.cancelSelect(props.manager, props.game, props.setGame);
-                return;
+
+            // if enemy piece: kickHome
+            if(gameState.availableSlots[piece.slot.key]
+                && piece.owner != gameState.currentPlayer) {           
+                kickHome(gameState, id);
             }
+
+            // allow to deselect piece
+            else if(gameState.currentPiece.key == id) {
+                props.cancelSelect(props.manager, props.game, props.setGame);
+              //  return;
+            }
+
             // don't select the wrong player's piece or select anything if there's no roll
-            if((piece.owner.playerNumber !== gameState.currentPlayer.playerNumber)
+            else if((piece.owner.playerNumber !== gameState.currentPlayer.playerNumber)
                 || (!gameState.hasRolled)) {
                     console.log("Selecting wrong piece!");
-                return;
+              //  return;
+            } else {
+                props.setGame(gameState);
+                props.selectPiece(id, props.game, props.setGame, props.manager);
             }
-          //  debugger;
-             // TODO: is the line below necessary?
-            props.setGame(gameState);
-            props.selectPiece(id, props.game, props.setGame, props.manager);
+     
         }
+
 
         return (
             <div className={"game-piece " + (props.game.currentPiece.key == piece._id ? 'selected-piece' : '')}

@@ -18,6 +18,7 @@ export interface iPlayer {
     specialSlots: any;
     key?: any;
     endSlotKeys?: any[];
+    startSlotKeys: any[];
 }
 
 export const  Player = (playerNumber: number, gameColor: string):iPlayer => {
@@ -32,6 +33,8 @@ export const  Player = (playerNumber: number, gameColor: string):iPlayer => {
         currentScore: 0,
         currentTurn: undefined,
         specialSlots: {},
-        key: undefined
+        key: undefined,
+        endSlotKeys: [],
+        startSlotKeys: []
     }
 }
