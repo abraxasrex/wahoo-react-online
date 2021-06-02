@@ -1,63 +1,61 @@
-import React,{useState} from 'react';
-import GameBoard from './view_components/GameBoard';
-import GameView from './view_components/GameView';
-import logo from './logo.svg';
-import './App.css';
-import {GameManager} from './helpers/GameManager';
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+import { GameLobby } from "./GameLobby";
 
+import Oofda from './Oofda';
 
-import {Game, iGame} from './classes/Game';
-import {colorSet } from './classes/Game';
-import {iPlayer, Player} from './classes/Player';
-
-const startGame = async (game: any, gameSetter: any)  => {
-  
-  // const players: iPlayer[] = [];
-  // const numberOfPlayers = 4;
-
-  // for (var i=0; i < numberOfPlayers; i++) {
-  //   players.push(Player((i + 1), colorSet[i]));
-  // }
-  await gameSetter({...game, currentPlayer: game.players[0]});
-
-  //return players;
-};
-
-function App() {
-  
-  const players: iPlayer[] = [];
-  const numberOfPlayers = 4;
-
-  for (var i=0; i < numberOfPlayers; i++) {
-    players.push(Player((i + 1), colorSet[i]));
-  }
-
-  let gameInit: iGame = Game;
-  const manager = new GameManager();
-
-  gameInit.players = players;
-
-  const [game, setGame] = useState<iGame>(gameInit);
-  
-  const triggerSetGame = (newState: iGame):any => {
-    let state = {...newState};
-    setGame(state);
-  }
-
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Wahoo
-        </p>  
-        <div className="wahoo-game">
-          <GameView startGame={startGame} players={players} manager={manager}
-            _slots={game.slots} _pieces={game.pieces}
-            game={game} setGame={triggerSetGame}></GameView>
-        </div>
-      </header>
-    </div>
+    <Router>
+      <div>
+        <nav>
+          <ul>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/about">About</Link>
+            </li>
+            <li>
+              <Link to="/gameLobby">Go to Game Lobby</Link>
+            </li>
+          </ul>
+        </nav>
+
+        {/* A <Switch> looks through its children <Route>s and
+            renders the first one that matches the current URL. */}
+        <Switch>
+          <Route path="/about">
+            <About />
+          </Route>
+          <Route path="/oofda">
+            <Oofda />
+          </Route>
+          <Route path = "/gameLobby">
+              <GameLobby></GameLobby>
+          </Route>
+          <Route path="/">
+            <Home />
+          </Route>
+        </Switch>
+      </div>
+    </Router>
   );
 }
 
-export default App;
+function Home() {
+  return <h2>Home</h2>;
+}
+
+function About() {
+  return <h2>About</h2>;
+}
+
+function Users() {
+  return <h2>Users</h2>;
+}

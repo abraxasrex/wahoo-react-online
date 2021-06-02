@@ -26,13 +26,10 @@ function highlightSlots(x: number, y: number, slotType: iSlotType, specialSlotTy
     if(specialSlotType === iSpecialSlotType.Entry) {
         return "brown"
     }
-    
+
     if(specialSlotType && specialSlotType === iSpecialSlotType.Jump) {
         return "turquoise"
     } 
-   
-  
-
 
     // slot types for testing mainly
     if(x === 0 && y === 125) {
@@ -59,7 +56,6 @@ function Slot (props: any) {
                 backgroundColor: highlightSlots(x, y, props.slot.slotType, props.slot.specialSlotType, props.slot.owner)}}
                 onClick={(e) => moveHere(props, e)}>
                 <span> 
-                    { /* props.x + "," + props.y */} 
                     { props.slot.orderId }
                 </span> 
             </div>

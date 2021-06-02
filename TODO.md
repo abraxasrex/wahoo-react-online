@@ -263,17 +263,16 @@ c. upon moving to a piece of another color, that piece will be sent home, and th
 2. make sure pieces can move in normally
 3. if 4 pieces go in, they should win home.
 
-
 8b. fix any bugs that might arise during this process...
 - each player gets an endCounter
 - if they move a piece onto a slot with iSlotType End, their endCounter goes up one
 - if their endCounter reaches 4, a popup says they win the game.
 
-[here]
-
-
 9. make a menu that takes you to a game lobby when you click a button
 9b. lobby should take you to the game.
+
+[here]
+
 
 10. hook sockets up to the lobby; when four people join, the button should be enabled to start game.
 

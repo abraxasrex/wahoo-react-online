@@ -8,39 +8,6 @@ function  GamePiece (props: any) {
 
         let piece = props.piece;
 
-        // TODO: change to use game state object, not manager
-
-        // if(gameState.availableSlots[piece.slot.key]
-        //     && piece.owner != gameState.currentPlayer) {           
-        //  //   kickHome(gameState, id);
-
-        // function kickHome (gameState: any, currentId: any, setGame: any, moveToSlot: any) {
-        //     let thisPiece = piece;
-        //     let thisSlot = thisPiece.slot;
-
-        //    for(let i = 0; i < piece.owner.startSlotKeys.length; i++) {
-        //      //   for(let i = 0; i < 5; i++) {
-        //         let key = piece.owner.startSlotKeys[i];
-        //         if(!gameState.slots[key].occupied) {
-
-        //            // thisPiece.slot = piece;
-        //            // thisSlot.owner = undefined;
-        //             thisPiece.slot = gameState.slots[key];
-        //             thisSlot.occupied = undefined;
-
-        //             let newState = gameState;
-
-        //             newState.pieces[thisPiece._id] = thisPiece;
-        //             newState.slots[thisSlot.key] = thisSlot;
-
-        //             props.setGame(newState);
-
-        //             props.moveToSlot(thisSlot, newState.currentPiece.slot, props.manager, newState, props.setGame);
-        //             return;
-        //         }
-        //     }
-        // }
-
         function selectPiece(e: any){
             const id = piece._id;
             const gameState = props.game;
@@ -48,10 +15,7 @@ function  GamePiece (props: any) {
             // if enemy piece: kickHome
             if(gameState.availableSlots[piece.slot.key]
                 && piece.owner != gameState.currentPlayer) {           
-             //   kickHome(gameState, id);
-           //  ameState: any, setGame: any, moveToSlot: any, piece: any, manager:any
-                    props.manager.kickHome(gameState, props.setGame, props.moveToSlot, piece, props.manager, true);
-                  //  gameState: any, currentId: any, setGame: any, moveToSlot: any, piece: any, manager:any
+                props.manager.kickHome(gameState, props.setGame, props.moveToSlot, piece, props.manager, true);
             } else if(piece.slot.slotType == iSlotType.End) {
                 // you can't move this anymore!
                 return;

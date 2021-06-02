@@ -102,22 +102,16 @@ export class GameManager {
 
         //in End
     }
-
-    // if(gameState.availableSlots[piece.slot.key]
-    //     && piece.owner != gameState.currentPlayer) {           
-    //  //   kickHome(gameState, id);
      
     async kickHome (gameState: any, setGame: any, moveToSlot: any, piece: any, manager:any, keepMoving: boolean) {
         let thisPiece = piece;
         let thisSlot = thisPiece.slot;
 
        for(let i = 0; i < piece.owner.startSlotKeys.length; i++) {
-         //   for(let i = 0; i < 5; i++) {
             let key = piece.owner.startSlotKeys[i];
             if(!gameState.slots[key].occupied) {
 
-               // thisPiece.slot = piece;
-               // thisSlot.owner = undefined;
+
                 thisPiece.slot = gameState.slots[key];
                 thisSlot.occupied = undefined;
 
@@ -187,16 +181,12 @@ export class GameManager {
 
     async changePlayer (newState: any, stateSetter: any, originalState: any) {
         let state = newState;
-        // TODO: change currentRound
         let currentPlayer = state.currentPlayer;
         if(currentPlayer?.playerNumber === 4) {
-           // await stateSetter({...state, currentPlayer: state.players[0]});
            state = {...state, currentPlayer: state.players[0]};
         }
-     //   } else {
-            // playernumber should be one more than index
+
             currentPlayer = state.players[(currentPlayer?.playerNumber) || 0];
-     //   }
         state = await this.clearSlate(state, stateSetter, false);
         await stateSetter({...state, hasRolled: false, currentRoll: undefined, currentRound: state.currentRound + 1, currentPlayer});
     }
@@ -253,19 +243,14 @@ export class GameManager {
                     }
                 }
 
-                // endCount += 1;
-
-                // if(endCount == 4) {
-                //     return steps;
-                // }
             }
 
             // jump case
             if(matchSlot.specialSlotType === iSpecialSlotType.Jump 
                 && i < state.currentRoll
                 && !state.slots[state.centerSlotId].occupied) {
-                // steps.push
-                steps.push(state.slots[state.centerSlotId]);
+
+                    steps.push(state.slots[state.centerSlotId]);
             }
 
             // exit case
@@ -279,11 +264,9 @@ export class GameManager {
                     }
                 });
                 stepIndex = openEndKey
-            //    steps.push(state.slots[stepIndex];)
             }
 
             // Track case
-            // if(matchSlot.slotType == iSlotType.Track) {
             if(matchSlot.occupied ) {
                 if(matchSlot?.occupied?.playerNumber != state.currentPlayer?.playerNumber) {
                     steps.push(state.slots[stepIndex]);
@@ -297,7 +280,6 @@ export class GameManager {
                 let endSlotKeys = state.currentPlayer.endSlotKeys || [];
 
                 stepIndex = endSlotKeys[0];
-            //    steps.push(state.slots[stepIndex];)
             } else {
                 stepIndex += 1;
             }

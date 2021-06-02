@@ -53,13 +53,7 @@ class GameBoard extends React.Component<any>  {
     constructor(props: any) {
         super(props);
 
-        // this.slots = props.slots;
-        // this.pieces = props.pieces;
         this.game = props.game;
-        // this.manager = props.manager;
-        // this.setGame = props.setGame;
-
-        // this.ctx = this.createContext();
         this.assignVals(props);
 
         //uncomment below to test
@@ -71,10 +65,8 @@ class GameBoard extends React.Component<any>  {
 
     assignVals(props: any): any {
         this.game = props.game;
-      //  if (Object.keys(props.game?.slots).length === 0) {
-            this.slots = props.game.slots;
-      //  } 
-       // this.slots = props.slots || ;
+        this.slots = props.game.slots;
+
         this.pieces = props.pieces;
         this.game = props.game;
         this.manager = props.manager;
@@ -146,17 +138,11 @@ class GameBoard extends React.Component<any>  {
 
         //need to record this...
         if(slot.slotType === iSlotType.End && slot?.owner?.endSlotKeys){
-            // if(slot.owner?.endSlotKeys) {
                 slot?.owner?.endSlotKeys.push(slot.orderId);
-            // } else if (slot?.owner) {
-            //     slot.owner.endSlotKeys = [slot.orderId];
-            // }
         }
 
         if(slot.slotType == iSlotType.Start) {
-          //  if(slot.owner?,startKeys) {
                 slot.owner?.startSlotKeys.push(slot.orderId)
-          //  }
         }
 
 
@@ -212,7 +198,6 @@ class GameBoard extends React.Component<any>  {
                     }
                 }
 
-             //   let slot = slots[slotOrder];
 
                 let pieceNumber =  testPositions[i].pieceNumber;
                 let piece: iPiece = pieces[pieceNumber];
@@ -297,7 +282,7 @@ class GameBoard extends React.Component<any>  {
         // while there isn't a winner
         let botAction = this.botAction.bind(this);
 
-        let botTimer = new timer(botAction, 100);
+        let botTimer = new timer(botAction, 500);
     }
 
     botAction () {
@@ -336,10 +321,6 @@ class GameBoard extends React.Component<any>  {
     async botSelect () {
         console.log("bot select a Piece!");
 
-        //1. for each game piece chosen randomly:
-        // 2. check if it has availableSlots
-        //3. first result with available slots: 
-        //4. trigger piece selection
         let i = 0;
         for(const [key, piece] of Object.entries(this.game.pieces)) {
             if(piece.owner != this.game.currentPlayer) {
@@ -353,7 +334,6 @@ class GameBoard extends React.Component<any>  {
                 this.currentBotAction = "botMove";
                 break;
             } else {
-               // this.props.manager.cancelSelect(this.game, this.setGame);
                await this.props.manager.clearSlate(this.game, this.setGame);
             }
             i++;
@@ -361,12 +341,7 @@ class GameBoard extends React.Component<any>  {
                 this.currentBotAction = "botMove";
                 break;
             }
-
         }
-
-    //    this.currentBotAction = "botMove";
-
-
     }
 
     async botMove() {
@@ -376,7 +351,6 @@ class GameBoard extends React.Component<any>  {
         let availableSlotKeys = Object.entries(this.game.availableSlots);
        // let random = getRandomInt(availableSlotKeys.length) - 1;
         let random = availableSlotKeys.length - 1;
-        //2. movePiece to this availableSlot
 
         let currentPiece: iPiece = this.game?.currentPiece;
 
@@ -405,7 +379,6 @@ class GameBoard extends React.Component<any>  {
             await this.manager.kickHome(this.game, this.setGame, this.props.moveToSlot, kickedPiece , this.manager, false);
         }
          await this.props.moveToSlot(availableSlotKeys[random][1], currentPiece ? currentPiece.slot : undefined, this.manager, this.game, this.setGame);
-        // this.currentBotAction = "botMove";
 
         this.currentBotAction = "botRoll";
     }
@@ -425,7 +398,6 @@ class GameBoard extends React.Component<any>  {
 
     // lifecycles
     componentDidMount() {
-       // debugger;
         if(this.game.players?.length > 0) {
             this.setGameEntities();
         }

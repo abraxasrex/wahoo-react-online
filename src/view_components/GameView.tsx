@@ -83,45 +83,16 @@ interface iGameViewProps {
         }
 
         useEffect(() => {
-            // Update the document title using the browser API
             updateEntities();
           });
-    // useEffect(()=> {
-    //     if(game.currentRound === 0) {
-    //        // let round = game.currentRound;
-    //        debugger;
-    //        startGame(game, setGame).then((_players: iPlayer[])=> {
-    //            players = _players
-    //        });
-    //     }
-    // }, []);
 
-    // setGame({...game, players: players, currentRound: 1});
-
-    // TODO: mechanism for starting first round, skipping for next rounds
-    // let players;
-    // let gameInit: iGame = Game;
-    // const manager = new GameManager();
-    // const [game, setGame] = useState<iGame>(gameInit);
-
-    // players = startGame();
-    // setGame({...game, players: players});
-
-    // const playerViews = [];
-
-    // for (var i = 0; i < game?.players?.length; i++) {
-    //     playerViews.push(<PlayerView player={game.players[i]} currentPlayer={game.currentPlayer} key={i}> </PlayerView>);
-    // } 
 
    
    updateEntities();
 
-   // Object.entries(game)
-
-    // debugger;
     return (
         <div className="wahoo-game">
-            <PlayerViews players={players}></PlayerViews>
+            <PlayerViews players={players} game={game}></PlayerViews>
             <div>
                 <GameBoard game={game} manager={manager} setGame={setGame} 
                     selectPiece={selectPiece} moveToSlot={moveToSlot}>

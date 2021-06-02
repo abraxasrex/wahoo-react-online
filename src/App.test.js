@@ -8,7 +8,7 @@ import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
 
-import App from './App';
+import Oofda from './Oofda';
 import GameView from './view_components/GameView';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -22,7 +22,7 @@ after(function () {
   clock.restore();
 });
 
-describe('<App />', () => {
+describe('<Oofda />', () => {
   it('renders one  <GameView /> components', () => {
     const wrapper = shallow(<App />);
     expect(wrapper.find(GameView)).to.have.lengthOf(1);
