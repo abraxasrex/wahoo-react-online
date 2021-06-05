@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -8,6 +8,9 @@ import {
   useParams
 } from "react-router-dom";
 
+import socketIOClient from "socket.io-client";
+
+
 import Oofda from './Oofda';
 
 
@@ -15,6 +18,15 @@ export function GameLobby() {
     let match = useRouteMatch();
     
     let sample_id = '1234';
+    const ENDPOINT = "http://127.0.0.1:4001";
+
+
+    useEffect(() => {
+      const socket = socketIOClient(ENDPOINT);
+      socket.on("FromAPI", data => {
+        console.log("socket data: ", data);
+      });
+    }, []);
 
     return (
       <div>

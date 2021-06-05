@@ -273,8 +273,8 @@ c. upon moving to a piece of another color, that piece will be sent home, and th
 
 [here]
 
-
 10. hook sockets up to the lobby; when four people join, the button should be enabled to start game.
+https://www.valentinog.com/blog/socket-react/
 
 11. on playing game, control should change based on turn to the person whose round it is.
 
