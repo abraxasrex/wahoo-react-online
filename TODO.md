@@ -271,10 +271,27 @@ c. upon moving to a piece of another color, that piece will be sent home, and th
 9. make a menu that takes you to a game lobby when you click a button
 9b. lobby should take you to the game.
 
+a1. react issue: setState won't update component or children
+
+10.1. playerJoined event on one client not firing for other clients
+
+
 [here]
 
 10. hook sockets up to the lobby; when four people join, the button should be enabled to start game.
 https://www.valentinog.com/blog/socket-react/
+a. when GameLobby component inits, it generates initial state, and emits
+"newLobby": {lobbyObject} with one player with unique id.
+b. server listens for "newLobby" event and adds it to an array of open games
+c. if new client connections joins, that client should send gameLobbyCode to the server
+d. if the new connections gameCode matches an existing game, the server should emit "playerJoined" with the players id. object = {lobbyObject}
+e. client listens to playerJoined, and if lobbyObject gameCode matches, player is allowed to join game...
+
+
+10.25. prevent same user from joining room twice on page reload
+- generate key at app level? read from cookie?
+
+10.5. user generating game lobby should trigger new code, which is visible, and other users can enter through the /join/ view
 
 11. on playing game, control should change based on turn to the person whose round it is.
 
