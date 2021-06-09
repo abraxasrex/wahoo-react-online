@@ -11,3 +11,53 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* custom styles */
+.oofda-nav-bar {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.oofda-nav-item {
+  list-style: none;
+  padding: 5px;
+  width: 15%;
+  border: 1px solid black;
+  text-align: center;
+  font-size: 25px;
+  vertical-align: middle ;
+}
+.oofda-nav-item a {
+  text-decoration: none;
+  /* display: block; */
+  margin: 0 auto;
+  color: black;
+}
+
+html {
+  background:
+        radial-gradient(
+            khaki 40px,
+            transparent 0,
+            transparent 100%
+        ),
+        radial-gradient(
+            skyblue 40px,
+            transparent 0,
+            transparent 100%
+        ),
+        radial-gradient(
+            pink 40px,
+            transparent 0,
+            transparent 100%
+        ), snow;
+    background-blend-mode: multiply;
+    background-size: 100px 100px;
+    background-position: 0 0, 33px 33px, -33px -33px;
+}
+
+.plain-background {
+  /* add elements that need to stand out against pattern bg */
+}
+

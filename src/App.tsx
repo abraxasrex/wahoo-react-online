@@ -12,16 +12,16 @@ import Oofda from './Oofda';
 export default function App() {
   return (
     <Router>
-      <div>
+      <div className="app-background">
         <nav>
-          <ul>
-            <li>
+          <ul className={'oofda-nav-bar'}>
+            <li className={'oofda-nav-item'}>
               <Link to="/">Home</Link>
             </li>
-            <li>
+            <li className={'oofda-nav-item'}>
               <Link to="/about">About</Link>
             </li>
-            <li>
+            <li className={'oofda-nav-item'}>
               <Link to="/gameLobby">Go to Game Lobby</Link>
             </li>
           </ul>
