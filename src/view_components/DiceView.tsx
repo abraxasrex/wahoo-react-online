@@ -3,12 +3,8 @@ import GameManager from '../helpers/GameManager';
 
 import Dot from './Dot';
 
-interface iDiceViewProps {
-    manager: any;
-    setGame: any;
-    currentRoll?: number;
-    game: any;
-}
+import {iDiceViewProps} from '../interfaces/index';
+
 function DiceView ({manager, setGame, game, currentRoll}: iDiceViewProps) {
 
     async function setDice(e: any){

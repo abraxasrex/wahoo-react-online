@@ -32,70 +32,83 @@ let sockets = [];
 io.on("connection", (socket) => {
 
   // block room after 4 users
-  if(sockets.length == 4) {
+  if(sockets.length > 3) {
     return;
   }
-
   sockets.push(socket);
-  // boilerplate stuff
   console.log("New client connected");
-  if (interval) {
-    clearInterval(interval);
-  }
-  interval = setInterval(() => getApiAndEmit(socket), 1000);
 
-  socket.on("disconnect", () => {
+  socket.on("disconnect", (client) => {
+    sockets.splice([sockets.indexOf(client)], 1);
+    sockets.forEach((client)=> client.emit('playerLeftServer', client));
     console.log("Client disconnected");
-    clearInterval(interval);
   });
 
-  // cases:
-  // 1. client component is emitting newLobby with empty data
-  //   if this is the case, and it matches an existing room,
-  //   the new player needs to get added to the array,
-  //   and a playerJoined with the matching gameLobby should be emitted
-  // 
+
   socket.on("newLobby", (lobby)=> {
-
+    console.log("new lobbyyyy: ", lobby);
     let match = gameLobbies[lobby.gameCode];
-
+    
+    console.log("lobbies, ", gameLobbies);
     // there's an existing room
-    if(match && match.players.length < 4) {
+    if(match && match.players && match.players.length < 4) {
       console.log("existing room");
 
-      gameLobbies[lobby.gameCode].players.push({playerName: "", playerNumber: match.players.length, playerId: lobby.playerId})
-      sockets.forEach(_socket=> _socket.emit("playerJoined", {...gameLobbies[lobby.gameCode], playerId: lobby.playerId, recast: true }));
+         // prevent adding same user
+        let deny = false;
+         match.players.forEach((player)=> {
+        if(player.playerId == lobby.playerId) {
+          console.log("bad user: adding twice: ", lobby.playerId);
+          deny = true;
+          return;
+        }
+      });
 
-    //  socket.emit("playerJoined", recaster);
-      // there's not an existing room
+      if(deny) {
+        return;
+      }
+
+      gameLobbies[lobby.gameCode].players.push({playerName: "", playerNumber: match.players.length, playerId: lobby.playerId})
+
+      sockets.forEach(client=> client.emit("playerJoinedServer", {...gameLobbies[lobby.gameCode]}));
+
     } else if(!match) {
       console.log("new room!");
 
       gameLobbies[lobby.gameCode] = lobby;
-      gameLobbies[lobby.gameCode].players.push({playerName: "", playerNumber: gameLobbies[lobby.gameCode].players.length, playerId: lobby.playerId})
+      gameLobbies[lobby.gameCode].players.push({playerName: "", playerNumber: 0, playerId: lobby.playerId});
 
-      // let recaster = gameLobbies[lobby.gameCode];
-      // recaster.recast = true;
-      sockets.forEach(_socket => _socket.emit("playerJoined", {...gameLobbies[lobby.gameCode], playerId: lobby.playerId, recast: false}));
+      let newInfo = {...gameLobbies[lobby.gameCode]};
+      sockets.forEach((_client)=> _client.emit("playerJoinedServer", newInfo));
 
     }
   });
 
-  // socket.on("playerJoined", (lobby)=> {
-  //   if(lobby.recast) {
-  //     let no_recast = lobby;
-  //     no_recast.recast = false;
-  //     console.log("recast");
-  //     socket.emit('playerJoined', lobby);
-  //   }
-  // });
+  // TODO: player update
+
+  socket.on("playerEditedClient", (editState)=> {
+
+    let gameCode = editState.gameCode;
+    let player = editState.player;
+
+    let lobby = gameLobbies[gameCode];
+    if(lobby) {
+      // change player at server level
+      console.log("Editing players.... ", lobby.players);
+      console.log("with player.... ", player);
+      let changedPlayer = lobby.players.find(_player=> _player.playerId == player.playerId);
+      let changedIndex = lobby.players.indexOf(changedPlayer);
+      gameLobbies[gameCode].players[changedIndex] = player;
+      console.log('edit server: ', gameLobbies[gameCode]);
+      //emit the edited player and gameCode
+      let emitState = {player: editState.player, gameCode};
+      sockets.forEach(client=> client.emit("playerEdited", emitState));
+      // make sure cleint matches
+    }
+  });
+
 
 });
 
-const getApiAndEmit = socket => {
-  const response = new Date();
-  // Emitting a new message. Will be consumed by the client
-  socket.emit("FromAPI", response);
-};
 
 server.listen(port, () => console.log(`Listening on port ${port}`));

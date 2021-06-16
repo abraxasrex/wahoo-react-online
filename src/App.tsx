@@ -8,8 +8,15 @@ import {
 import { GameLobby } from "./GameLobby";
 
 import Oofda from './Oofda';
+import {Home} from './view_components/Home';
+
+import {getPlayerId} from './helpers/Helpers';
+
 
 export default function App() {
+
+  const clientId = getPlayerId();
+
   return (
     <Router>
       <div className="app-background">
@@ -22,7 +29,7 @@ export default function App() {
               <Link to="/about">About</Link>
             </li>
             <li className={'oofda-nav-item'}>
-              <Link to="/gameLobby">Go to Game Lobby</Link>
+              <Link to="/gameLobby">Game Lobby</Link>
             </li>
           </ul>
         </nav>
@@ -37,7 +44,7 @@ export default function App() {
             <Oofda />
           </Route>
           <Route path = "/gameLobby">
-              <GameLobby></GameLobby>
+              <GameLobby clientPlayer={clientId} />
           </Route>
           <Route path="/">
             <Home />
@@ -48,9 +55,7 @@ export default function App() {
   );
 }
 
-function Home() {
-  return <h2>Home</h2>;
-}
+
 
 function About() {
   return <h2>About</h2>;

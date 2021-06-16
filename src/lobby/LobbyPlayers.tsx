@@ -9,10 +9,12 @@ class LobbyPlayers extends React.Component<any> {
     
     // players: iPlayer[];
     players: any[];
+    clientPlayer: any;
     // game: iGame;
     constructor(props: any) {
         super(props);
-        this.players = props.players;
+       this.players = props.players;
+       this.clientPlayer = props.clientPlayer;
       //  this.game = props.game;
       console.log(" a player viewssss has rendered! ", props);
 
@@ -20,12 +22,19 @@ class LobbyPlayers extends React.Component<any> {
     render() {
         const playerViews: Array<any>= [];
         let players = this.props.players;
-
+        console.log ("PLAYERS emit: ", this.props.lobby);
         for (var i = 0; i < players?.length; i++) {
-            let playerView: any = <LobbyPlayer player={players[i]} key={i} 
-            index={i}
-            setLobby={this.props.setLobby} lobby={this.props.lobby}></LobbyPlayer>;
-            playerViews.push(playerView);
+            let playerView: any = 
+                (<LobbyPlayer 
+                    key={i} 
+                    player={this.props.players[i]} 
+                    index={i}
+                    clientPlayer={this.clientPlayer}
+                    emitter={this.props.lobby.emitter || this.props.emitter}
+                    setLobby={this.props.setLobby} 
+                    lobby={this.props.lobby}></LobbyPlayer>);
+
+                playerViews.push(playerView);
         }
 
         return (playerViews);

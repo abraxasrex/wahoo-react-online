@@ -275,8 +275,10 @@ a1. react issue: setState won't update component or children
 
 10.1. playerJoined event on one client not firing for other clients
 
+10.1. move socket logic up to gameLobby!!! ...
 
 [here]
+6-15: on client game edit, the *other* player will reload without emitter
 
 10. hook sockets up to the lobby; when four people join, the button should be enabled to start game.
 https://www.valentinog.com/blog/socket-react/
@@ -287,6 +289,12 @@ c. if new client connections joins, that client should send gameLobbyCode to the
 d. if the new connections gameCode matches an existing game, the server should emit "playerJoined" with the players id. object = {lobbyObject}
 e. client listens to playerJoined, and if lobbyObject gameCode matches, player is allowed to join game...
 
+10.2.
+1. adding user on same browser is a "2nd" user
+2. new user, on new window, crashes node app, before a console message
+
+10.26 game form edit -->
+1. 
 
 10.25. prevent same user from joining room twice on page reload
 - generate key at app level? read from cookie?

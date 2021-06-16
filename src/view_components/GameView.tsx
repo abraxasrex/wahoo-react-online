@@ -6,51 +6,29 @@ import Slot from './Slot'
 import GamePiece from './GamePiece';
 
 import {Game, iGame} from '../classes/Game';
-import {colorSet } from '../classes/Game';
-
-import {iPlayer, Player} from '../classes/Player';
-
-import {GameManager} from '../helpers/GameManager';
-import { iSlot } from '../classes/Slot';
 
 import Slots from './Slots';
 import Pieces from './Pieces';
 import PlayerViews from './PlayerViews';
 
-interface iGameViewProps {
-    startGame: Function;
-    players: iPlayer[];
-    game: iGame;
-    setGame: any;
-    manager: any;
-    _slots: any;
-    _pieces: any;
-}
+import {iGameViewProps} from '../interfaces/index';
 
    // UI
    const selectPiece = (id: string, game: iGame, setGame: any, manager: any) => {
         return manager.selectPiece(id, game, setGame);
-    //   this.resetPiecesAndSlots();
-     //   return true;
-    }
 
-    // asyncSelectPiece(id: string) {
-    // await this.selectPiece(id);
-    // }
+    }
 
     const cancelSelect = (manager: any, state: iGame, stateSetter:any) => {
         manager.cancelSelect(state, stateSetter);
-    //   this.resetPiecesAndSlots();
     }
 
     const moveToSlot = (targetSlot: any, lastSlot: any, manager: any, game: iGame, setGame: any) => {
         manager.moveToSlot(targetSlot, lastSlot, game, setGame);
-    // this.resetPiecesAndSlots();
     }
 
     const GameView = ({startGame, players, game, setGame, manager, _slots, _pieces}: iGameViewProps) => {
  
-    // let players: iPlayer[] = [];
 
         let slots: JSX.Element[] = _slots;
         let pieces: JSX.Element[] = _pieces;

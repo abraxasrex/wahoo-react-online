@@ -1,11 +1,7 @@
 import React from 'react';
 import { iGame } from '../classes/Game';
 
-interface iPiecesProps {
-    game: iGame,
-    pieces: JSX.Element[],
-    manager: any
-}
+import {iPiecesProps} from '../interfaces/index';
 
 function Pieces({pieces, game, manager}: iPiecesProps): JSX.Element {
 

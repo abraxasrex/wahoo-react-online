@@ -5,11 +5,9 @@ import { iSlot, iSlotType, iSpecialSlotType } from '../classes/Slot';
 function moveHere(props: any, e: any){
     e.preventDefault();
     const key = props.slot.key;
-   // debugger;
     const gameState = props.game;
 
     if(gameState.availableSlots[key]) {
-      //  managerState.currentSlot = props;
         let lastSlot = gameState.currentPiece.slot;
         props.moveToSlot(props.slot, lastSlot, props.manager, props.game, props.setGame);
     }
@@ -17,8 +15,6 @@ function moveHere(props: any, e: any){
 
 function highlightSlots(x: number, y: number, slotType: iSlotType, specialSlotType: iSpecialSlotType, owner: iPlayer) {
 
-   
-  
     if(owner) {
         return owner?.gameColor;
     }
@@ -35,11 +31,7 @@ function highlightSlots(x: number, y: number, slotType: iSlotType, specialSlotTy
     if(x === 0 && y === 125) {
         return "orange";
     } 
-    // else if (slotType === "End" || slotType === "Start") {
-    //     return owner.gameColor || "Grey"
-    // } else if (slotType === "Center"){
-    //     return "Blue"
-    // } 
+
     return "lightgrey";
 }
 

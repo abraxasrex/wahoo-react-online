@@ -8,33 +8,15 @@ EndLanePattern, EndLaneStartPositions, CenterSlotPattern, CenterSlotStartPositio
 SpecialSlotPositions, TestPositions, TestPositions2} from '../constants/board_constants';
 
 import {createKey, addSlotBatch, timer, getRandomInt} from '../helpers/Helpers';
-// import Player from '../classes/Player';
 
 import { iPlayer } from '../classes/Player';
 import { iSlot, iSlotType, iSpecialSlotType } from '../classes/Slot';
 import { iPiece } from '../classes/Piece';
 import { iGame } from '../classes/Game';
 
-export interface iManagerSetter {
 
-}
+import {iSpecialSlot, iBoardCounter, iGameBoardProps} from '../interfaces/index';
 
-export interface iSpecialSlot {
-    key: string;
-}
-
-export interface iBoardCounter {
-    count: number
-}
-
-interface iGameBoardProps {
-    props?: any,
-    slots: iSlot[],
-    pieces: iPiece[],
-    game: iGame,
-    manager: any,
-    setGame: any
-}
 class GameBoard extends React.Component<any>  {
 
     ctx: any;

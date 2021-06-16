@@ -12,11 +12,18 @@ code {
     monospace;
 }
 
+/* fonts */
+@font-face {
+  font-family: 'Fredoka One';
+  src:  url('./fonts/FredokaOne-Regular.ttf') format('truetype');
+}
+
 /* custom styles */
 .oofda-nav-bar {
   width: 100%;
   display: flex;
   justify-content: space-around;
+  padding: 0;
 }
 
 .oofda-nav-item {
@@ -27,15 +34,109 @@ code {
   text-align: center;
   font-size: 25px;
   vertical-align: middle ;
+  max-height: 35px;
+
+  display: flex;
+  align-items: stretch;
+
+  background-color: white;
 }
-.oofda-nav-item a {
+
+.oofda-nav-item a, .home-nav-button a {
   text-decoration: none;
   /* display: block; */
   margin: 0 auto;
   color: black;
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-html {
+/* .home-nav-button a {
+
+} */
+
+/* home styles */
+.home-container {
+  width: 35%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 40px;
+}
+
+.home-container > * {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+  margin: 5px;
+
+  margin-top: 10px;
+}
+
+.home-headline {
+  font-family: 'Fredoka One';
+  font-size: 64px;
+  text-decoration: underline;
+  letter-spacing: 5px;
+}
+
+.home-button-box {
+  width: 75%;
+  margin-top: 25px;
+}
+
+.home-button-box > * {
+ /* // margin: 5px; */
+
+}
+
+.home-nav-button {
+  font-size: 100%;
+  padding: 0;
+  border: 1px solid black;
+  width: 100%;
+  border-radius: 2px;
+  font-family: 'Fredoka One';
+  min-height: 50px;
+}
+
+/* lobby styles */
+
+
+.game-lobby-container {
+  display: relative;
+}
+
+.game-lobby-container > * {
+  display: absolute;
+  border: 1px solid black;
+}
+
+.game-lobby-hero {
+  top: 50%;
+  left: 50%;
+}
+
+.lobbyForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.lobbycolor-select {
+  border: 5px solid black;
+}
+
+/* html {
   background:
         radial-gradient(
             khaki 40px,
@@ -55,9 +156,31 @@ html {
     background-blend-mode: multiply;
     background-size: 100px 100px;
     background-position: 0 0, 33px 33px, -33px -33px;
-}
+} */
 
 .plain-background {
   /* add elements that need to stand out against pattern bg */
 }
 
+ /* gradient created by Created by Alison Quaglia, on codepen */
+body {
+  background: linear-gradient(-45deg, 
+  #ee7752, 
+  #e73c7e, 
+  #23a6d5, 
+  #23d5ab);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+  0% {
+      background-position: 0% 50%;
+  }
+  50% {
+      background-position: 100% 50%;
+  }
+  100% {
+      background-position: 0% 50%;
+  }
+}

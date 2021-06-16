@@ -11,6 +11,10 @@ export async function createKey(slot: iSlot, counter: number) {
      //   return counter?.toString() + slot?.y?.toString() + slot?.x?.toString();
 }
 
+export  function getPlayerId () {
+    return Math.floor(Math.random() * 10000);
+  }
+
     export class  timer{
 
         timerObj: any;

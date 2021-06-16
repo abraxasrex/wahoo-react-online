@@ -1,6 +1,6 @@
 
 import {getRandomInt} from '../helpers/Helpers';
-import { iSpecialSlot } from '../view_components/GameBoard';
+import { iSpecialSlot } from '../interfaces/index';
 import GamePiece from '../view_components/GamePiece';
 import { iPiece } from './Piece';
 import { iSlot } from './Slot';
