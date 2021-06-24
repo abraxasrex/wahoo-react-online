@@ -36,6 +36,12 @@ class LobbyPlayer extends React.Component<any> {
         this.setLobby = this.props.setLobby;
         this.clientPlayer = this.props.clientPlayer;
 
+        console.log("construct!");
+
+      //  if(this.props.player.gameColor !== this.state.form.gameColor || this.props.player.playerName !== this.state.form.playerName) {
+            this.form = {gameColor: this.props.player.gameColor, playerName: this.props.player.playerName};
+     //   }
+
         let _state: any = {
             player: props.player,
             setLobby: props.setLobby,
@@ -48,6 +54,8 @@ class LobbyPlayer extends React.Component<any> {
     
 
         this.nameOnChange = this.nameOnChange.bind(this);
+
+
     }
         // let name = player?.name;
         // console.log(" a player view has rendered!");
@@ -87,15 +95,20 @@ class LobbyPlayer extends React.Component<any> {
 
         render () {
            console.log("clients to compare: ", this.clientPlayer, this.props.player);
+
+           let nonPlayable = this.clientPlayer !== this.props.player.playerId;
+
+           this.form.gameColor = nonPlayable ? this.props.player.gameColor : this.form.gameColor;
+
             return (
             <div className={"player player-view player-" + this.state.player?.playerNumber + " lobby-player"}>
                 {/* <span> name: {this.player?.playerName} </span> */}
-                <fieldset disabled={this.clientPlayer !== this.props.player.playerId}>
+                <fieldset disabled={nonPlayable}>
                     <form className="lobbyForm">
                         <p> edit values: </p>
                         <label>name: </label>
                         <p>{this.form.playerName}</p>
-                        <input type="text" value={this.form.playerName} onChange={this.nameOnChange} />
+                        <input type="text" value={nonPlayable ? this.props.player.playerName : this.form.playerName} onChange={this.nameOnChange} />
                         <label>game color: </label>
                         <div className="form-colors">
                 

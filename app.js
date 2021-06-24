@@ -68,9 +68,14 @@ io.on("connection", (socket) => {
         return;
       }
 
-      gameLobbies[lobby.gameCode].players.push({playerName: "", playerNumber: match.players.length, playerId: lobby.playerId})
+      let length = match.players.length;
+      gameLobbies[lobby.gameCode].players.push({playerName: "", playerNumber: length, playerId: lobby.playerId})
+      console.log("working?: ", gameLobbies[lobby.gameCode], lobby);
 
-      sockets.forEach(client=> client.emit("playerJoinedServer", {...gameLobbies[lobby.gameCode]}));
+      let newInfo = {...gameLobbies[lobby.gameCode]};
+      sockets.forEach((_client)=> {
+        _client.emit("playerJoinedServer", newInfo);
+      });
 
     } else if(!match) {
       console.log("new room!");
@@ -94,15 +99,17 @@ io.on("connection", (socket) => {
     let lobby = gameLobbies[gameCode];
     if(lobby) {
       // change player at server level
-      console.log("Editing players.... ", lobby.players);
-      console.log("with player.... ", player);
+    //  console.log("Editing players.... ", lobby.players);
+     // console.log("with player.... ", player);
       let changedPlayer = lobby.players.find(_player=> _player.playerId == player.playerId);
       let changedIndex = lobby.players.indexOf(changedPlayer);
       gameLobbies[gameCode].players[changedIndex] = player;
       console.log('edit server: ', gameLobbies[gameCode]);
       //emit the edited player and gameCode
-      let emitState = {player: editState.player, gameCode};
-      sockets.forEach(client=> client.emit("playerEdited", emitState));
+      let emitState = {player: editState.player, gameCode, players: lobby.players};
+      sockets.forEach((client)=> {
+        client.emit("playerEdited", emitState);
+      });
       // make sure cleint matches
     }
   });

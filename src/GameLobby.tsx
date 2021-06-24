@@ -66,7 +66,7 @@ export function GameLobby({clientPlayer}: any) {
 
       socket.on("connect", () =>{
         //on connect: init emitter function, set it to state, and notify server of new lobby
-        emitter = getSocketFunction(socketRef);
+        emitter = lobby.emitter || getSocketFunction(socketRef);
         // TEST only
       //  emitter = undefined;
 
@@ -107,11 +107,17 @@ export function GameLobby({clientPlayer}: any) {
       socket.on("playerEdited", (serverState: any) => {
         let changedPlayer = serverState.player;
         let gameCode = serverState.gameCode;
+        let _players: any = serverState.players;
+
         if(gameCode == lobby.gameCode && clientPlayer != changedPlayer.playerId) {
-          let updated: any = lobby.players.find((_player: any) => _player.playerId == changedPlayer.playerId);
-          let _players: any = lobby.players;
-          _players[_players.indexOf(updated)] = changedPlayer;
-          setLobby({...lobby, ...players});
+          let updatedIndex: any = _players.findIndex((_player: any) => {
+            return _player.playerId == changedPlayer.playerId
+          });
+         // let _players: any = [...lobby.players] || [...players] || serverState.players;
+
+          _players[updatedIndex] = {..._players[updatedIndex], changedPlayer};
+          console.log("mystery lobby: ", lobby, _players, players, serverState.players);
+         setLobby({...lobby, players: _players, emitter: emitter || lobby.emitter});
         }
       });
 
@@ -122,7 +128,7 @@ export function GameLobby({clientPlayer}: any) {
       players = lobby.players;
     }, []);
 
-    console.log("thisplayerid: ", clientPlayer);
+    console.log("emitter and lobby emitter: ", emitter, lobby.emitter);
     return (
       <div>
         <GameLobbyView lobby={lobby} setLobby={triggerSetLobby} 

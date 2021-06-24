@@ -279,6 +279,17 @@ a1. react issue: setState won't update component or children
 
 [here]
 6-15: on client game edit, the *other* player will reload without emitter
+-----------------------
+1. when a player is edited, the other clients will load without emitter. however, they load with emitter if another playeer joins after that....
+- playerJoinedServer event leads to the emitter or lobby emitter having a value. the playerEdited event doesn't.
+- for some reason, when playerEdited fires, the lobby state itself has been emptied of players.
+fix: get player state from server (not great, still shouldn't be disappearing....)
+
+2. pipe edit values into actual forms
+
+2. plyaer reload is added as a new user
+
+-----------------------
 
 10. hook sockets up to the lobby; when four people join, the button should be enabled to start game.
 https://www.valentinog.com/blog/socket-react/
