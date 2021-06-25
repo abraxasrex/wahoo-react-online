@@ -12,32 +12,28 @@ import {
 import socketIOClient from "socket.io-client"
 import { io } from "socket.io-client";
 
-
-
 import Oofda from './Oofda';
-import { GameLobbyView } from "./lobby/GameLobbyView";
-
-
-
-
-
+import { GameLobbyView, iLobbyViewProps } from "./lobby/GameLobbyView";
 
 let sample_id = '1234';
 const ENDPOINT = "http://127.0.0.1:4001";
 
-const lobbyTemplate = {
+export interface iLobby {
+ players: any  [],
+ gameCode: string,
+ readyToPlay: boolean,
+ emitter?: any
+}
+
+const lobbyTemplate: iLobby = {
   players: [],
   gameCode: sample_id,
   readyToPlay: false,
   emitter: undefined
 }
 
+export function GameLobby({clientPlayerId}: any) {
 
-export function GameLobby({clientPlayer}: any) {
-
-    let match = useRouteMatch();
-
-    let thisPlayerId: any;
     let socket;
     let players: any = [];
     let emitter: any;
@@ -52,14 +48,11 @@ export function GameLobby({clientPlayer}: any) {
     const getSocketFunction = (_socket: any) => {
       return function(emitState: any){
         _socket.emit("playerEditedClient", emitState);
-    
       }
     };
 
     useEffect(() => {
       
-    //  thisPlayerId = getPlayerId();
-
       socket = socketIOClient(ENDPOINT);
       let socketRef: any = socket;
 
@@ -70,35 +63,14 @@ export function GameLobby({clientPlayer}: any) {
         // TEST only
       //  emitter = undefined;
 
-        let _lobby = {...lobby, playerId: clientPlayer, emitter};
+        let _lobby = {...lobby, playerId: clientPlayerId, emitter};
         setLobby(_lobby);
         socketRef.emit("newLobby", _lobby);
       });
-
-
-
-
-    // socket.on("newLobby", serverLobby => {
-    //   // matching codes
-    //   if(serverLobby.gameCode == lobby.gameCode) {
-    //     // 1. the array is length 'one', and the entry has thisPlayerId
-    //     // if(serverLobby.players.length > 1 && serverLobby.playerId == thisPlayerId) {
-    //     //   //  setLobby()
-    //     // }
-    //     // 2. the array is greater than one, and the last item does not equal this playerID
-    //     if (serverLobby.players.length > 1 && 
-    //           serverLobby.players[serverLobby.players.length - 1].playerId != thisPlayerId
-    //         ) {
-    //           setLobby({...lobby, ...serverLobby, emitter});
-    //     }
-    //   }
-    // }); 
  
 
       socket.on("playerJoinedServer", serverLobby => {
-       // let serverLobby = JSON.parse(_serverLobby);
-        console.log("player joined server: ", serverLobby);
-
+        console.log("servr lobby: ", serverLobby);  
           if(serverLobby.gameCode == lobby.gameCode && lobby.players.length < serverLobby.players.length) {
             setLobby({...lobby, ...serverLobby, emitter});
           }
@@ -107,17 +79,16 @@ export function GameLobby({clientPlayer}: any) {
       socket.on("playerEdited", (serverState: any) => {
         let changedPlayer = serverState.player;
         let gameCode = serverState.gameCode;
-        let _players: any = serverState.players;
+        let serverPlayers: any [] = serverState.players;
 
-        if(gameCode == lobby.gameCode && clientPlayer != changedPlayer.playerId) {
-          let updatedIndex: any = _players.findIndex((_player: any) => {
+        if(gameCode == lobby.gameCode && clientPlayerId != changedPlayer.playerId) {
+
+          let updatedIndex: any = serverPlayers.findIndex((_player: any) => {
             return _player.playerId == changedPlayer.playerId
           });
-         // let _players: any = [...lobby.players] || [...players] || serverState.players;
 
-          _players[updatedIndex] = {..._players[updatedIndex], changedPlayer};
-          console.log("mystery lobby: ", lobby, _players, players, serverState.players);
-         setLobby({...lobby, players: _players, emitter: emitter || lobby.emitter});
+          serverPlayers[updatedIndex] = {...serverPlayers[updatedIndex], changedPlayer};
+          setLobby({...lobby, players: serverPlayers, emitter: emitter || lobby.emitter});
         }
       });
 
@@ -128,11 +99,10 @@ export function GameLobby({clientPlayer}: any) {
       players = lobby.players;
     }, []);
 
-    console.log("emitter and lobby emitter: ", emitter, lobby.emitter);
     return (
       <div>
         <GameLobbyView lobby={lobby} setLobby={triggerSetLobby} 
-          clientPlayer={clientPlayer}
+          clientPlayerId={clientPlayerId}
           players={lobby.players} emitter={emitter || lobby.emitter}></GameLobbyView>
       </div>
     );

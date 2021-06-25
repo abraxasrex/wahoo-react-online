@@ -44,7 +44,7 @@ export default function App() {
             <Oofda />
           </Route>
           <Route path = "/gameLobby">
-              <GameLobby clientPlayer={clientId} />
+              <GameLobby clientPlayerId={clientId} />
           </Route>
           <Route path="/">
             <Home />

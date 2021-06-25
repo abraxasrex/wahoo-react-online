@@ -8,14 +8,25 @@ export function getRandomInt(max: number) {
 
 export async function createKey(slot: iSlot, counter: number) {
         return slot.orderId?.toString() || '';
-     //   return counter?.toString() + slot?.y?.toString() + slot?.x?.toString();
 }
 
-export  function getPlayerId () {
-    return Math.floor(Math.random() * 10000);
+export  function getPlayerId (): number | undefined {
+
+    let storage = window.localStorage;
+    let playerIdString = storage.getItem('OofdaPlayerId');
+
+    console.log("Oofda result!: ", playerIdString);
+    if(!!playerIdString) {
+        return parseInt(playerIdString);
+    } else {
+        let playerId = Math.floor(Math.random() * 10000);
+        storage.setItem('OofdaPlayerId', playerId.toString());
+        return playerId;
+    }
+
   }
 
-    export class  timer{
+    export class  timer {
 
         timerObj: any;
         fn: Function;

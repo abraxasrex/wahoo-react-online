@@ -16,18 +16,17 @@ import { io } from "socket.io-client";
 import Oofda from '../Oofda';
 import { idText } from "typescript";
 import { iLobbyForm } from "../interfaces";
-// import { DefaultEventsMap , Socket} from "socket.io-client/build/typed-events";
+import { iLobby } from "../GameLobby";
 
 export interface iLobbyViewProps {
-  lobby: any,
+  lobby: iLobby,
   setLobby: any,
-  players: any,
+  players: any [],
   emitter: any,
-  clientPlayer: any
+  clientPlayerId: any
 }
-export function GameLobbyView ({lobby, setLobby, players, emitter, clientPlayer}: iLobbyViewProps) {
+export function GameLobbyView ({lobby, setLobby, players, emitter, clientPlayerId}: iLobbyViewProps) {
 
-  console.log("lobby viee lobby: ", lobby, emitter);
 
    if(emitter || lobby.emitter) {
       return (
@@ -45,29 +44,12 @@ export function GameLobbyView ({lobby, setLobby, players, emitter, clientPlayer}
               <Link to={lobby.readyToPlay ? `/oofda/${lobby.gameCode}` : '#'}>
                 {lobby.readyToPlay ? "Start your new game!" : "waiting on players..."}
               </Link>
-  
-              lobby player length: {lobby.players?.length}
-              player length: {players?.length}
             </div>
     
-  
             <LobbyPlayers players={lobby.players} setLobby={setLobby} 
-              clientPlayer={clientPlayer}
+              clientPlayerId={clientPlayerId}
               lobby={lobby} emitEdit={emitter} emitter={emitter} ></LobbyPlayers>
           </div>
-  
-          {/* The Topics page has its own <Switch> with more routes
-              that build on the /topics URL path. You can think of the
-              2nd <Route> here as an "index" page for all topics, or
-              the page that is shown when no topic is selected */}
-          {/* <Switch>
-            <Route path={`${match.path}/:topicId`}>
-              <Oofda />
-            </Route>
-            <Route path={match.path}>
-              <h3>Please select a topic.</h3>
-            </Route>
-          </Switch> */}
         </div>
       );
     } else {
