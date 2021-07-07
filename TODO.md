@@ -289,9 +289,10 @@ fix: get player state from server (not great, still shouldn't be disappearing...
 
 
 6-15: on client game edit, the *other* player will reload without emitter
+0. stack overflow on player leaving
 -----------------------
 [here]
-0. stack overflow on player leaving
+
 1. get lobby to recognize 4 players have joined
 2. when game start is selected, each player should get routed to gameboard, which gets the necessary data fed into it.
 
