@@ -24,7 +24,7 @@ class LobbyPlayer extends React.Component<any> {
         super(props);
 
         this.setLobby = this.props.setLobby;
-        this.clientPlayer = this.props.clientPlayer;
+        this.clientPlayer = this.props.clientPlayerId;
         this.form = {
             gameColor: this.props.player.gameColor, 
             playerName: this.props.player.playerName
@@ -74,7 +74,7 @@ class LobbyPlayer extends React.Component<any> {
         render () {
 
            let nonPlayable = this.clientPlayer !== this.props.player.playerId;
-
+            console.log("client & props player: ", this.clientPlayer, this.props.player)
            this.form.gameColor = nonPlayable ? this.props.player.gameColor : this.form.gameColor;
 
             return (

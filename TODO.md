@@ -277,9 +277,7 @@ a1. react issue: setState won't update component or children
 
 10.1. move socket logic up to gameLobby!!! ...
 
-[here]
-6-15: on client game edit, the *other* player will reload without emitter
------------------------
+
 1. when a player is edited, the other clients will load without emitter. however, they load with emitter if another playeer joins after that....
 - playerJoinedServer event leads to the emitter or lobby emitter having a value. the playerEdited event doesn't.
 - for some reason, when playerEdited fires, the lobby state itself has been emptied of players.
@@ -288,6 +286,35 @@ fix: get player state from server (not great, still shouldn't be disappearing...
 2. pipe edit values into actual forms
 
 2. plyaer reload is added as a new user
+
+
+6-15: on client game edit, the *other* player will reload without emitter
+-----------------------
+[here]
+0. stack overflow on player leaving
+1. get lobby to recognize 4 players have joined
+2. when game start is selected, each player should get routed to gameboard, which gets the necessary data fed into it.
+
+data:
+player name
+player ID
+player color
+gameLobbyID
+
+3. when game inits, all other relevant data for the game needs to be generated for each client so that the game loads correctly
+
+3.5. gameSocketEvents:
+a. userRoll()
+b. userMove()
+c. changeTurn()
+d. winGame()
+- event sends current state to compare
+- user state from current turn's state always prevails
+- turn won't change to next user until state has been resolved between server and client
+
+4. for each turn / round, only the current player can roll & move
+
+5. game win conditions
 
 -----------------------
 

@@ -34,7 +34,7 @@ io.on("connection", (socket) => {
 
   let _sockets = sockets;
 
-  for(let i=0; i < sockets; i++) {
+  for(let i=0; i < sockets.length; i++) {
     if(sockets[i].id == socket.id) {
       _sockets[i].disconnect();
       _sockets[i] = socket;
@@ -50,8 +50,36 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", (client) => {
 
-    sockets.splice([sockets.indexOf(client)], 1);
-    sockets.forEach((client)=> client.emit('playerLeftServer', client));
+    
+    // let newSockets = [...sockets];
+    // newSockets.splice([newSockets.indexOf(client)], 1);
+
+    // if(newSockets.length == sockets.length) {
+    //   console.log("disconnected user was not removed");
+    // }
+
+    // sockets = newSockets;
+    // sockets.forEach((client)=> client.emit('playerLeftServer', client));
+
+    let checkSockets = [...sockets];
+
+    let removeIndex;
+
+    for(let i=0; i < checkSockets.length; i++) {
+      console.log("client: ", client);
+      if(checkSockets[i].id == socket.id) {
+        removeIndex = i;
+        console.log("kick out old socket");
+        break;
+      }
+    } 
+
+    if(removeIndex) {
+      console.log("removing from sockets...");
+      checkSockets.splice(removeIndex, 1);
+
+      sockets = checkSockets;
+    }
 
     console.log("Client disconnected");
   });
@@ -92,6 +120,7 @@ io.on("connection", (socket) => {
 
           let newInfo = {...gameLobbies[lobby.gameCode]};
 
+          console.log("old user info: ", newInfo);
           sockets.forEach((client)=> {
             client.emit("playerJoinedServer", newInfo);
           });
