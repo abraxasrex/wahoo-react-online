@@ -112,17 +112,23 @@ code {
 
 
 .game-lobby-container {
-  display: relative;
+  position: relative;
+  height: 250px;
 }
 
 .game-lobby-container > * {
-  display: absolute;
+  position: absolute;
   border: 1px solid black;
 }
 
 .game-lobby-hero {
   top: 50%;
   left: 50%;
+}
+
+.lobby-player-tile {
+  width: 100px;
+  height: 100px;
 }
 
 .lobbyForm {

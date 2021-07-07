@@ -78,7 +78,7 @@ class LobbyPlayer extends React.Component<any> {
            this.form.gameColor = nonPlayable ? this.props.player.gameColor : this.form.gameColor;
 
             return (
-            <div className={"player player-view player-" + this.state.player?.playerNumber + " lobby-player"}>
+            <div className={"player player-view lobby-player-tile lobby-player-" + (this.state.player?.playerNumber + 1) + " lobby-player"}>
                 <fieldset disabled={nonPlayable}>
                     <form className="lobbyForm">
                         <p> edit values: </p>

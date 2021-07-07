@@ -75,6 +75,28 @@
   background-color: yellow;
 }
 
+.lobby-player-1 {
+  top: 0%;
+  left: 0%;
+}
+
+.lobby-player-2 {
+  top: 0%;
+  left: 90%;
+}
+
+.lobby-player-3{
+  top: 90%;
+  left: 0%;
+}
+
+.lobby-player-4 {
+  top: 90%;
+  left: 90%;
+}
+
+
+
 .current-player {
   border: 2px solid purple;
 }

@@ -15,8 +15,13 @@ export  function getPlayerId (): number | undefined {
     let storage = window.localStorage;
     let playerIdString = storage.getItem('OofdaPlayerId');
 
+    let testMode = false;
+
+    // uncomment to test mutliple clients
+    testMode = true;
+
     console.log("Oofda result!: ", playerIdString);
-    if(!!playerIdString) {
+    if(!!playerIdString && !testMode) {
         return parseInt(playerIdString);
     } else {
         let playerId = Math.floor(Math.random() * 10000);

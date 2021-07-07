@@ -26,7 +26,7 @@ export interface iLobbyViewProps {
   clientPlayerId: any
 }
 export function GameLobbyView ({lobby, setLobby, players, emitter, clientPlayerId}: iLobbyViewProps) {
-
+  let readyToPlay = lobby.players.length == 4 ? true : false;
 
    if(emitter || lobby.emitter) {
       return (
@@ -41,8 +41,8 @@ export function GameLobbyView ({lobby, setLobby, players, emitter, clientPlayerI
                 </input></p>
               </div>
   
-              <Link to={lobby.readyToPlay ? `/oofda/${lobby.gameCode}` : '#'}>
-                {lobby.readyToPlay ? "Start your new game!" : "waiting on players..."}
+              <Link to={readyToPlay ? `/oofda/${lobby.gameCode}` : '#'}>
+                {readyToPlay ? "Start your new game!" : "waiting on players..."}
               </Link>
             </div>
     
