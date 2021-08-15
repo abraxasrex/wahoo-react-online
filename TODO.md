@@ -290,17 +290,56 @@ fix: get player state from server (not great, still shouldn't be disappearing...
 
 6-15: on client game edit, the *other* player will reload without emitter
 0. stack overflow on player leaving
+1. get lobby to recognize 4 players have joined
+
 -----------------------
 [here]
 
-1. get lobby to recognize 4 players have joined
+----------------
+user stories:
+
+1. As the fourth user in a Game Lobby, I can click on th
+---------------------
+
 2. when game start is selected, each player should get routed to gameboard, which gets the necessary data fed into it.
 
-data:
-player name
-player ID
-player color
-gameLobbyID
+socket event cycles:
+A. OnClientGameStart (from lobby)
+- client that starts game sends this to server
+- saves its game (and player?) id in localStorage
+- this emits onServerGameStart, which sends the following to all clients in gamelobby:
+
+socketGameEntity {
+  boardState (positions of all current slots and pieces) and/or:
+  currentPlayer
+  currentRoll
+  currentSelectedPiece
+}
+- each client updates accordingly
+
+- all following client events come from game/gameboard
+
+A2. onjoinActiveGame, onLeaveActiveGame
+- see corresponding gamelobby events
+
+B. rolledDice
+ - client that rolls sends this to server
+ - serverReceivedRoll broadcasts this to all clients
+
+ C. selectedPiece
+ - client that selects sends this to server
+ - yada yada
+
+ D. movedPiece
+ - see above
+
+ E. droppedOutGame
+ - see behavior for game lobby
+
+ F. rejoinedGame
+ - see behavior for game lobby
+
+
 
 3. when game inits, all other relevant data for the game needs to be generated for each client so that the game loads correctly
 

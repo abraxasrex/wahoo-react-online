@@ -94,7 +94,14 @@ export function GameLobby({clientPlayerId}: any) {
 
       socket.on("playerLeftServer", (something)=>{
         console.log("someone left");
-      })  
+      }) ;
+
+      socket.on("onServerGameStart", (socketGameEntity)=> {
+        // TODO:
+        // 1. separate function to save player and game id in localstorage
+        // 2. navigate to game functionally with params to setup initial game
+      });
+
 
       players = lobby.players;
     }, []);

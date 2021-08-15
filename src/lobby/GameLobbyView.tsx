@@ -28,6 +28,8 @@ export interface iLobbyViewProps {
 export function GameLobbyView ({lobby, setLobby, players, emitter, clientPlayerId}: iLobbyViewProps) {
   let readyToPlay = lobby.players.length == 4 ? true : false;
 
+  // TODO: change jsx Link into a function, that calls new saveIds function,
+  // emits onClientGameStart, and then routes to gameboard with correct params
    if(emitter || lobby.emitter) {
       return (
         <div>
@@ -40,7 +42,10 @@ export function GameLobbyView ({lobby, setLobby, players, emitter, clientPlayerI
                 <p><input value={lobby.gameCode}>
                 </input></p>
               </div>
-  
+
+              <button>
+                
+              </button>
               <Link to={readyToPlay ? `/oofda/${lobby.gameCode}` : '#'}>
                 {readyToPlay ? "Start your new game!" : "waiting on players..."}
               </Link>

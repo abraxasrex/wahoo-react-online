@@ -182,6 +182,12 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("onClientGameStart", (gameStartState)=>{
+    let clientId = gameStartState.clientId;
+    let gameID = gameStartState.gameId;
+    // TODO: find lobby for gameId, for all players of that game, emit onServerGameStart
+  })
+
 
 });
 
