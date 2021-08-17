@@ -11,20 +11,15 @@ import {colorSet } from './classes/Game';
 import {iPlayer, Player} from './classes/Player';
 
 const startGame = async (game: any, gameSetter: any)  => {
-  
-  // const players: iPlayer[] = [];
-  // const numberOfPlayers = 4;
-
-  // for (var i=0; i < numberOfPlayers; i++) {
-  //   players.push(Player((i + 1), colorSet[i]));
-  // }
   await gameSetter({...game, currentPlayer: game.players[0]});
-
-  //return players;
 };
 
-function Oofda() {
+function Oofda(props: any) {
   
+ // const stateTest = props.history.location.state
+
+  console.log("props test: ", props);
+
   const players: iPlayer[] = [];
   const numberOfPlayers = 4;
 

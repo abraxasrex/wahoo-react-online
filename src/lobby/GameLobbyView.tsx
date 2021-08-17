@@ -31,6 +31,10 @@ export function GameLobbyView ({lobby, setLobby, players, emitter, clientPlayerI
   // TODO: change jsx Link into a function, that calls new saveIds function,
   // emits onClientGameStart, and then routes to gameboard with correct params
    if(emitter || lobby.emitter) {
+
+     if(readyToPlay) {
+        emitter.emit('gameStartReady', lobby.gameCode);
+     }
       return (
         <div>
           <h2>Game Lobby</h2>
@@ -46,7 +50,10 @@ export function GameLobbyView ({lobby, setLobby, players, emitter, clientPlayerI
               <button>
                 
               </button>
-              <Link to={readyToPlay ? `/oofda/${lobby.gameCode}` : '#'}>
+              <Link 
+                to={{
+                  pathname: readyToPlay ? `/oofda/${lobby.gameCode}` : '#'
+                }}>
                 {readyToPlay ? "Start your new game!" : "waiting on players..."}
               </Link>
             </div>

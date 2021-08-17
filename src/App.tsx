@@ -40,10 +40,10 @@ export default function App() {
           <Route path="/about">
             <About />
           </Route>
-          <Route path="/oofda">
+          <Route path="/oofda" >
             <Oofda />
           </Route>
-          <Route path = "/gameLobby">
+          <Route path = "/gameLobby"> 
               <GameLobby clientPlayerId={clientId} />
           </Route>
           <Route path="/">
